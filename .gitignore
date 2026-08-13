@@ -1,0 +1,19 @@
+# --- .NET ---
+bin/
+obj/
+*.user
+.vs/
+
+# --- Node / Vite ---
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# --- Environment / secrets ---
+.env
+.env.local
+
+# --- OS / editor ---
+.DS_Store
+Thumbs.db
