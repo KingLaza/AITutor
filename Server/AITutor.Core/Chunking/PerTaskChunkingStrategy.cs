@@ -4,7 +4,9 @@ namespace AITutor.Core.Chunking;
 
 public class PerTaskChunkingStrategy : IChunkingStrategy
 {
-    private static readonly Regex TaskBoundary = new(@"^\s*\d+\.\s", RegexOptions.Multiline);
+    private static readonly Regex TaskBoundary = new(
+    @"(?<!\d)\d{1,2}\.\s*(?=\(\d+\s*poena\)|[A-ZČĆŽŠĐ])",
+    RegexOptions.Multiline);
 
     public List<string> Chunk(List<string> pages)
     {

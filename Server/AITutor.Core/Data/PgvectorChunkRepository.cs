@@ -21,4 +21,30 @@ public class PgvectorChunkRepository : IChunkRepository
         cmd.Parameters.AddWithValue(new Vector(chunk.Embedding));
         await cmd.ExecuteNonQueryAsync();
     }
+
+    public async Task<List<ChunkSearchResult>> SearchAsync(float[] queryEmbedding, int topK)
+    {
+        await using var conn = await _dataSource.OpenConnectionAsync();
+        await using var cmd = conn.CreateCommand();
+        cmd.CommandText = @"
+            SELECT content, source_file, embedding <=> $1 AS distance
+            FROM chunks
+            ORDER BY embedding <=> $1
+            LIMIT $2";
+        cmd.Parameters.AddWithValue(new Vector(queryEmbedding));
+        cmd.Parameters.AddWithValue(topK);
+
+        var results = new List<ChunkSearchResult>();
+        await using var reader = await cmd.ExecuteReaderAsync();
+        while (await reader.ReadAsync())
+        {
+            results.Add(new ChunkSearchResult
+            {
+                Content = reader.GetString(0),
+                SourceFile = reader.IsDBNull(1) ? "" : reader.GetString(1),
+                Distance = reader.GetDouble(2)
+            });
+        }
+        return results;
+    }
 }

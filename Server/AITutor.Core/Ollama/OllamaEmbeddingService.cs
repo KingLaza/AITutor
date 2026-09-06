@@ -10,13 +10,23 @@ public class OllamaEmbeddingService : IEmbeddingService
 
     public OllamaEmbeddingService(HttpClient http) => _http = http;
 
-    public async Task<float[]> GetEmbeddingAsync(string text)
+    public async Task<float[]> GetEmbeddingAsync(string text, EmbeddingKind kind = EmbeddingKind.Document)
     {
-        var body = JsonSerializer.Serialize(new { model = Model, prompt = text });
+        var prefix = kind == EmbeddingKind.Query ? "search_query: " : "search_document: ";
+        var body = JsonSerializer.Serialize(new
+        {
+            model = Model,
+            prompt = prefix + text,
+            options = new { num_ctx = 8192 }
+        });
         var resp = await _http.PostAsync("http://localhost:11434/api/embeddings",
             new StringContent(body, Encoding.UTF8, "application/json"));
         var json = await resp.Content.ReadAsStringAsync();
         using var doc = JsonDocument.Parse(json);
+
+        if (doc.RootElement.TryGetProperty("error", out var errorProp))
+            throw new InvalidOperationException($"Ollama embedding greška: {errorProp.GetString()}");
+
         return doc.RootElement.GetProperty("embedding")
             .EnumerateArray().Select(x => x.GetSingle()).ToArray();
     }

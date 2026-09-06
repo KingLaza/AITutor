@@ -12,7 +12,13 @@ public class OllamaChatService : IChatService
 
     public async Task<string> GenerateAsync(string prompt)
     {
-        var body = JsonSerializer.Serialize(new { model = Model, prompt, stream = false });
+        var body = JsonSerializer.Serialize(new
+        {
+            model = Model,
+            prompt,
+            stream = false,
+            options = new { temperature = 0.2 }
+        });
         var resp = await _http.PostAsync("http://localhost:11434/api/generate",
             new StringContent(body, Encoding.UTF8, "application/json"));
         var json = await resp.Content.ReadAsStringAsync();

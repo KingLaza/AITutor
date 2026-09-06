@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using AITutor.Core;
+using AITutor.Core.Rag;
 
 namespace AITutor_api.Controllers;
 
@@ -7,17 +7,18 @@ namespace AITutor_api.Controllers;
 [Route("api/[controller]")]
 public class ChatController : ControllerBase
 {
-    private readonly IChatService _chat;
+    private readonly RagQueryService _rag;
 
-    public ChatController(IChatService chat) => _chat = chat;
+    public ChatController(RagQueryService rag) => _rag = rag;
 
     public record ChatRequest(string Message);
-    public record ChatResponse(string Reply);
+    public record ChatResponse(string Reply, List<string> Sources);
 
     [HttpPost]
     public async Task<ActionResult<ChatResponse>> Post(ChatRequest req)
     {
-        var reply = await _chat.GenerateAsync(req.Message);
-        return Ok(new ChatResponse(reply));
+        var result = await _rag.AnswerAsync(req.Message);
+        var sources = result.RetrievedChunks.Select(c => $"{c.SourceFile} (dist: {c.Distance:F3})").ToList();
+        return Ok(new ChatResponse(result.Reply, sources));
     }
 }
