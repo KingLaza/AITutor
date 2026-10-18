@@ -59,9 +59,10 @@ public class RagQueryService
         var profile = _subjects.Get(subject);
 
         if (mode == AnswerMode.Plain) return await AnswerPlainAsync(question, history, subject);
+        var useTools = mode != AnswerMode.RagNoTools;
 
         if (activeTask != null && TryGetHintLevel(question, activeTask.Level) is int level)
-            return await AnswerTaskAsync(activeTask.Text, level, history, subject);
+            return await AnswerTaskAsync(activeTask.Text, level, history, subject, useTools);
 
         var intent = await _intent.ClassifyAsync(question, subject);
 
@@ -72,7 +73,7 @@ public class RagQueryService
         }
 
         if (intent == ChatIntent.Task)
-            return await AnswerTaskAsync(question, 1, history, subject);
+            return await AnswerTaskAsync(question, 1, history, subject, useTools);
 
         var standalone = history.Count > 0 && IsShortFollowUp(question)
             ? await CondenseQuestionAsync(question, history)
@@ -153,14 +154,14 @@ public class RagQueryService
 
     // ---- zadaci i lestvica nagoveštaja ----
 
-    private async Task<RagAnswer> AnswerTaskAsync(string task, int level, IReadOnlyList<ChatTurn> history, string subject)
+    private async Task<RagAnswer> AnswerTaskAsync(string task, int level, IReadOnlyList<ChatTurn> history, string subject, bool useTools = true)
     {
         level = Math.Clamp(level, 1, MaxHintLevel);
         var profile = _subjects.Get(subject);
         var plan = level == 2 ? ExtractPlan(history) : null;
 
         // Za zadatke podržanog tipa (raspoređivanje, disk, zamena stranica, i-node, format adrese) rešenje računa kod, ne model.
-        var solved = profile.Solver == null ? null : await profile.Solver.TrySolveAsync(task);
+        var solved = profile.Solver == null || !useTools ? null : await profile.Solver.TrySolveAsync(task);
         if (level == MaxHintLevel && solved != null)
             return new RagAnswer
             {

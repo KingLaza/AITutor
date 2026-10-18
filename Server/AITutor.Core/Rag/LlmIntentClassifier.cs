@@ -33,12 +33,14 @@ public class LlmIntentClassifier : IIntentClassifier
             CASUAL - pozdrav, zahvalnost, kratak razgovor, pitanje o tebi ili o učenju uopšte. NIJE činjenično pitanje iz bilo koje oblasti.
             SUBJECT - bilo koje stručno ili činjenično pitanje o nekom pojmu (čak i ako izgleda da je van predmeta {subjectName}).
             TASK - ispitni zadatak ili zahtev da se nešto uradi, reši, napiše ili transformiše.
+            Pitanje koje traži da se navede, objasni ili definiše pojam (npr. "Navesti tri stavke...", "Koja je razlika između...") je SUBJECT. TASK je samo kada treba izračunati, nacrtati, napisati kod ili rešiti zadatak sa zadatim podacima.
 
             Primeri:
             "Ćao!" -> CASUAL
             "Kako mi možeš pomoći?" -> CASUAL
             "Hvala, to mi je jasno" -> CASUAL
             "Šta je nuklearna fizika?" -> SUBJECT
+            "Navesti tri osobine sistema za rad u realnom vremenu" -> SUBJECT
             "Napiši program koji sortira niz" -> TASK
             {subjectExamples}
 

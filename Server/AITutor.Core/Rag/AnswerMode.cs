@@ -1,5 +1,6 @@
 namespace AITutor.Core.Rag;
 
-// Rag: odgovor iz materijala predmeta (podrazumevano). Plain: model odgovara samo iz opšteg znanja, bez pretrage;
-// to je mesto za kasnije poređenje odgovora bez RAG-a i sa RAG-om.
-public enum AnswerMode { Rag, Plain }
+// Rag: odgovor iz materijala predmeta uz programske alate za zadatke (podrazumevano, ceo sistem).
+// RagNoTools: isto, ali bez alata (model sam rešava zadatke); Plain: samo opšte znanje modela, bez pretrage.
+// Tri režima služe za poređenje u evaluaciji (plain / RAG / RAG + alati).
+public enum AnswerMode { Rag, Plain, RagNoTools }

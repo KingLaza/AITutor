@@ -117,13 +117,13 @@ public class TaskSolverJsonTests
     }
 
     [Fact]
-    public void Ml_feedback_is_reported_as_unsupported()
+    public void Ml_feedback_is_added_when_the_task_asks_for_it_but_the_json_omits_it()
     {
         const string json = """{"type":"scheduling","processes":[{"name":"A","burst":5,"arrival":0}],"algorithms":["RR"],"quantum":2}""";
         var result = OsTaskSolver.SolveFromJson(json, "Prikazati izvrsenje za RR (q=2) i ML Feedback")!;
 
+        Assert.Contains("RR (q=2ms)", result.Text);
         Assert.Contains("ML Feedback", result.Text);
-        Assert.Contains("ne podržava", result.Text);
     }
 
     [Theory]

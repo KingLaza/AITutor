@@ -144,4 +144,45 @@ public class SolverTests
 
     [Fact]
     public void Size_parser_returns_null_for_garbage() => Assert.Null(SizeParser.Parse("nema broja"));
+
+    // Zadatak sa ispita (ML Feedback q=2^i): A(3,0) B(7,1) C(2,3) D(8,6) E(5,10); redosled izračunat ručno po definiciji iz predavanja.
+    [Fact]
+    public void Ml_feedback_with_growing_quantum_matches_hand_calculation()
+    {
+        var procs = new Proc[] { new("A", 3, 0, null), new("B", 7, 1, null), new("C", 2, 3, null), new("D", 8, 6, null), new("E", 5, 10, null) };
+
+        var result = CpuScheduling.SimulateFeedback(procs);
+
+        Assert.Equal("A:0-1 B:1-2 A:2-4 C:4-5 B:5-7 D:7-8 C:8-9 D:9-11 E:11-14 B:14-18 D:18-22 E:22-24 D:24-25",
+            string.Join(" ", result.Timeline.Select(s => $"{s.Name}:{s.Start}-{s.End}")));
+        Assert.Equal(4, result.Completion["A"]);
+        Assert.Equal(9, result.Completion["C"]);
+        Assert.Equal(18, result.Completion["B"]);
+        Assert.Equal(24, result.Completion["E"]);
+        Assert.Equal(25, result.Completion["D"]);
+    }
+
+    [Fact]
+    public void Ml_feedback_with_fixed_quantum_behaves_like_round_robin_when_all_demote_each_time()
+    {
+        var procs = new Proc[] { new("A", 4, 0, null), new("B", 4, 0, null) };
+
+        var result = CpuScheduling.SimulateFeedback(procs, 2, exponential: false);
+
+        Assert.Equal("A:0-2 B:2-4 A:4-6 B:6-8", string.Join(" ", result.Timeline.Select(s => $"{s.Name}:{s.Start}-{s.End}")));
+    }
+
+    [Fact]
+    public void Scheduling_solver_runs_round_robin_srtf_and_ml_feedback_from_one_task()
+    {
+        var json = """{"type":"scheduling","processes":[{"name":"A","burst":3,"arrival":0},{"name":"B","burst":7,"arrival":1},{"name":"C","burst":2,"arrival":3},{"name":"D","burst":8,"arrival":6},{"name":"E","burst":5,"arrival":10}],"algorithms":["RR","SRTF","MLFQ"],"quantum":2,"interval":null}""";
+        const string task = "Prikazati redosled izvršenja ukoliko se koriste algoritmi a) RR (q=2) b) SRTF c) ML Feedback q=2^i";
+
+        var result = OsTaskSolver.SolveFromJson(json, task)!;
+
+        Assert.Contains("RR (q=2ms)", result.Text);
+        Assert.Contains("ML Feedback (kvant reda i = 1*2^i ms", result.Text);
+        Assert.Contains("A=4, B=18, C=9, D=25, E=24", result.Text);
+        Assert.DoesNotContain("ne podržava", result.Text);
+    }
 }

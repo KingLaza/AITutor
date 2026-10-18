@@ -29,6 +29,7 @@ public class OsTaskSolver : ITaskSolver
     private static string BuildPrompt(string task) => $$"""
         Izvuci parametre zadatka iz predmeta Operativni sistemi u JSON. Prvo odredi tip zadatka:
         - "scheduling": raspoređivanje procesa (SJF, SRTF, FCFS, prioritet, Round Robin); procesi imaju CPU fazu (burst), vreme aktiviranja (arrival) i opciono prioritet.
+        - "io_scheduling": procesi sa CPU i U/I fazama zapisanim kao 4-(5)-3 (CPU 4, U/I 5, CPU 3); traži se vreme izvršenja i iskorišćenost CPU za multiprogramiranje (FCFS, SRTF) i bez njega.
         - "disk": raspoređivanje zahteva za disk (SSTF, SCAN, C-SCAN, LOOK, C-LOOK, FCFS) i/ili broj staza diska.
         - "page_replacement": zamena stranica (FIFO, LRU, OPT) za niz referenci i dati broj okvira.
         - "inode": Unix/Linux i-node: veličina bloka, broj direktnih adresa, veličina adrese, veličine fajlova.
@@ -37,7 +38,8 @@ public class OsTaskSolver : ITaskSolver
         - "none": sve ostalo (teorija, kod, pitanja Da/Ne, monitori, semafori).
 
         Vrati SAMO JSON, bez objašnjenja, u obliku za izabrani tip (vrednosti uzmi iz zadatka, polja kojih nema u zadatku stavi na null):
-        {"type":"scheduling","processes":[{"name":"<ime>","burst":<ms>,"arrival":<ms>,"priority":<broj ili null>}],"algorithms":["SJF","SRTF","PRIORITY","PRIORITY_PREEMPTIVE","RR","FCFS" - samo traženi],"quantum":<ms ili null>,"interval":[<od>,<do>] ili null}
+        {"type":"scheduling","processes":[{"name":"<ime>","burst":<ms>,"arrival":<ms>,"priority":<broj ili null>}],"algorithms":["SJF","SRTF","PRIORITY","PRIORITY_PREEMPTIVE","RR","FCFS","MLFQ" (ML Feedback) - samo traženi],"quantum":<ms ili null>,"interval":[<od>,<do>] ili null}
+        {"type":"io_scheduling","processes":[{"name":"<ime>","arrival":<ms>}]}
         {"type":"disk","requests":[<svi zahtevi iz reda, brojevi>],"served":[<već usluženi zahtevi redom>],"head":<broj ili null>,"direction":"up"|"down"|null,"algorithms":["SSTF","SCAN","C-SCAN","LOOK","C-LOOK","FCFS" - samo traženi],"cylinders":<broj ili null>,"surfaces":<broj strana ili null>}
         {"type":"page_replacement","frames":<broj okvira>,"reference":"<niz referenci tačno kako piše>","algorithms":["FIFO","LRU","OPT" - samo traženi]}
         {"type":"inode","blockSize":"<veličina bloka sa jedinicom>","direct":<broj direktnih adresa>,"addressSize":"<veličina adrese>","indirectLevels":<0-3>,"fileSizes":["<veličina fajla sa jedinicom>"]}
@@ -68,6 +70,11 @@ public class OsTaskSolver : ITaskSolver
         {
             "Simuliraj izvršavanje po milisekundama. U svakom trenutku odredi koji su procesi stigli (vreme aktiviranja) i nisu završeni, pa izaberi jedan po algoritmu: SJF najkraća CPU faza, SRTF najmanje preostalo vreme (uz prekidanje), prioritet manji broj je veći prioritet, Round Robin po redu uz vremenski kvant.",
             "Kod algoritama sa prekidanjem (SRTF, prioritet sa prekidanjem) pri svakom pristizanju novog procesa proveri da li ima prednost nad onim koji se izvršava. Kod Round Robin novopristigli proces ide u red pre procesa kome je istekao kvant. Nacrtaj Gantov dijagram i očitaj ko se izvršava u traženom intervalu.",
+        },
+        ["io_scheduling"] = new[]
+        {
+            "Faze procesa idu redom: CPU, U/I, CPU... (npr. 4-(5)-3). U/I uređaji rade paralelno, a procesor izvršava samo jedan proces. Kod multiprogramiranja procesor dok jedan proces čeka na U/I izvršava drugi; bez multiprogramiranja procesor miruje tokom U/I faze, a sledeći proces počinje tek kad prethodni završi.",
+            "Prati vreme po vreme: ko je u CPU fazi, ko u U/I fazi i kada postaje spreman. FCFS ne prekida CPU fazu; SRTF pri svakom novom spremnom procesu poredi preostalo vreme tekuće CPU faze. Iskorišćenost CPU = ukupno CPU vreme svih procesa / ukupno vreme do završetka poslednjeg procesa.",
         },
         ["disk"] = new[]
         {
@@ -109,6 +116,7 @@ public class OsTaskSolver : ITaskSolver
             return Str(root, "type")?.ToLowerInvariant() switch
             {
                 "scheduling" => Scheduling(root, task),
+                "io_scheduling" => IoSchedulingSolve(root, task),
                 "disk" => Disk(root),
                 "page_replacement" => Pages(root),
                 "inode" => Inode(root),
@@ -136,6 +144,7 @@ public class OsTaskSolver : ITaskSolver
             "SRTF" => t.Contains("srtf"),
             "FCFS" => t.Contains("fcfs") || t.Contains("fifo") || t.Contains("first come"),
             "RR" => t.Contains("rr") || t.Contains("round"),
+            "MLFQ" => t.Contains("feedback") || t.Contains("mlfq"),
             _ => t.Contains("prioritet") || t.Contains("priority"),
         };
     }
@@ -173,6 +182,8 @@ public class OsTaskSolver : ITaskSolver
             var mentioned = algorithms.Where(a => MentionedIn(task, a!)).ToList();
             if (mentioned.Count > 0) algorithms = mentioned;
         }
+        // LLM ponekad izostavi ML Feedback iz liste, a zadatak ga traži.
+        if (task != null && MentionedIn(task, "MLFQ") && !algorithms.Contains("MLFQ")) algorithms.Add("MLFQ");
         if (algorithms.Count == 0) return null;
 
         var sb = new StringBuilder("Raspoređivanje procesa (simulacija po milisekundama):\n");
@@ -180,19 +191,71 @@ public class OsTaskSolver : ITaskSolver
         foreach (var alg in algorithms)
         {
             ScheduleResult result;
-            try { result = CpuScheduling.Simulate(alg!, procs, quantum); }
+            try { result = alg == "MLFQ" ? CpuScheduling.SimulateFeedback(procs, FeedbackBase(task), FeedbackExponential(task)) : CpuScheduling.Simulate(alg!, procs, quantum); }
             catch (ArgumentException) { continue; }
             solved++;
-            var label = alg == "RR" ? $"RR (q={quantum}ms)" : alg;
+            var label = alg switch
+            {
+                "RR" => $"RR (q={quantum}ms)",
+                "MLFQ" => FeedbackExponential(task) ? $"ML Feedback (kvant reda i = {FeedbackBase(task)}*2^i ms, RQ0 prvi)" : $"ML Feedback (stalan kvant {FeedbackBase(task)}ms)",
+                _ => alg,
+            };
             sb.AppendLine($"- {label}: {string.Join(" | ", result.Timeline.Select(s => $"{s.Name} {s.Start}-{s.End}"))}");
             if (from != null && to != null)
                 sb.AppendLine($"    U periodu {from}-{to}ms izvršava se: {string.Join(", ", CpuScheduling.WhoRuns(result, from.Value, to.Value))}");
             sb.AppendLine($"    Završetak procesa: {string.Join(", ", procs.Select(p => $"{p.Name}={result.Completion[p.Name]}"))}");
         }
-        if (task != null && System.Text.RegularExpressions.Regex.IsMatch(task, "feedback|mlfq", System.Text.RegularExpressions.RegexOptions.IgnoreCase))
-            sb.AppendLine("Napomena: ML Feedback (višenivojski red sa povratnom spregom) alat ne podržava, njega reši ručno prema predavanju.");
         return solved == 0 ? null : Hinted("scheduling", sb.ToString().TrimEnd());
     }
+
+    // Faze se čitaju direktno iz teksta zadatka (zapis 4-(5)-3), LLM daje samo imena procesa i vremena aktiviranja.
+    private static SolverResult? IoSchedulingSolve(JsonElement root, string? task)
+    {
+        if (task == null || !root.TryGetProperty("processes", out var arr) || arr.ValueKind != JsonValueKind.Array) return null;
+        var notations = IoScheduling.PhasesInText(task);
+        var jsonProcs = arr.EnumerateArray().ToList();
+        if (notations.Count == 0 || notations.Count != jsonProcs.Count) return null;
+
+        var procs = new List<IoProc>();
+        for (var i = 0; i < notations.Count; i++)
+        {
+            var name = Str(jsonProcs[i], "name");
+            if (name == null) return null;
+            procs.Add(new IoProc(name, Int(jsonProcs[i], "arrival") ?? 0, IoScheduling.ParsePhases(notations[i])));
+        }
+
+        var t = task.ToLowerInvariant();
+        var policies = new List<string>();
+        if (t.Contains("fcfs") || t.Contains("fifo")) policies.Add("FCFS");
+        if (t.Contains("srtf")) policies.Add("SRTF");
+        if (System.Text.RegularExpressions.Regex.IsMatch(t, @"bez\s+multi|monoprogram")) policies.Add("NO_MULTIPROGRAMMING");
+        if (policies.Count == 0) policies.AddRange(IoScheduling.Supported);
+
+        var sb = new StringBuilder("Raspoređivanje procesa sa U/I fazama (simulacija po milisekundama):\n");
+        sb.AppendLine($"Procesi: {string.Join("; ", procs.Select(p => $"{p.Name} (aktiviranje {p.Arrival}ms, faze {string.Join("-", p.Phases.Select((x, i) => i % 2 == 1 ? $"({x})" : x.ToString()))})"))}");
+        var any = false;
+        foreach (var policy in policies)
+        {
+            IoScheduleResult r;
+            try { r = IoScheduling.Simulate(policy, procs); }
+            catch (ArgumentException) { continue; }
+            any = true;
+            var label = policy switch { "FCFS" => "Multiprogramiranje, FCFS", "SRTF" => "Multiprogramiranje, SRTF", _ => "Bez multiprogramiranja" };
+            sb.AppendLine($"- {label}: CPU: {string.Join(" | ", r.CpuTimeline.Select(s => $"{s.Name} {s.Start}-{s.End}"))}");
+            sb.AppendLine($"    Završetak procesa: {string.Join(", ", procs.Select(p => $"{p.Name}={r.Completion[p.Name]}"))}; ukupno vreme {r.Makespan}ms");
+            sb.AppendLine($"    Iskorišćenost CPU: {r.CpuBusy}/{r.Makespan} = {r.Utilization.ToString("0.#", CultureInfo.InvariantCulture)}%");
+        }
+        return any ? Hinted("io_scheduling", sb.ToString().TrimEnd()) : null;
+    }
+
+    // "ML Feedback q=2^i" (ili "q=2i") = kvant raste sa nivoom (1, 2, 4...); "ML Feedback q=3" = stalan kvant.
+    private static readonly System.Text.RegularExpressions.Regex FixedFeedbackQuantum =
+        new(@"feedback[^\d]{0,12}q\s*=\s*(\d+)(?!\s*\^?\s*i)", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+
+    private static bool FeedbackExponential(string? task) => task == null || !FixedFeedbackQuantum.IsMatch(task);
+
+    private static int FeedbackBase(string? task) =>
+        task != null && FixedFeedbackQuantum.Match(task) is { Success: true } m ? int.Parse(m.Groups[1].Value) : 1;
 
     private static string? NormalizeSchedulingName(string name) => name.ToUpperInvariant().Replace(" ", "_").Replace("-", "_") switch
     {
@@ -202,6 +265,7 @@ public class OsTaskSolver : ITaskSolver
         "PRIORITY" or "PRIORITET" or "PRIORITY_NON_PREEMPTIVE" => "PRIORITY",
         "PRIORITY_PREEMPTIVE" or "PREEMPTIVE_PRIORITY" => "PRIORITY_PREEMPTIVE",
         "RR" or "ROUND_ROBIN" or "ROUNDROBIN" => "RR",
+        "MLFQ" or "ML_FEEDBACK" or "FEEDBACK" or "MULTILEVEL_FEEDBACK" => "MLFQ",
         _ => null,
     };
 

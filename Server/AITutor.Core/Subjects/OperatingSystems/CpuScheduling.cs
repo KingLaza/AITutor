@@ -86,6 +86,63 @@ public static class CpuScheduling
         return new ScheduleResult(algorithm, ToSegments(ticks), completion);
     }
 
+    // Planiranje u više redova sa povratnom spregom (predavanje 6): novi proces ulazi u RQ0, posle isteka kvanta spušta se u
+    // sledeći red; kvant reda i je baseQuantum * 2^i (exponential) ili stalan baseQuantum. Redovi su FCFS, a poslednji red
+    // je ciklični (proces koji istekne ostaje u njemu). Proces dobija ceo kvant (nema prekidanja usred kvanta);
+    // procesi koji stignu u istom trenutku kad se bira sledeći, ulaze u RQ0 pre izbora. Broj redova nije ograničen.
+    public static ScheduleResult SimulateFeedback(IReadOnlyList<Proc> procs, int baseQuantum = 1, bool exponential = true)
+    {
+        if (baseQuantum <= 0) throw new ArgumentException("Kvant mora biti pozitivan");
+        var remaining = procs.ToDictionary(p => p.Name, p => p.Burst);
+        var queues = new List<List<Proc>> { new() };
+        var arrived = new HashSet<string>();
+        var completion = new Dictionary<string, int>();
+        var ticks = new List<string>();
+        var time = 0;
+
+        void Admit()
+        {
+            foreach (var p in procs.Where(p => p.Arrival <= time && arrived.Add(p.Name))) queues[0].Add(p);
+        }
+
+        while (completion.Count < procs.Count)
+        {
+            if (time > 100_000) throw new InvalidOperationException("Simulacija predugo traje");
+            Admit();
+            var level = queues.FindIndex(q => q.Count > 0);
+            if (level < 0)
+            {
+                ticks.Add("idle");
+                time++;
+                continue;
+            }
+
+            var proc = queues[level][0];
+            queues[level].RemoveAt(0);
+            var quantum = exponential ? baseQuantum << level : baseQuantum;
+            var run = Math.Min(quantum, remaining[proc.Name]);
+            for (var i = 0; i < run; i++)
+            {
+                ticks.Add(proc.Name);
+                time++;
+                remaining[proc.Name]--;
+                // Pristigli u toku kvanta čekaju u RQ0; redosled u redu sledi vreme pristizanja.
+                Admit();
+            }
+
+            if (remaining[proc.Name] == 0)
+            {
+                completion[proc.Name] = time;
+                continue;
+            }
+            var next = level + 1;
+            while (queues.Count <= next) queues.Add(new List<Proc>());
+            queues[next].Add(proc);
+        }
+
+        return new ScheduleResult("MLFQ", ToSegments(ticks), completion);
+    }
+
     private static List<Segment> ToSegments(List<string> ticks)
     {
         var segments = new List<Segment>();

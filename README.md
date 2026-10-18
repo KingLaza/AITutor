@@ -58,7 +58,8 @@ Materijal kursa nije deo repoa; u `data/os_additions/` su samo dodaci koje je na
 - API: `dotnet run` u `Server/AITutor_api` (http://localhost:5000, Swagger na `/swagger`).
 - Klijent: `npm install`, pa `npm run dev` u `Client/AITutor_web` (http://localhost:5173).
 - Testovi: `dotnet test` u `Server` (ne trebaju Ollama ni baza).
-- Eksperimenti i skripte za evaluaciju: `eval/`.
+- Eksperimenti i skripte za evaluaciju: `eval/`. Polje `mode` u `/api/chat` bira režim odgovora: `Rag` (podrazumevano, pretraga + programski alati),
+  `RagNoTools` (pretraga, ali model sam rešava zadatke) i `Plain` (bez pretrage); koristi ih `eval/ablation.py` za poređenje.
 
 ## Podešavanja
 

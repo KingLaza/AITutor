@@ -90,6 +90,18 @@ public class RagQueryServiceTests
     }
 
     [Fact]
+    public async Task RagNoTools_mode_never_calls_the_solver_and_lets_the_model_solve()
+    {
+        _solver.Result = new SolverResult("inode", "Fajl 6MB: 1536 blokova");
+
+        var answer = await _svc.AnswerAsync("Prikaži rešenje", null, new TaskState("zadatak o i-node", 1), null, AnswerMode.RagNoTools);
+
+        Assert.Equal(0, _solver.Calls);
+        Assert.DoesNotContain("izračunato programski", answer.Reply);
+        Assert.Single(_chat.Prompts);
+    }
+
+    [Fact]
     public async Task Hints_for_solver_tasks_are_prewritten_method_hints_and_never_call_the_model()
     {
         _solver.Result = new SolverResult("fork", "Broj procesa: 4", new[] { "NAGOVESTAJ-1", "NAGOVESTAJ-2" });

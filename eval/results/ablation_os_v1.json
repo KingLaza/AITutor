@@ -1,0 +1,707 @@
+[
+ {
+  "mode": "rag",
+  "id": "jan24_q6_rasporedjivanje",
+  "seconds": 17.5,
+  "intent": "Task",
+  "expected": "SJF: B; SRTF: A; Prioritet bez prekidanja: B; Prioritet sa prekidanjem: D; RR(30): A",
+  "checks": [
+   {
+    "name": "SJF->B",
+    "ok": true
+   },
+   {
+    "name": "SRTF->A",
+    "ok": true
+   },
+   {
+    "name": "PRIORITY:->B",
+    "ok": true
+   },
+   {
+    "name": "PRIORITY_PREEMPTIVE->D",
+    "ok": true
+   },
+   {
+    "name": "RR->A",
+    "ok": true
+   }
+  ],
+  "reply": "Rešenje izračunato programski (tačno, bez procene modela):\n\nRaspoređivanje procesa (simulacija po milisekundama):\n- SJF: A 0-50 | B 50-70 | D 70-110 | C 110-210\n    U periodu 60-70ms izvršava se: B\n    Završetak procesa: A=50, B=70, C=210, D=110\n- SRTF: A 0-20 | B 20-40 | A 40-70 | D 70-110 | C 110-210\n    U periodu 60-70ms izvršava se: A\n    Završetak procesa: A=70, B=40, C=210, D=110\n- PRIORITY: A 0-50 | B 50-70 | D 70-110 | C 110-210\n    U periodu 60-70ms izvršava se: B\n    Završetak procesa: A=50, B=70, C=210, D=110\n- PRIORITY_PREEMPTIVE: A 0-20 | B 20-40 | C 40-60 | D 60-100 | C 100-180 | A 180-210\n    U periodu 60-70ms izvršava se: D\n    Završetak procesa: A=210, B=40, C=180, D=100\n- RR (q=30ms): A 0-30 | B 30-50 | A 50-70 | C 70-100 | D 100-130 | C 130-160 | D 160-170 | C 170-210\n    U periodu 60-70ms izvršava se: A\n    Završetak procesa: A=70, B=50, C=210, D=170",
+  "error": null,
+  "grade": "ok"
+ },
+ {
+  "mode": "rag",
+  "id": "okt23_q9_disk",
+  "seconds": 11.1,
+  "intent": "Task",
+  "expected": "64000 staza; glava ide ka nizim cilindrima: SSTF 125,222,360,25; SCAN 25,125,222,360; C-SCAN 25,360,222,125",
+  "checks": [
+   {
+    "name": "64000",
+    "ok": true
+   },
+   {
+    "name": "SSTF",
+    "ok": true
+   },
+   {
+    "name": "SCAN",
+    "ok": true
+   },
+   {
+    "name": "C-SCAN",
+    "ok": true
+   }
+  ],
+  "reply": "Rešenje izračunato programski (tačno, bez procene modela):\n\nDisk:\n- Broj staza: 4 strana x 16000 cilindara = 64000\n- Glava je na cilindru 77, kreće se ka nižim cilindrima; preostali zahtevi: [25, 360, 125, 222]\n- SSTF: 125 -> 222 -> 360 -> 25\n- SCAN: 25 -> 125 -> 222 -> 360\n- C-SCAN: 25 -> 360 -> 222 -> 125",
+  "error": null,
+  "grade": "ok"
+ },
+ {
+  "mode": "rag",
+  "id": "okt23_q10_inode",
+  "seconds": 8.1,
+  "intent": "Task",
+  "expected": "512 adresa po bloku. a) 10 podataka, 0 indeksnih; b) 1536 podataka, 4 indeksna; c) 262144 podataka, 513 indeksnih",
+  "checks": [
+   {
+    "name": "a:10+0",
+    "ok": true
+   },
+   {
+    "name": "b:1536",
+    "ok": true
+   },
+   {
+    "name": "b:4 indeksna",
+    "ok": true
+   },
+   {
+    "name": "c:262144",
+    "ok": true
+   },
+   {
+    "name": "c:513",
+    "ok": true
+   }
+  ],
+  "reply": "Rešenje izračunato programski (tačno, bez procene modela):\n\nI-node (blok 4 KB, 10 direktnih adresa, adresa 8 B, 512 adresa po bloku, nivoa indirekcije: 3):\n- Fajl 40KB: 10 blokova sa podacima + 0 indeksnih = 10 blokova; pristupa disku do poslednjeg bloka (fajl otvoren): 1\n- Fajl 6MB: 1536 blokova sa podacima + 4 indeksnih = 1540 blokova; pristupa disku do poslednjeg bloka (fajl otvoren): 3\n- Fajl 1GB: 262144 blokova sa podacima + 513 indeksnih = 262657 blokova; pristupa disku do poslednjeg bloka (fajl otvoren): 3",
+  "error": null,
+  "grade": "ok"
+ },
+ {
+  "mode": "rag",
+  "id": "okt23_q8_adresa",
+  "seconds": 6.8,
+  "intent": "Task",
+  "expected": "offset 18 bita, indeks 15+15; a) 16 neiskoriscenih; b) 15 po tabeli (30 ukupno); c) 15|15|18",
+  "checks": [
+   {
+    "name": "16 neiskoriscenih",
+    "ok": true
+   },
+   {
+    "name": "15|15|18",
+    "ok": true
+   }
+  ],
+  "reply": "Rešenje izračunato programski (tačno, bez procene modela):\n\nFormat virtuelne adrese:\n- Stranica 256 KB -> pomeraj 18 bita\n- Tabela stranica ima 256 KB / 8 B = 32768 stavki -> 15 bita indeksa po nivou (2 nivoa, ukupno 30 bita)\n- Format: P1 15 | P2 15 | pomeraj 18\n- Korisnih bita: 48; neiskorišćenih od 64: 16\n- Veličina virtuelnog adresnog prostora: 2^48 B = 256 TB",
+  "error": null,
+  "grade": "ok"
+ },
+ {
+  "mode": "rag",
+  "id": "okt23_q7_lru",
+  "seconds": 5.2,
+  "intent": "Task",
+  "expected": "9 gresaka stranica; na kraju okviri {E, B, G}",
+  "checks": [
+   {
+    "name": "9 gresaka",
+    "ok": true
+   },
+   {
+    "name": "okviri E,B,G",
+    "ok": true
+   }
+  ],
+  "reply": "Rešenje izračunato programski (tačno, bez procene modela):\n\nZamena stranica (3 okvira, niz referenci: E D H B D E D A E B E D E B G):\n- LRU: 9 grešaka stranica\n    E: [E - -] greška\n    D: [E D -] greška\n    H: [E D H] greška\n    B: [B D H] greška, izbačena E\n    D: [B D H] pogodak\n    E: [B D E] greška, izbačena H\n    D: [B D E] pogodak\n    A: [A D E] greška, izbačena B\n    E: [A D E] pogodak\n    B: [A B E] greška, izbačena D\n    E: [A B E] pogodak\n    D: [D B E] greška, izbačena A\n    E: [D B E] pogodak\n    B: [D B E] pogodak\n    G: [G B E] greška, izbačena D",
+  "error": null,
+  "grade": "ok"
+ },
+ {
+  "mode": "rag",
+  "id": "okt23_q2_daNe",
+  "seconds": 85.3,
+  "intent": "Subject",
+  "expected": "a) Ne (stek nije zajednicki); b) Da; c) Da; d) Ne (ukupno 8); e) Ne (zavisi od virtuelne adrese)",
+  "checks": [
+   {
+    "name": "a=Ne",
+    "ok": true
+   },
+   {
+    "name": "b=Da",
+    "ok": true
+   },
+   {
+    "name": "c=Da",
+    "ok": true
+   },
+   {
+    "name": "d=Ne",
+    "ok": true
+   },
+   {
+    "name": "e=Ne",
+    "ok": true
+   }
+  ],
+  "reply": "a) Ne - Niti dele stek, jer svaka nit ima svoj stek za lokalne promenljive i pozive funkcija.\nb) Da - Lokalne promenljive funkcije main() se smeštaju na stek procesa.\nc) Da - Programski kod funkcija iz biblioteka (npr. malloc, strlen) nalazi se u adresnom prostoru procesa.\nd) Ne - Za 3 nivoa stranicenja, instrukcija koja čita operand iz memorije zahteva 3+1 = 4 pristupa memoriji.\ne) Ne - Broj virtuelne stranice zavisi od veličine virtuelne adrese, a ne nužno od 32-bitne fizičke adrese i stranice od 4KB.",
+  "error": null,
+  "grade": "ok"
+ },
+ {
+  "mode": "rag",
+  "id": "jan24_q7_daNe",
+  "seconds": 49.9,
+  "intent": "Subject",
+  "expected": "a) Da; b) Ne (sadrzi virtuelnu stranicu/pid, indeksirana okvirom); c) Da",
+  "checks": [
+   {
+    "name": "a=Da",
+    "ok": true
+   },
+   {
+    "name": "b=Ne",
+    "ok": true
+   },
+   {
+    "name": "c=Da",
+    "ok": true
+   }
+  ],
+  "reply": "a) Da - Samo stavke tabele stranica poslednjeg nivoa sadrže broj fizičkog okvira.\nb) Ne - Stavka invertovane tabele stranica sadrži broj virtuelne stranice koja je u tom okviru, identifikator procesa i kontrolne bitove, a ne adresu fizičkog okvira.\nc) Da - Operativni sistem obavezno ažurira tabelu stranica prilikom obrade greške stranice.",
+  "error": null,
+  "grade": "ok"
+ },
+ {
+  "mode": "rag",
+  "id": "jan24_q8_adresa2",
+  "seconds": 5.9,
+  "intent": "Task",
+  "expected": "9 (segment) | 9 | 9 | 12 (pomeraj) = 39 bita; 2^39 B = 512 GB",
+  "checks": [
+   {
+    "name": "9|9|9|12",
+    "ok": true
+   },
+   {
+    "name": "512 GB",
+    "ok": true
+   }
+  ],
+  "reply": "Rešenje izračunato programski (tačno, bez procene modela):\n\nFormat virtuelne adrese:\n- Stranica 4 KB -> pomeraj 12 bita\n- Tabela stranica ima 4 KB / 8 B = 512 stavki -> 9 bita indeksa po nivou (2 nivoa, ukupno 18 bita)\n- 512 segmenata -> 9 bita za segment\n- Format: segment 9 | P1 9 | P2 9 | pomeraj 12\n- Korisnih bita: 39\n- Veličina virtuelnog adresnog prostora: 2^39 B = 512 GB",
+  "error": null,
+  "grade": "ok"
+ },
+ {
+  "mode": "rag",
+  "id": "jan24_q4_monitor",
+  "seconds": 52.7,
+  "intent": "Task",
+  "expected": "monitor sa uslovnom promenljivom/stanjem koje forsira naizmenicnost set()/reset() (npr. bool next_is_set; cwait/csignal)",
+  "checks": [],
+  "reply": "monitor Switch {\n    int zajednicka_promenljiva = 0;\n    bool naredni_je_set = true;\n    condition red;\n    procedure set() {\n        if (!naredni_je_set) cwait(red);\n        zajednicka_promenljiva = 1;\n        naredni_je_set = false;\n        csignal(red);\n    }\n    procedure reset() {\n        if (naredni_je_set) cwait(red);\n        zajednicka_promenljiva = 0;\n        naredni_je_set = true;\n        csignal(red);\n    }\n}\nvoid P1() { while (true) Switch.set(); }\nvoid P2() { while (true) Switch.reset(); }\nvoid main() { parbegin(P1, P2); }\n\n_Napomena: rešenje je automatski generisao lokalni model. Uporedi ga sa izvorima i proveri rezultat._",
+  "error": null,
+  "grade": "ok"
+ },
+ {
+  "mode": "rag",
+  "id": "jun24_q3_teorija",
+  "seconds": 39.0,
+  "intent": "Subject",
+  "expected": "npr. stanje niti, programski brojac (PC), pokazivac steka (SP) i drugi registri",
+  "checks": [
+   {
+    "name": "bar 3 od: stanje/PC/SP/registri",
+    "ok": true
+   }
+  ],
+  "reply": "Prilikom zamene niti snima se kontekst tekuće niti, što uključuje programski brojač, pokazivač steka i registri. Takođe, menja se stanje niti i ona se stavlja u odgovarajući red. Ako nova nit pripada drugom procesu, menja se i adresni prostor.",
+  "error": null,
+  "grade": "ok"
+ },
+ {
+  "mode": "plain",
+  "id": "jan24_q6_rasporedjivanje",
+  "seconds": 77.3,
+  "intent": "Subject",
+  "expected": "SJF: B; SRTF: A; Prioritet bez prekidanja: B; Prioritet sa prekidanjem: D; RR(30): A",
+  "checks": [
+   {
+    "name": "SJF->B",
+    "ok": false
+   },
+   {
+    "name": "SRTF->A",
+    "ok": false
+   },
+   {
+    "name": "PRIORITY:->B",
+    "ok": false
+   },
+   {
+    "name": "PRIORITY_PREEMPTIVE->D",
+    "ok": false
+   },
+   {
+    "name": "RR->A",
+    "ok": false
+   }
+  ],
+  "reply": "Odgovor:\n\nAnalizirajmo izvršavanje svakog procesa za navedene rasporede u periodu 60-70ms.\n\nPodaci o procesima:\nA: CPU faza = 50ms, Prioritet = 4, Vreme aktiviranja = 0ms\nB: CPU faza = 20ms, Prioritet = 1, Vreme aktiviranja = 20ms\nC: CPU faza = 100ms, Prioritet = 3, Vreme aktiviranja = 40ms\nD: CPU faza = 40ms, Prioritet = 2, Vreme aktiviranja = 60ms\n\n---\n1. Raspored SJF (Shortest Job First) - Bez prekidanja\nSJF se bazira na ukupnoj dužini CPU faze. Procesi se pokreću u redosledu najkraće faze, ali se uzima u obzir vreme aktiviranja.\n\nVreme 0ms: Samo A je spreman. A počinje.\nA radi do 50ms.\nVreme 20ms: B postaje spreman.\nVreme 40ms: C postaje spreman.\nVreme 50ms: A završava.\nVreme 60ms: D postaje spreman.\n\nRaspored se mora rešiti na osnovu trenutno spremljenih procesa.\n\nVreme 0-20ms: A radi. (A ostalo: 30ms)\nVreme 20ms: Spremni su A (ostalo 30ms), B (20ms). Najkraći je B.\nVreme 20-40ms: B radi. (B završi u 40ms)\nVreme 40ms: Spremni su A (ostalo 30ms), C (100ms). Najkraći je A.\nVreme 40-70ms: A radi. (A završi u 70ms)\nU periodu 60-70ms, radi proces A.\n\n---\n2. Raspored SRTF (Shortest Remaining Time First) - Sa prekidanjem\nSRTF je dinamička verzija SJF-a.\n\nVreme 0ms: Samo A (50ms). A radi.\nVreme 20ms: B (20ms) postaje spreman. Ostalo za A je 30ms. B je kraći od A. Prekidamo A. B počinje.\nVreme 40ms: C (100ms) postaje spreman. Ostalo za B je 0ms (B završi).\nVreme 40ms: Spremni su A (30ms), C (100ms). Najkraći je A. A počinje.\nVreme 60ms: D (40ms) postaje spreman. Ostalo za A je 10ms. D je duži od A. A nastavlja.\nVreme 70ms: A završi.\nU periodu 60-70ms, radi proces A.\n\n---\n3. Raspored Prioritetu bez prekidanja\nProcesi se pokreću po prioritetu (manji broj = veći prioritet).\n\nVreme 0ms: Samo A (Prioritet 4) je spreman. A počinje.\nA radi do 50ms.\nVreme 20ms: B (Prioritet 1) postaje spreman. B ima veći prioritet od A. Pošto je bez prekidanja, A radi",
+  "error": null,
+  "grade": "wrong"
+ },
+ {
+  "mode": "plain",
+  "id": "okt23_q9_disk",
+  "seconds": 86.4,
+  "intent": "Subject",
+  "expected": "64000 staza; glava ide ka nizim cilindrima: SSTF 125,222,360,25; SCAN 25,125,222,360; C-SCAN 25,360,222,125",
+  "checks": [
+   {
+    "name": "64000",
+    "ok": false
+   },
+   {
+    "name": "SSTF",
+    "ok": false
+   },
+   {
+    "name": "SCAN",
+    "ok": false
+   },
+   {
+    "name": "C-SCAN",
+    "ok": false
+   }
+  ],
+  "reply": "Odgovor:\n\nPrvo, izračunaj broj staza.\n\nDisk ima 2 tanjira (4 strane).\nBroj staza je jednak broju cilindara, jer se cilindar odnosi na vertikalnu poziciju na disku.\nDakle, broj staza je 16000.\n\nSada analiziraj red I/O zahteva i trenutno stanje.\n\nPočetni zahtevi: [25, 100, 360, 77, 125, 222]\nUsluženi zahtevi: [100] i [77]\n\nOvo znači da su cilindri 100 i 77 obrađeni. Preostali zahtevi su: [25, 360, 125, 222].\n\nDa bismo odredili sledeći cilindar, moramo znati gde se glava trenutno nalazi nakon usluge cilindra 77. Pretpostavimo da je poslednji usluga bio cilindar 77.\n\nAlgoritmi:\n\n1. SSTF (Shortest Seek Time First)\nSSTF bira zahtev koji je najbliži trenutnoj poziciji glave. Ako je glava na 77, gledamo udaljenost do preostalih zahteva:\nUdaljenost do 25: |77 - 25| = 52\nUdaljenost do 360: |77 - 360| = 283\nUdaljenost do 125: |77 - 125| = 48\nUdaljenost do 222: |77 - 222| = 145\nNajmanja udaljenost je 48, pa sledeći cilindar je 125.\n\n2. SCAN (Elevator Algorithm)\nSCAN se kreće u jednom smeru sve dok ne dođe do kraja diska, a zatim se menja smer. Da bismo primenili SCAN, moramo znati smer kretanja. Ako pretpostavimo da je glava krenula ka većim cilindrima (jer je 100 usluga, a sledeći je 77, što je malo nejasno, ali standardno je da se nastavlja u smeru ili ka najudaljenijem cilindru).\n\nAko pretpostavimo da je glava poslednji put bila na 77 i da se kreće ka najvećem cilindru (360), sledeći cilindar je najmanji preostali zahtev koji je veći od 77, ili ako je već prošao sve veće, onda ide ka najmanjem.\n\nAko se kreće ka rastućim cilindrima (od 77 ka 360):\nPreostali zahtevi: [25, 125, 222, 360]\nSledeći cilindar je 125.\n\nAko se kreće ka opadajućim cilindrima (od 77 ka 0):\nSledeći cilindar je 25.\n\nBez specifikacije početnog smjera, najčešće se pretpostavlja da se nastavlja u smeru koji vodi ka najudaljenijem cilindru ili da se koristi smer koji je bio poslednji. Ako je poslednji usluga 77, a preostali su [25, 125, 222, 360], i ako se pretpostavi da je glava krenula ka većim cilindrima, sledeći je 125",
+  "error": null,
+  "grade": "wrong"
+ },
+ {
+  "mode": "plain",
+  "id": "okt23_q10_inode",
+  "seconds": 64.9,
+  "intent": "Subject",
+  "expected": "512 adresa po bloku. a) 10 podataka, 0 indeksnih; b) 1536 podataka, 4 indeksna; c) 262144 podataka, 513 indeksnih",
+  "checks": [
+   {
+    "name": "a:10+0",
+    "ok": true
+   },
+   {
+    "name": "b:1536",
+    "ok": true
+   },
+   {
+    "name": "b:4 indeksna",
+    "ok": false
+   },
+   {
+    "name": "c:262144",
+    "ok": true
+   },
+   {
+    "name": "c:513",
+    "ok": false
+   }
+  ],
+  "reply": "Odgovor:\n\nAnalizirajmo dati sistem:\nVeličina bloka (B) = 4KB = 4096 bajtova\nVeličina adrese diska (A) = 8B\nBroj direktnih adresa u i-nodeu = 10\nBroj indirektnih pokazivača = 1 (jednostruki), 1 (dvostruki), 1 (trostruki)\n\nPrvo izračunajmo koliko adresa (pokazivača) može da stane u jedan blok.\nBroj adresa po bloku (N_addr) = Veličina bloka / Veličina adrese\nN_addr = 4096 B / 8 B = 512 adresa\n\nUkupan broj pokazivača koji i-node može da sadrži:\nUkupan broj pokazivača = 10 (direktni) + 1 (jednostruki) + 1 (dvostruki) + 1 (trostruki) = 13 pokazivača.\n\nUkupan broj blokova koje i-node može da adresira:\nBroj blokova = 10 (direktni) + N_addr (jednostruki) + N_addr^2 (dvostruki) + N_addr^3 (trostruki)\nBroj blokova = 10 + 512 + 512^2 + 512^3\nBroj blokova = 10 + 512 + 262144 + 134217728\nBroj blokova = 134480394 bloka.\n\nSada izračunajmo za svaku veličinu datoteke.\n\na) Veličina datoteke = 40KB\nBroj blokova podataka potrebnih = ceil(Veličina datoteke / Veličina bloka)\nBroj blokova podataka = ceil(40960 B / 4096 B) = 10 blokova.\n\nDa li je potrebno koristiti indirektne blokove?\nDirektni blokovi su 10. Pošto je potrebno samo 10 blokova, koristiće se samo direktni blokovi.\nPotrebni blokovi podataka = 10.\nPotrebni indeksni blokovi = 0.\n\nb) Veličina datoteke = 6MB\nVeličina datoteke u bajtovima = 6 * 1024 * 1024 B = 6291456 B.\nBroj blokova podataka potrebnih = ceil(6291456 B / 4096 B) = ceil(1536 blokova).\nBroj blokova podataka = 1536.\n\nDa li je potrebno koristiti indirektne blokove?\nDirektni blokovi = 10.\nPreostali blokovi = 1536 - 10 = 1526 blokova.\n\nJednostruki indirektni blok adresira 512 blokova.\nPotrebno za jednostruki indirektni blok = ceil(1526 / 512) = ceil(2.98...) = 3 blokova.\nKoristićemo 1 jednostruki indirektni blok (koji adresira 512 blokova) i deo drugog.\n\nAko koristimo 1 jednostruki indirektni blok, adresira 512 blokova.\nPreostali blokovi = 1",
+  "error": null,
+  "grade": "partial"
+ },
+ {
+  "mode": "plain",
+  "id": "okt23_q8_adresa",
+  "seconds": 79.0,
+  "intent": "Subject",
+  "expected": "offset 18 bita, indeks 15+15; a) 16 neiskoriscenih; b) 15 po tabeli (30 ukupno); c) 15|15|18",
+  "checks": [
+   {
+    "name": "16 neiskoriscenih",
+    "ok": false
+   },
+   {
+    "name": "15|15|18",
+    "ok": false
+   }
+  ],
+  "reply": "Odgovor:\n\nAnalizirajmo dati memorijski podsistem:\nVirtuelni adresni prostor: 64 bita\nFizički adresni prostor: 52 bita\nVeličina stranice (Page Size): 256 KB\nTabela stranica: 2 nivoa\nBroj bitova za indeksiranje u oba nivoa je isti.\nVeličina ulaza (entry) u tabeli stranica: 8 B\n\nPrvo, izračunajmo broj bitova koji se koriste za adresiranje unutar stranice (offset).\nVeličina stranice je 256 KB.\n256 KB = 2^8 * 2^10 B = 2^18 B.\nBroj bitova za offset (d) je 18 bitova.\n\nUkupan broj bitova u virtuelnoj adresi (VA) je 64 bita.\nVA = (Indeks Nivo 1) | (Indeks Nivo 2) | (Offset)\n64 = (Bitovi za Indeks Nivo 1) + (Bitovi za Indeks Nivo 2) + 18\n\nBitovi za indeksiranje (I1 + I2) = 64 - 18 = 46 bitova.\n\nPošto je broj bitova za indeksiranje u obe tabele stranica isti, neka je taj broj $k$.\n$2k = 46$\n$k = 23$ bitova.\n\nDakle, bitovi za Indeks Nivo 1 su 23, bitovi za Indeks Nivo 2 su 23, a bitovi za offset su 18.\nProvera: 23 + 23 + 18 = 64 bita.\n\na) Koliko bitova u virtuelnoj adresi se ne koristi za adresiranje?\n\nAdresiranje se odnosi na deo adrese koji se koristi za identifikaciju stranice (indeksi) i deo koji identifikuje lokaciju unutar stranice (offset). U ovom kontekstu, svi 64 bita se koriste za adresiranje (tj. za identifikaciju stranice i lokaciju unutar stranice).\n\nMeđutim, ako pitanje podrazumeva da li postoji deo adrese koji je rezervisan ili ne koristi se za strukturu tabele stranica, to nije slučaj jer smo izračunali da se svi 64 bita raspoređuju na indeksiranje i offset.\n\nAko je pitanje postavljeno u kontekstu ograničenja fizičkog prostora, to je drugačija stvar. Fizčki adresni prostor je 52 bita. To znači da se 52 bita koriste za adresiranje u fizičkom memorijskom sistemu.\n\nAko interpretiramo \"adresiranje\" kao deo koji se koristi za mapiranje na fizički prostor (tj. bitovi koji se koriste za identifikaciju stranice i offset), onda su svi 64 bita deo virtuelnog adresnog prostora.\n\nAko je pitanje zamišljeno da se uporedi sa veličinom fizičkog prostora, onda je razlika između virtuelnog i fizičkog prostora. Ali, najlogičnije je da se pita za deo virtuelne adrese koji nije potreban za strukturu tabele stranica ili offset. Pošto smo sve rasporedili, odgovor je 0 bitova.\n\nOdgovor na a) je 0 bitova, jer su svi 64 bita raspoređeni na indeksiranje i offset.\n\nb) Koliko bitova se koristi za indeksiranje tabele stranica?\n\nIndeksiranje se odnosi na bitove koji se koriste za navigaciju kroz nivoe tabele",
+  "error": null,
+  "grade": "wrong"
+ },
+ {
+  "mode": "plain",
+  "id": "okt23_q7_lru",
+  "seconds": 57.5,
+  "intent": "Subject",
+  "expected": "9 gresaka stranica; na kraju okviri {E, B, G}",
+  "checks": [
+   {
+    "name": "9 gresaka",
+    "ok": false
+   },
+   {
+    "name": "okviri E,B,G",
+    "ok": false
+   }
+  ],
+  "reply": "Odgovor:\n\nImamo 3 stranicna okvira (frame). Niz stranica je: EDHBDEDAEBEDEBG. Koristimo LRU (Least Recently Used) algoritam.\n\nPratićemo stanje okvira i broj grešaka (page faults).\n\nPočetno stanje: Okviri su prazni.\n\n1. Stranica E: Učitava se. Okviri: [E, -, -]. Greška: 1.\n2. Stranica D: Učitava se. Okviri: [E, D, -]. Greška: 2.\n3. Stranica H: Učitava se. Okviri: [E, D, H]. Greška: 3.\n   (Trenutno stanje: E, D, H. Najmanje korišćena je E, jer je najranije uneta, ali u LRU se gleda poslednje korišćenje. Pretpostavimo da je red korišćenja: H (najnovije), D, E (najstarije)).\n\n4. Stranica B: Ne postoji. Najstarija je E. Zamena E sa B. Okviri: [B, D, H]. Greška: 4.\n   (Red korišćenja: B, H, D).\n\n5. Stranica D: Već je prisutna. Okviri: [B, D, H]. Greška: 4.\n   (D je sada najnovije korišćena. Red korišćenja: D, B, H).\n\n6. Stranica E: Ne postoji. Najstarija je H. Zamena H sa E. Okviri: [B, D, E]. Greška: 5.\n   (Red korišćenja: E, D, B).\n\n7. Stranica D: Već je prisutna. Okviri: [B, D, E]. Greška: 5.\n   (D je sada najnovije korišćena. Red korišćenja: D, E, B).\n\n8. Stranica A: Ne postoji. Najstarija je B. Zamena B sa A. Okviri: [A, D, E]. Greška: 6.\n   (Red korišćenja: A, D, E).\n\n9. Stranica E: Već je prisutna. Okviri: [A, D, E]. Greška: 6.\n   (E je sada najnovije korišćena. Red korišćenja: E, A, D).\n\n10. Stranica B: Ne postoji. Najstarija je D. Zamena D sa B. Okviri: [A, B, E]. Greška: 7.\n    (Red korišćenja: B, E, A).\n\n11. Stranica E: Već je prisutna. Okviri: [A, B, E]. Greška: 7.\n    (E je sada najnovije korišćena. Red korišćenja: E, B, A).\n\n12. Stranica D: Ne postoji. Najstarija je A. Zamena A sa D. Okviri: [D, B, E]. Greška: 8.\n    (Red korišćenja: D, E, B).\n\n13. Stranica E: Već je prisutna. Okviri: [D, B, E]. Greška: 8.\n    (E je sada najnovije korišćena. Red korišćenja: E, D",
+  "error": null,
+  "grade": "wrong"
+ },
+ {
+  "mode": "plain",
+  "id": "okt23_q2_daNe",
+  "seconds": 83.1,
+  "intent": "Subject",
+  "expected": "a) Ne (stek nije zajednicki); b) Da; c) Da; d) Ne (ukupno 8); e) Ne (zavisi od virtuelne adrese)",
+  "checks": [
+   {
+    "name": "a=Ne",
+    "ok": false
+   },
+   {
+    "name": "b=Da",
+    "ok": true
+   },
+   {
+    "name": "c=Da",
+    "ok": true
+   },
+   {
+    "name": "d=Ne",
+    "ok": false
+   },
+   {
+    "name": "e=Ne",
+    "ok": true
+   }
+  ],
+  "reply": "Odgovor:\n\na) Da. Proces sa više niti (threadova) deli programski kod i globalne podatke jer su te komponente deo samog procesa. Međutim, svaka nit mora imati svoj sopstveni stek (stack) za praćenje lokalnih promenljivih, poziva funkcija i lokalnog stanja izvršavanja.\n\nb) Da. Kada se izvršava C program, funkcija main() (kao i sve druge funkcije) se učitava u memoriju. Lokalna promenljiva funkcije main() (tj. promenljive deklarisane unutar main() funkcije) se tokom izvršavanja smeštaju na stek procesa.\n\nc) Da. Funkcija malloc() je deo biblioteke koja se koristi za dinamičko alociranje memorije. Ta alokacija se obavlja unutar adresnog prostora procesa, obično u heap delu memorije procesa.\n\nd) Da. Ako je sistem sa 3 nivoa stranicenja (bez kesa i TLB), pristup memoriji za instrukciju koja sabira vrednost registra sa sadržajem memorijske lokacije zahteva sledeće korake:\n1. Prvi pristup: Pronalaženje stranice u prvom nivou tabele stranica.\n2. Drugi pristup: Pronalaženje stranice u drugom nivou tabele stranica.\n3. Treći pristup: Pronalaženje stranice u trećem nivou tabele stranica, nakon čega se pristupa stvarnoj memorijskoj lokaciji.\nDakle, zahteva 3 pristupa memoriji.\n\ne) Ne. Ako je fizicki adresni prostor 32-bitan, to znači da je ukupna veličina fizickog memorijskog prostora 2^32 bajta. Ako je veličina stranice 4KB (tj. 2^12 bajta), broj bitova potreban za indeksiranje stranice (offset unutar stranice) je 12 bitova. Ukupan broj bitova za virtuelnu adresu je 32. Broj bitova za identifikaciju virtuelne stranice je razlika između ukupnog broja bitova virtuelne adrese i broja bitova za offset unutar stranice. Ako pretpostavimo da je virtuelni adresni prostor takođe 32-bitan, broj bitova za virtuelnu stranicu je 32 - 12 = 20 bitova. Međutim, pitanje ne navodi da li je virtuelni adresni prostor 32-bitan. Ako je virtuelni adresni prostor veći od 32-bitnog, onda broj bitova za virtuelnu stranicu može biti veći od 20. Ako je virtuelni adresni prostor ograničen na 32 bita, onda je ta tvrdnja tačna, ali pošto je navedeno samo 32-bitni fizicki adresni prostor, a ne virtuelni, ne možemo potvrditi da je broj bitova za virtuelnu stranicu uvek 20. Ako je podrazumevano da je virtuelni prostor jednak fizickom (32 bita), onda je tačno, ali je preciznije reći da je to uslovno. U kontekstu standardnih pitanja, ako je virtuelni prostor 32-bitan, onda je 20 bitova. Ali, pošto je formulacija \"uvek iznosi 20 bitova\" bez navođenja veličine virtuelnog prostora, odgovor je Ne jer to nije garantovano.",
+  "error": null,
+  "grade": "partial"
+ },
+ {
+  "mode": "plain",
+  "id": "jan24_q7_daNe",
+  "seconds": 19.4,
+  "intent": "Subject",
+  "expected": "a) Da; b) Ne (sadrzi virtuelnu stranicu/pid, indeksirana okvirom); c) Da",
+  "checks": [
+   {
+    "name": "a=Da",
+    "ok": false
+   },
+   {
+    "name": "b=Ne",
+    "ok": true
+   },
+   {
+    "name": "c=Da",
+    "ok": true
+   }
+  ],
+  "reply": "a. Ne, jer svaka stavka u tabeli stranica, bez obzira na nivo, sadrži informaciju o tome gde se stranica nalazi, što može uključivati fizičku adresu na poslednjem nivou.\nb. Ne, invertovana tabela stranica obično sadrži informacije o tome koja virtuelna stranica odgovara određenoj fizičkoj stranici, a ne direktno adresu fizičke stranice u svakoj stavci.\nc. Da, jer prilikom obrade greške stranica, sistem mora da ažurira tabele stranica kako bi se osiguralo ispravno mapiranje i nastavak izvršavanja programa.",
+  "error": null,
+  "grade": "partial"
+ },
+ {
+  "mode": "plain",
+  "id": "jan24_q8_adresa2",
+  "seconds": 78.0,
+  "intent": "Subject",
+  "expected": "9 (segment) | 9 | 9 | 12 (pomeraj) = 39 bita; 2^39 B = 512 GB",
+  "checks": [
+   {
+    "name": "9|9|9|12",
+    "ok": false
+   },
+   {
+    "name": "512 GB",
+    "ok": false
+   }
+  ],
+  "reply": "Odgovor:\n\nDa bismo nacrtali format virtuelne adrese i izračunali veličinu virtuelnog adresnog prostora, moramo analizirati dati sistem.\n\nSistem implementira segmentaciju sa stranicenjem u dva nivoa.\n\nParametri su:\n1. Maksimalan broj segmenata = 512\n2. Veličina stranice (Page Size) = 4 KB = 4 * 1024 bajta = 4096 bajta\n3. Veličina stavke u tabeli stranice (Page Table Entry, PTE) = 8 B\n\n### 1. Analiza segmentacije\n\nPošto proces može imati maksimalno 512 segmenata, potrebna nam je adresa koja može da identifikuje jedan od tih segmenata.\n\nBroj segmenata (512) zahteva logičan broj bitova:\nlog2(512) = 9 bitova.\nDakle, deo virtuelne adrese posvećen identifikaciji segmenta (Segment ID) ima 9 bitova.\n\n### 2. Analiza stranicenja (Paging)\n\nStranicenje se dešava unutar svakog segmenta.\n\nVeličina stranice je 4 KB. Broj bitova potreban za adresiranje unutar stranice (Offset) je:\nlog2(4096) = 12 bitova.\nDakle, deo virtuelne adrese posvećen ofsetu unutar stranice (Page Offset) ima 12 bitova.\n\n### 3. Struktura adresiranja (Dva nivoa)\n\nPitanje navodi \"segmentaciju sa stranicenjem u dva nivoa\". Ovo obično znači da se segmentacija koristi za razdvajanje logičkih delova programa, a unutar svakog segmenta se koristi stranicenje.\n\nAko je segmentacija na prvom nivou, a stranicenje na drugom nivou, virtuelna adresa se obično sastoji od:\n[Segment ID] | [Adresa unutar segmenta]\n\nPošto je stranicenje u dva nivoa, to znači da se adresa unutar segmenta (koja je adresa stranice) mora dalje razbiti.\n\nStandardno, ako je stranicenje u dva nivoa, adresa stranice se deli na:\n[Page Directory Index] | [Page Table Index] | [Page Offset]\n\nMeđutim, u kontekstu segmentacije koja se kombinuje sa stranicenjem, često se koristi sledeći model:\nVirtuelna Adresa = [Segment Selector] | [Adresa stranice unutar segmenta]\n\nAko je stranicenje u dva nivoa, to znači da je adresa stranice (koja je adresa u okviru segmenta) raspoređena kao:\n[Nivo 1 Index] | [Nivo 2 Index] | [Offset]\n\n**Izračunavanje bitova za stranicenje:**\nUkupna veličina stranice je 4 KB. Ako je stranicenje u dva nivoa, to znači da se adresa stranice deli na dva indeksa i jedan ofset.\n\nAko je veličina stranice 4 KB, to znači da je ukupni broj stranica u jednom segmentu (ako je segment dovoljno velik) $4096 / (\\text{veličina stranice})$ što je 1. Ako je ovo pogrešno tumačenje, moramo pretpostaviti da je 4KB veličina stranice, a da se unutar segmenta koristi stranicenje.\n\nAko je stranicenje u dva nivoa, i ako pretpostavimo",
+  "error": null,
+  "grade": "wrong"
+ },
+ {
+  "mode": "plain",
+  "id": "jan24_q4_monitor",
+  "seconds": 87.1,
+  "intent": "Subject",
+  "expected": "monitor sa uslovnom promenljivom/stanjem koje forsira naizmenicnost set()/reset() (npr. bool next_is_set; cwait/csignal)",
+  "checks": [],
+  "reply": "Ovo je klasičan problem koji ilustruje potrebu za kontrolom pristupa zajedničkim resursima u višestrukom okruženju, što se rešava korišćenjem monitora (ili semafora/mutexa).\n\nPošto je tražen monitor, rešenje mora biti implementirano u stilu monitora, što znači da se kritična sekcija (pogotovo deo gde se menja promenljiva) automatski štiti od istovremenog pristupa.\n\nEvo kako bi se takav monitor mogao definisati i implementirati, koristeći koncepte koji su tipični za operativne sisteme.\n\n### Definicija Monitora\n\nMonitor će sadržati:\n1. Zajedničku promenljivu (npr. `shared_variable`).\n2. Funkcije za kontrolu pristupa: `set()` i `reset()`.\n3. Mehanizme za sinhronizaciju (čekanje i obaveštavanje, tipično korišćenje uslovnih varijabli ili čekanja/obaveštavanja).\n\nPretpostavimo da koristimo koncept uslovnih varijabli (condition variables) za implementaciju čekanja, što je standardan način u monitorima.\n\n### Pseudokod Implementacije\n\n**Struktura Monitora:**\n\n```\nMonitor SharedResource {\n    // Zajednička promenljiva koju procesi modifikuju\n    int shared_variable = 0;\n\n    // Uslovne varijable za sinhronizaciju\n    // Ako je potrebno da se procesi čekaju dok se promena ne izvrši,\n    // ali u ovom slučaju, pošto je cilj samo da se naizmenično setuje/resetuje,\n    // možemo koristiti samo mehanizam za osiguranje da samo jedan proces radi u datom trenutku.\n    // Međutim, za striktno naizmenično izvršavanje, moramo da kontrolišemo redosled.\n\n    // Za jednostavnost, koristićemo mehanizam koji osigurava da se samo jedan proces izvršava u kritičkoj sekciji.\n    // Ako je cilj da se *garantuje* da P1 radi, pa P2, pa P1, itd., onda je potreban dodatni brojač ili stanje.\n\n    // Pretpostavimo da je cilj da se samo jedan proces u bilo kom trenutku menja promenljiva.\n    // Ako je cilj striktno naizmeničnost (P1 -> P2 -> P1 -> P2...), onda je potrebno stanje.\n    \n    int turn = 0; // 0 za P1, 1 za P2 (ili slično)\n\n    // Funkcija za postavljanje na 1\n    procedure set() {\n        // U ulazu monitora, proces čeka dok mu ne dozvoli turn\n        while (turn != ID_za_ovaj_proces) {\n            wait(condition_variable); // Čekaj dok ne bude tvoj red\n        }\n\n        // Kritična sekcija\n        shared_variable = 1;\n        \n        // Promeni stanje da bi sledeći proces mogao da radi\n        turn = (turn + 1) % 2; \n        \n        // Obavesti sledeći proces\n        signal(condition_variable); \n    }\n\n    // Funkcija za resetovanje na 0\n    procedure reset() {\n        // Slično kao set(), proces čeka dok mu ne bude dozvoljen red\n        while (turn != ID_za_ovaj_proces) {\n            wait(condition_variable);\n        }",
+  "error": null,
+  "grade": "partial"
+ },
+ {
+  "mode": "plain",
+  "id": "jun24_q3_teorija",
+  "seconds": 32.3,
+  "intent": "Subject",
+  "expected": "npr. stanje niti, programski brojac (PC), pokazivac steka (SP) i drugi registri",
+  "checks": [
+   {
+    "name": "bar 3 od: stanje/PC/SP/registri",
+    "ok": true
+   }
+  ],
+  "reply": "Odgovor:\n\nTri stavke u upravljačkom bloku niti (context switch) koje se menjaju su:\n\n1. Registri procesora: Ovo uključuje sve registrare CPU-a (kao što su registri za akumulator, pokazivači, itd.) koji sadrže trenutno stanje izvršavanja niti. Kada se dešava zamena niti, stanje registara trenutne niti mora biti sačuvano, a stanje registara sledeće niti učitano u CPU.\n\n2. Stanje izvršavanja (Program Counter/Instruction Pointer): Ovo je pokazivač koji ukazuje na sledeću instrukciju koja treba da se izvrši u trenutnoj niti. Pri promeni niti, ovaj pokazivač mora biti promenjen da bi se nastavilo izvršavanje od tačke gde je prekinuto u novoj niti.\n\n3. Stanje memorije/Adresni prostor (Page Table Base Register ili slično): U sistemima sa virtuelnom memorijom, mora se promeniti pokazivač koji ukazuje na tablice stranica (page tables) za trenutnu nit. Ovo osigurava da nova nit pristupa svom sopstvenom, izolovanom virtuelnom adresnom prostoru.",
+  "error": null,
+  "grade": "partial"
+ },
+ {
+  "mode": "ragnotools",
+  "id": "jan24_q6_rasporedjivanje",
+  "seconds": 172.2,
+  "intent": "Task",
+  "expected": "SJF: B; SRTF: A; Prioritet bez prekidanja: B; Prioritet sa prekidanjem: D; RR(30): A",
+  "checks": [
+   {
+    "name": "SJF->B",
+    "ok": false
+   },
+   {
+    "name": "SRTF->A",
+    "ok": true
+   },
+   {
+    "name": "PRIORITY:->B",
+    "ok": false
+   },
+   {
+    "name": "PRIORITY_PREEMPTIVE->D",
+    "ok": false
+   },
+   {
+    "name": "RR->A",
+    "ok": false
+   }
+  ],
+  "reply": "SJF:\nVreme aktiviranja: A(0), B(20), C(40), D(60)\nNa vremenu 0ms: Samo A je spreman. A se izvršava.\nNa vremenu 20ms: A je izvršio 20ms (preostalo 30ms). B postaje spreman.\nSpremni procesi: A (preostalo 30ms), B (20ms).\nSJF bira B jer je kraći. B se izvršava.\nNa vremenu 40ms: B je završio (20ms). C postaje spreman.\nSpremni procesi: A (preostalo 30ms), C (100ms).\nSJF bira A jer je kraći. A se izvršava.\nNa vremenu 60ms: A je završio (30ms). D postaje spreman.\nSpremni procesi: C (100ms), D (40ms).\nSJF bira D jer je kraći. D se izvršava.\nU periodu 60-70ms se izvršava proces D.\n\nSRTF:\nVreme aktiviranja: A(0), B(20), C(40), D(60)\nNa vremenu 0ms: Samo A je spreman. A se izvršava.\nNa vremenu 20ms: A je izvršio 20ms (preostalo 30ms). B postaje spreman.\nSpremni procesi: A (preostalo 30ms), B (20ms).\nSRTF bira B jer je kraći. B se izvršava.\nNa vremenu 40ms: B je završio. C postaje spreman.\nSpremni procesi: A (preostalo 30ms), C (100ms).\nSRTF bira A jer je kraći. A se izvršava.\nNa vremenu 60ms: A je završio (30ms). D postaje spreman.\nSpremni procesi: C (100ms), D (40ms).\nSRTF bira D jer je kraći. D se izvršava.\nU periodu 60-70ms se izvršava proces D.\n\nPrioritet bez prekidanja:\nNa vremenu 0ms: Samo A je spreman. A se izvršava (prioritet 4).\nNa vremenu 20ms: B postaje spreman (prioritet 1).\nSpremni procesi: A (prioritet 4), B (prioritet 1).\nPrioritet bira B. B se izvršava.\nNa vremenu 40ms: B je završio. C postaje spreman (prioritet 3).\nSpremni procesi: A (prioritet 4), C (prioritet 3).\nPrioritet bira C. C se izvršava.\nNa vremenu 60ms: C je izvršio 20ms (preostalo 80ms). D postaje spreman (prioritet 2).\nSpremni procesi: A (prioritet 4), C (prioritet 3), D (prioritet 2).\nPrioritet bira D. D se izvršava.\nU periodu 60-70ms se izvršava proces D.\n\nPrioritet sa prekidanjem (manji broj, veći prioritet):\nNa vremenu 0ms: Samo A je spreman. A se izvršava (prioritet 4).\nNa vremenu 20ms: B postaje spreman (prioritet 1).\nSpremni procesi: A (prioritet 4), B (prioritet 1).\nPrioritet bira B. B se izvršava.\nNa vremenu 40ms: B je završio. C postaje spreman (prioritet 3).\nSpremni procesi: A (prioritet 4), C (prioritet 3).\nPrioritet bira C. C se izvršava.\nNa vremenu 60ms: C je izvršio 20ms (preostalo 80ms). D postaje spreman (prioritet 2).\nSpremni procesi: A (prioritet 4), C (prioritet 3), D (prioritet 2).\nPrioritet bira D. D se izvršava.\nU periodu 60-70ms se izvršava proces D.\n\nRoundRobin (kvant = 30ms):\nNa vremenu 0ms: Samo A je spreman. A se izvršava za 30ms.\nNa vremenu 20ms: A je izvršio 20ms (preostalo 30ms). B postaje spreman.\nNa vremenu 30ms: A je prekinut. Spremni procesi: B (20ms), A (preostalo 30ms).\nRR bira B. B se izvršava za 30ms.\nNa vremenu 50ms: B je završio (20ms). Spremni procesi: A (preostalo 30ms).\nRR bira A. A se izvršava za 30ms.\nNa vremenu 80ms: A je završio (30ms). C postaje spreman (aktiviranje 40ms, ali je čekao). D postaje spreman (aktiviranje 60ms, ali je čekao).\nSpremni procesi: C (100ms), D (40ms).\nRR bira C. C se izvršava za 30ms.\nNa vremenu 110ms: C je prekinut. Spremni procesi: D (40ms), C (preostalo 70ms).\nRR bira D. D se izvršava za 30ms.\nNa vremenu 140ms: D je prekinut. Spremni procesi: C (preostalo 70ms), D (preostalo 10ms).\nRR bira C. C se izvršava za 30ms.\nU periodu 60-70ms se izvršava proces C (izvršavanje C počinje na 80ms, ali je u tom periodu u redu za izvršavanje, a na 60ms je D u redu za izvršavanje, ali je C bio u redu pre nego što je D postao spreman).\n\nRevidiran RR:\nVreme 0-30ms: A izvršava (A preostalo\n\n_Napomena: rešenje je automatski generisao lokalni model. Uporedi ga sa izvorima i proveri rezultat._",
+  "error": null,
+  "grade": "partial"
+ },
+ {
+  "mode": "ragnotools",
+  "id": "okt23_q9_disk",
+  "seconds": 143.0,
+  "intent": "Task",
+  "expected": "64000 staza; glava ide ka nizim cilindrima: SSTF 125,222,360,25; SCAN 25,125,222,360; C-SCAN 25,360,222,125",
+  "checks": [
+   {
+    "name": "64000",
+    "ok": false
+   },
+   {
+    "name": "SSTF",
+    "ok": true
+   },
+   {
+    "name": "SCAN",
+    "ok": false
+   },
+   {
+    "name": "C-SCAN",
+    "ok": false
+   }
+  ],
+  "reply": "Broj staza na disku se računa kao proizvod broja tanjira i broja strana po tanjiru.\nBroj staza = Broj tanjira * Broj strana po tanjiru\nBroj staza = 2 * 4\nBroj staza = 8\n\nPreostali I/O zahtevi su: [25, 100, 360, 77, 125, 222].\nUsluženi zahtevi su: [100] i [77].\n\nPreostali zahtevi nakon usluge 100 i 77 su: [25, 360, 125, 222].\nPočetna pozicija (poslednji usluga) je 77 (ako se uzme da je poslednji usluga 77, jer je 100 usluga pre njega, ali po redosledu usluge su 100 i 77, pa je poslednja usluga 77). Ako se uzme da je poslednja usluga 77, onda je trenutna pozicija 77.\n\nAlgoritam SSTF (Shortest Seek Time First):\nTrenutna pozicija = 77\nPreostali zahtevi: [25, 360, 125, 222]\nRazlike:\n| 25 - 77 | = 52\n| 360 - 77 | = 283\n| 125 - 77 | = 48\n| 222 - 77 | = 145\nNajmanja razlika je 48, pa se sledeći zahtev je 125.\nTrenutna pozicija = 125\nPreostali zahtevi: [25, 360, 222]\nRazlike:\n| 25 - 125 | = 100\n| 360 - 125 | = 235\n| 222 - 125 | = 97\nNajmanja razlika je 97, pa se sledeći zahtev je 222.\nTrenutna pozicija = 222\nPreostali zahtevi: [25, 360]\nRazlike:\n| 25 - 222 | = 197\n| 360 - 222 | = 138\nNajmanja razlika je 138, pa se sledeći zahtev je 360.\nTrenutna pozicija = 360\nPreostali zahtevi: [25]\nSledeći zahtev je 25.\n\nSledeći cilindri prema SSTF su: 125, 222, 360, 25.\n\nAlgoritam SCAN (Elevator):\nPretpostavimo da je disk celokupan opseg od 0 do 360 (najveći cilindar u zahtevima).\nTrenutna pozicija = 77\nPreostali zahtevi: [25, 360, 125, 222]\nPošto je poslednja usluga 77, i ako se pretpostavi da se skenira ka većim cilindrima (u smeru rastućeg broja cilindara), sledeći cilindar je najmanji preostali zahtev veći od 77, ili najveći ako se skenira do kraja. Ako se pretpostavi da se skenira ka najvećem cilindru (360), sledi:\n1. Cilindri veći od 77: [125, 222, 360] u rastućem redosledu.\n2. Cilindri manji od 77: [25] u opadajućem redosledu.\n\nSledeći zahtev je 125.\nTrenutna pozicija = 125\nPreostali zahtevi: [25, 222, 360]\nSledeći zahtev je 222.\nTrenutna pozicija = 222\nPreostali zahtevi: [25, 360]\nSledeći zahtev je 360.\nTrenutna pozicija = 360\nPreostali zahtevi: [25]\nSledeći zahtev je 25 (skeniranje u suprotnom smeru).\n\nSledeći cilindri prema SCAN su: 125, 222, 360, 25.\n\nAlgoritam C-SCAN (Circular SCAN):\nC-SCAN se ponaša kao SCAN, ali kada dođe do kraja diska, vraća se na početak (0) bez obavljanja usluga na putu nazad.\nTrenutna pozicija = 77\nPreostali zahtevi: [25, 360, 125, 222]\nSledeći zahtev je 125 (kao i kod SCAN).\nTrenutna pozicija = 125\nPreostali zahtevi: [25, 222, 360]\nSledeći zahtev je 222.\nTrenutna pozicija = 222\nPreostali zahtevi: [25, 360]\nSledeći zahtev je 360.\nTrenutna pozicija = 360\nPreostali zahtevi: [25]\nPošto je 360 kraj, sledeći zahtev je 25 (skeniranje u smeru 0).\n\nSledeći cilindri prema C-SCAN su: 125, 222, 360, 25.\n\n_Napomena: rešenje je automatski generisao lokalni model. Uporedi ga sa izvorima i proveri rezultat._",
+  "error": null,
+  "grade": "partial"
+ },
+ {
+  "mode": "ragnotools",
+  "id": "okt23_q10_inode",
+  "seconds": 131.0,
+  "intent": "Task",
+  "expected": "512 adresa po bloku. a) 10 podataka, 0 indeksnih; b) 1536 podataka, 4 indeksna; c) 262144 podataka, 513 indeksnih",
+  "checks": [
+   {
+    "name": "a:10+0",
+    "ok": true
+   },
+   {
+    "name": "b:1536",
+    "ok": true
+   },
+   {
+    "name": "b:4 indeksna",
+    "ok": false
+   },
+   {
+    "name": "c:262144",
+    "ok": true
+   },
+   {
+    "name": "c:513",
+    "ok": false
+   }
+  ],
+  "reply": "Za smestanje datoteke veličine 40KB:\n\nVeličina datoteke (V) = 40 KB = 40 * 1024 B = 40960 B\nVeličina bloka (B) = 4 KB = 4096 B\nBroj direktnih adresa (D) = 10\nVeličina adrese (A) = 8 B\n\nBroj blokova potrebnih za podatke (N_data) = ceil(V / B)\nN_data = ceil(40960 / 4096) = ceil(10) = 10 blokova.\n\nBroj blokova za direktne adrese = D = 10.\nBroj blokova za jednostruko indirektovanje (N_ind1) = ceil(D / (A / B))\nPošto je A=8B, a B=4096B, ovo je nekonzistentno. Pretpostavljamo da je cilj da se izračuna koliko blokova je potrebno za indeksiranje.\n\nBroj adresa u jednom indeksnom bloku (N_addr_per_block) = B / A = 4096 B / 8 B = 512 adresa.\n\nBroj blokova za direktne adrese = 10 (jer je D=10).\n\nBroj blokova za jednostruko indirektovanje (N_ind1) = ceil(N_data / N_addr_per_block)\nN_ind1 = ceil(10 / 512) = 1 blok.\n\nBroj blokova za dvostruko indirektovanje (N_ind2) = ceil(N_ind1 / N_addr_per_block)\nN_ind2 = ceil(1 / 512) = 1 blok.\n\nBroj blokova za trostruko indirektovanje (N_ind3) = ceil(N_ind2 / N_addr_per_block)\nN_ind3 = ceil(1 / 512) = 1 blok.\n\nUkupan broj blokova za podatke = N_data = 10 blokova.\nUkupan broj indeksnih blokova = 1 (direktni) + 1 (jednostruki) + 1 (dvostruki) + 1 (trostruki) = 4 bloka.\n\nUkupan broj blokova = Ukupan broj blokova za podatke + Ukupan broj indeksnih blokova = 10 + 4 = 14 blokova.\n\nZa smestanje datoteke veličine 6MB:\n\nV = 6 MB = 6 * 1024 * 1024 B = 6291456 B\nB = 4096 B\nN_data = ceil(6291456 / 4096) = ceil(1536) = 1536 blokova.\n\nBroj blokova za direktne adrese = 10.\n\nBroj blokova za jednostruko indirektovanje (N_ind1) = ceil(N_data / N_addr_per_block)\nN_ind1 = ceil(1536 / 512) = 3 bloka.\n\nBroj blokova za dvostruko indirektovanje (N_ind2) = ceil(N_ind1 / N_addr_per_block)\nN_ind2 = ceil(3 / 512) = 1 blok.\n\nBroj blokova za trostruko indirektovanje (N_ind3) = ceil(N_ind2 / N_addr_per_block)\nN_ind3 = ceil(1 / 512) = 1 blok.\n\nUkupan broj blokova za podatke = N_data = 1536 blokova.\nUkupan broj indeksnih blokova = 10 (direktni) + 3 (jednostruki) + 1 (dvostruki) + 1 (trostruki) = 15 blokova.\n\nUkupan broj blokova = 1536 + 15 = 1551 blokova.\n\nZa smestanje datoteke veličine 1GB:\n\nV = 1 GB = 1024 * 1024 * 1024 B = 1073741824 B\nB = 4096 B\nN_data = ceil(1073741824 / 4096) = ceil(262144) = 262144 blokova.\n\nBroj blokova za direktne adrese = 10.\n\nBroj blokova za jednostruko indirektovanje (N_ind1) = ceil(N_data / N_addr_per_block)\nN_ind1 = ceil(262144 / 512) = 512 bloka.\n\nBroj blokova za dvostruko indirektovanje (N_ind2) = ceil(N_ind1 / N_addr_per_block)\nN_ind2 = ceil(512 / 512) = 1 blok.\n\nBroj blokova za trostruko indirektovanje (N_ind3) = ceil(N_ind2 / N_addr_per_block)\nN_ind3 = ceil(1 / 512) = 1 blok.\n\nUkupan broj blokova za podatke = N_data = 262144 blokova.\nUkupan broj indeksnih blokova = 10 (direktni) + 512 (jednostruki) + 1 (dvostruki) + 1 (trostruki) = 524 bloka.\n\nUkupan broj blokova = 262144 + 524 = 262668 blokova.\n\n_Napomena: rešenje je automatski generisao lokalni model. Uporedi ga sa izvorima i proveri rezultat._",
+  "error": null,
+  "grade": "partial"
+ },
+ {
+  "mode": "ragnotools",
+  "id": "okt23_q8_adresa",
+  "seconds": 73.7,
+  "intent": "Task",
+  "expected": "offset 18 bita, indeks 15+15; a) 16 neiskoriscenih; b) 15 po tabeli (30 ukupno); c) 15|15|18",
+  "checks": [
+   {
+    "name": "16 neiskoriscenih",
+    "ok": false
+   },
+   {
+    "name": "15|15|18",
+    "ok": false
+   }
+  ],
+  "reply": "a) Ukupan broj bitova virtuelne adrese je 64.\nBroj bitova za adresiranje stranice je određen veličinom stranice.\nVeličina stranice je 256KB.\n256KB = 2^8 * 2^10 bajtova = 2^18 bajtova.\nBroj bitova za adresiranje unutar stranice je 18 bitova.\nBroj bitova koji se ne koriste za adresiranje je 64 - 18 = 46 bitova.\n\nb) Tabelama stranica u 2 nivoa, ukupan broj bitova za indeksiranje je 64 - 18 = 46 bitova.\nPošto su oba nivoa tabele stranica imala isti broj bitova za indeksiranje, taj broj se deli na dva jednaka dela.\nBroj bitova za indeksiranje u svakoj tabeli stranica je 46 / 2 = 23 bitova.\n\nc) Format virtuelne adrese se sastoji od:\n1. Bitova za indeksiranje u gornjem nivou tabele stranica (23 bita).\n2. Bitova za indeksiranje u donjem nivou tabele stranica (23 bita).\n3. Bitova za adresiranje unutar stranice (18 bitova).\n\nUkupan broj bitova je 23 + 23 + 18 = 64 bita.\n\nFormat virtuelne adrese (korisni bitovi) je:\n[Indeks gornjeg nivoa (23 bita)] [Indeks donjeg nivoa (23 bita)] [Offset unutar stranice (18 bitova)]\n\n_Napomena: rešenje je automatski generisao lokalni model. Uporedi ga sa izvorima i proveri rezultat._",
+  "error": null,
+  "grade": "wrong"
+ },
+ {
+  "mode": "ragnotools",
+  "id": "okt23_q7_lru",
+  "seconds": 48.3,
+  "intent": "Task",
+  "expected": "9 gresaka stranica; na kraju okviri {E, B, G}",
+  "checks": [
+   {
+    "name": "9 gresaka",
+    "ok": false
+   },
+   {
+    "name": "okviri E,B,G",
+    "ok": false
+   }
+  ],
+  "reply": "Početno stanje okvira: 3 prazna okvira.\n\nNiz referenci: EDHBDEDAEBEDEBG\n\nKorak 1: E\nOkvir 1: E\nOkvir 2: -\nOkvir 3: -\nGreške: 0\n\nKorak 2: D\nOkvir 1: E\nOkvir 2: D\nOkvir 3: -\nGreške: 0\n\nKorak 3: H\nOkvir 1: E\nOkvir 2: D\nOkvir 3: H\nGreške: 0\n\nKorak 4: B\nOkvir 1: B (zamena - najstariji, jer je E najranije ušla)\nOkvir 2: D\nOkvir 3: H\nGreške: 1 (zamena H)\n\nKorak 5: D\nOkvir 1: B\nOkvir 2: D\nOkvir 3: D (zamena H)\nGreške: 2 (zamena H)\n\nKorak 6: E\nOkvir 1: E (zamena B)\nOkvir 2: D\nOkvir 3: D\nGreške: 3 (zamena B)\n\nKorak 7: D\nOkvir 1: E\nOkvir 2: D\nOkvir 3: D\nGreške: 3\n\nKorak 8: A\nOkvir 1: E\nOkvir 2: A (zamena D - najstariji)\nOkvir 3: D\nGreške: 4 (zamena D)\n\nKorak 9: E\nOkvir 1: E\nOkvir 2: A\nOkvir 3: E (zamena D)\nGreške: 5 (zamena D)\n\nKorak 10: B\nOkvir 1: E\nOkvir 2: A\nOkvir 3: B (zamena E - najstariji)\nGreške: 6 (zamena E)\n\nKorak 11: E\nOkvir 1: E\nOkvir 2: A\nOkvir 3: B\nGreške: 6\n\nKorak 12: D\nOkvir 1: E\nOkvir 2: D (zamena A)\nOkvir 3: B\nGreške: 7 (zamena A)\n\nKorak 13: E\nOkvir 1: E\nOkvir 2: D\nOkvir 3: E (zamena B)\nGreške: 8 (zamena B)\n\nKorak 14: B\nOkvir 1: E\nOkvir 2: D\nOkvir 3: B (zamena E)\nGreške: 9 (zamena E)\n\nKorak 15: G\nOkvir 1: G (zamena E)\nOkvir 2: D\nOkvir 3: B\nGreške: 10 (zamena E)\n\nUkupan broj grešaka stranica: 10\nSadržaj stranica nakon zamene:\nOkvir 1: G\nOkvir 2: D\nOkvir 3: B\n\n_Napomena: rešenje je automatski generisao lokalni model. Uporedi ga sa izvorima i proveri rezultat._",
+  "error": null,
+  "grade": "wrong"
+ },
+ {
+  "mode": "ragnotools",
+  "id": "okt23_q2_daNe",
+  "seconds": 22.5,
+  "intent": "Subject",
+  "expected": "a) Ne (stek nije zajednicki); b) Da; c) Da; d) Ne (ukupno 8); e) Ne (zavisi od virtuelne adrese)",
+  "checks": [
+   {
+    "name": "a=Ne",
+    "ok": true
+   },
+   {
+    "name": "b=Da",
+    "ok": true
+   },
+   {
+    "name": "c=Da",
+    "ok": true
+   },
+   {
+    "name": "d=Ne",
+    "ok": true
+   },
+   {
+    "name": "e=Ne",
+    "ok": true
+   }
+  ],
+  "reply": "a) Ne - Niti dele stek, jer svaka nit ima svoj stek za lokalne promenljive i pozive funkcija.\nb) Da - Lokalne promenljive funkcije main() se smestaju na stek procesa.\nc) Da - Programski kod funkcija iz biblioteka (npr. malloc, strlen) nalazi se u adresnom prostoru procesa.\nd) Ne - Za 3 nivoa stranicenja, instrukcija koja čita operand iz memorije zahteva n+1 pristupa, što je 3+1 = 4 pristupa.\ne) Ne - Broj virtuelne stranice zavisi od veličine virtuelne adrese, a ne nužno od veličine fizičke adrese.",
+  "error": null,
+  "grade": "ok"
+ },
+ {
+  "mode": "ragnotools",
+  "id": "jan24_q7_daNe",
+  "seconds": 16.2,
+  "intent": "Subject",
+  "expected": "a) Da; b) Ne (sadrzi virtuelnu stranicu/pid, indeksirana okvirom); c) Da",
+  "checks": [
+   {
+    "name": "a=Da",
+    "ok": true
+   },
+   {
+    "name": "b=Ne",
+    "ok": true
+   },
+   {
+    "name": "c=Da",
+    "ok": true
+   }
+  ],
+  "reply": "a) Da - Samo stavke tabele stranica poslednjeg nivoa sadrže broj fizičkog okvira.\nb) Ne - Stavka invertovane tabele stranica sadrži broj virtuelne stranice koja je u tom okviru, identifikator procesa i kontrolne bitove, a ne adresu fizičkog okvira jer okvir je indeks stavke.\nc) Da - Operativni sistem obavezno ažurira tabelu stranica prilikom obrade greške stranice.",
+  "error": null,
+  "grade": "ok"
+ },
+ {
+  "mode": "ragnotools",
+  "id": "jan24_q8_adresa2",
+  "seconds": 221.3,
+  "intent": "Task",
+  "expected": "9 (segment) | 9 | 9 | 12 (pomeraj) = 39 bita; 2^39 B = 512 GB",
+  "checks": [
+   {
+    "name": "9|9|9|12",
+    "ok": false
+   },
+   {
+    "name": "512 GB",
+    "ok": true
+   }
+  ],
+  "reply": "Format virtuelne adrese u sistemu koji implementira segmentaciju sa stranicenjem u dva nivoa, sa maksimalno 512 segmenata, veličinom stranice 4KB i veličinom stavke u tabeli stranica 8B, izgleda sledeće:\n\nVirtuelna adresa se sastoji od dela koji identifikuje segment i dela koji identifikuje stranicu unutar tog segmenta.\n\nPošto je maksimalno 512 segmenata, potrebno je logaritmički broj bita za identifikaciju segmenta:\nBroj bita za segment = ceil(log2(512)) = 9 bita.\n\nVeličina stranice je 4KB.\n4KB = 4 * 1024 bajta = 4096 bajtova.\nBroj bita za stranicu (offset unutar stranice) = log2(4096) = 12 bita.\n\nPošto je implementacija u dva nivoa, struktura adrese će uključivati identifikaciju segmenta, a zatim strukturu za stranicenje unutar tog segmenta.\n\nAko se koristi segmentacija, virtuelna adresa se obično deli na:\n1. Segment identifikator (Segment ID)\n2. Adresa unutar segmenta (koja se dalje stranicira)\n\nPošto je stranicenje u dva nivoa, adresa unutar segmenta se dalje deli na:\n1. Nivo 1 adresa (Page Directory Index)\n2. Nivo 2 adresa (Page Table Index)\n3. Offset unutar stranice\n\nMeđutim, pošto je zadatak specifičan za segmentaciju sa stranicenjem u dva nivoa, moramo uzeti u obzir kako se adresa mapira.\n\nAko je segmentacija primarna, virtuelna adresa je:\n[Segment ID | Adresa unutar segmenta]\n\nAdresa unutar segmenta se stranicira u dva nivoa. Ako je veličina stranice 4KB (2^12), onda je offset 12 bita.\n\nZa stranicenje u dva nivoa, potrebno je da se adresa unutar segmenta podeli na:\n[Nivo 1 Indeks | Nivo 2 Indeks | Offset]\n\nVeličina stranice je 4KB = 2^12 bajtova. Ako je stranicenje u dva nivoa, to znači da je veličina stranice (ili veličina pod-stranice) podeljena. Ako je veličina stranice 4KB, a imamo dva nivoa, to obično znači da je veličina stranice podeljena na dva dela, ali pošto je navedena samo veličina stranice, pretpostavićemo da je to konačna veličina stranice.\n\nU sistemu sa stranicenjem u dva nivoa, veličina stranice (4KB) se deli na veličinu stranice nivoa 1 i veličinu stranice nivoa 2. Ako je veličina stranice 4KB, a imamo dva nivoa, to obično znači da je veličina stranice 4KB, a adresa se deli na:\n[Nivo 1 Indeks | Nivo 2 Indeks | Offset]\n\nAko je veličina stranice 4KB, onda je offset 12 bita.\nAko je tabela stranica u nivou 1 (Page Directory) i tabela stranica u nivou 2 (Page Table), i ako je veličina stavke 8B, onda veličina tabele stranica je:\nVeličina tabele stranica = Broj stavki * Veličina stavke.\n\nAko je veličina stranice 4KB, a stavka je 8B, onda broj stavki po tabeli stranica je:\nBroj stavki = Veličina stranice / Veličina stavke = 4096 B / 8 B = 512 stavki.\n\nZa nivo 2 (Page Table), broj stavki je 512. Potrebno je log2(512) = 9 bita za indeks nivoa 2.\n\nZa nivo 1 (Page Directory), broj stavki mora biti dovoljno velik da pokrije sve segmente. Pošto imamo 512 segmenata, i ako svaki segment ima svoju tabelu stranica, onda je potrebno 9 bita za identifikaciju segmenta.\n\nAko je segmentacija primarna, virtuelna adresa je:\n[Segment ID (9 bita) | Adresa unutar segmenta]\n\nAdresa unutar segmenta (koja je stranicirana u dva nivoa):\n[Nivo 1 Indeks | Nivo 2 Indeks | Offset]\n\nPošto je broj stavki u tabeli stranica 512 (9 bita), onda je Nivo 1 Indeks i Nivo 2 Indeks po 9 bita.\n\nUkupan broj bita za adresu unutar segmenta = 9 (Nivo 1) + 9 (Nivo 2) + 12 (Offset) = 30 bita.\n\nUkupna virtuelna adresa = Segment ID + Adresa unutar segmenta\nUkupna virtuelna adresa = 9 bita (Segment ID) + 30 bita (Adresa unutar segmenta) = 39 bita.\n\nFormat virtuelne adrese:\n[Segment ID (9 bita) | Nivo 1 Indeks (9 bita) | Nivo 2 Indeks (9 bita) | Offset (12 bita)]\n\nVeličina virtuelnog adresnog prostora:\nVeličina = 2 ^ Ukupan broj bita = 2 ^ 39 bajtova.\n\nOdgovor:\nFormat virtuelne adrese je: [Segment ID (9 bita) | Nivo 1 Indeks (9 bita) | Nivo 2 Indeks (9 bita) | Offset (12 bita)].\nVeličina virtuelnog adresnog prostora je 2^39 bajtova.\n\n_Napomena: rešenje je automatski generisao lokalni model. Uporedi ga sa izvorima i proveri rezultat._",
+  "error": null,
+  "grade": "partial"
+ },
+ {
+  "mode": "ragnotools",
+  "id": "jan24_q4_monitor",
+  "seconds": 8.9,
+  "intent": "Task",
+  "expected": "monitor sa uslovnom promenljivom/stanjem koje forsira naizmenicnost set()/reset() (npr. bool next_is_set; cwait/csignal)",
+  "checks": [],
+  "reply": "monitor Switch {\n    int x = 0;\n    bool naredniJeSet = true;\n    condition red;\n    procedure set() {\n        if (!naredniJeSet) cwait(red);\n        x = 1;\n        naredniJeSet = false;\n        csignal(red);\n    }\n    procedure reset() {\n        if (naredniJeSet) cwait(red);\n        x = 0;\n        naredniJeSet = true;\n        csignal(red);\n    }\n}\nvoid P1() { while (true) Switch.set(); }\nvoid P2() { while (true) Switch.reset(); }\nvoid main() { parbegin(P1, P2); }\n\n_Napomena: rešenje je automatski generisao lokalni model. Uporedi ga sa izvorima i proveri rezultat._",
+  "error": null,
+  "grade": "ok"
+ },
+ {
+  "mode": "ragnotools",
+  "id": "jun24_q3_teorija",
+  "seconds": 6.9,
+  "intent": "Subject",
+  "expected": "npr. stanje niti, programski brojac (PC), pokazivac steka (SP) i drugi registri",
+  "checks": [
+   {
+    "name": "bar 3 od: stanje/PC/SP/registri",
+    "ok": true
+   }
+  ],
+  "reply": "Prilikom zamene niti snima se kontekst tekuće niti, a taj kontekst uključuje programski brojač, pokazivač steka i registri. Takođe, menja se stanje niti (Spremna ili Blokirana) i ona se stavi u odgovarajući red. Ako nova nit pripada drugom procesu, menja se i adresni prostor.",
+  "error": null,
+  "grade": "ok"
+ }
+]

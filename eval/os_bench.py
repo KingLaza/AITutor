@@ -6,38 +6,7 @@ import sys, json, time, urllib.request
 URL = "http://127.0.0.1:5000/api/chat"
 SUBJECT = "Operativni sistemi"
 
-QUESTIONS = [
-    {"id": "jan24_q6_rasporedjivanje", "exam": "Januar 2024, zadatak 6",
-     "text": "U sistemu se izvrsava 4 procesa A, B, C, D koji su dati svojim vremenom aktiviranja, prioritetom i duzinom CPU faze. Koji od procesa ce se izvrsavati u periodu 60-70ms, ako se rasporedjivanje obavlja po: SJF, SRTF, Prioritetu bez prekidanja, Prioritetu sa prekidanjem (manji broj, veci prioritet), RoundRobin (vremenski kvant = 30ms)? Proces A: CPU faza 50ms, prioritet 4, vreme aktiviranja 0ms. Proces B: 20ms, prioritet 1, aktiviranje 20ms. Proces C: 100ms, prioritet 3, aktiviranje 40ms. Proces D: 40ms, prioritet 2, aktiviranje 60ms.",
-     "expected": "SJF: B; SRTF: A; Prioritet bez prekidanja: B; Prioritet sa prekidanjem: D; RR(30): A"},
-    {"id": "okt23_q9_disk", "exam": "Oktobar 2023, zadatak 9",
-     "text": "Koliko staza ima disk koji ima 2 tanjira (4 strane) i 16000 cilindara? U datom trenutku red I/O zahteva za cilindrima na disku sadrzi sledece zahteve [25, 100, 360, 77, 125, 222]. Upravo su usluzeni zahtevi [100] i [77] redom. Kojim cilindrima ce sledece biti pristupano prema algoritmima: SSTF, C-SCAN, SCAN?",
-     "expected": "64000 staza; glava ide ka nizim cilindrima: SSTF 125,222,360,25; SCAN 25,125,222,360; C-SCAN 25,360,222,125"},
-    {"id": "okt23_q10_inode", "exam": "Oktobar 2023, zadatak 10",
-     "text": "Fajl sistem Unix System V ima blokove velicine 4KB i i-node koji sadrzi 10 direktnih adresa, jednu adresu jednostruko indirektnog, jednu dvostruko indirektnog i jednu trostruko indirektnog bloka. Disk adrese su velicine 8B. Koliko disk blokova, indeksnih i sa podacima je potrebno za smestanje sadrzaja datoteke cija je velicina a) 40KB b) 6MB c) 1GB.",
-     "expected": "512 adresa po bloku. a) 10 podataka, 0 indeksnih; b) 1536 podataka, 4 indeksna; c) 262144 podataka, 513 indeksnih"},
-    {"id": "okt23_q8_adresa", "exam": "Oktobar 2023, zadatak 8",
-     "text": "Razmotriti memorijski podsistem OS sa 64-bitnim virtuelnim adresnim prostorom, 52-bitnim fizickim adresama, 256KB velicine stranice i tabelama stranica u 2 nivoa, sa istim brojem bitova kao indeks u obe tabele stranica. Svaka stavka (ulaz) u tabelu stranica je 8B. a) Koliko bitova u virtuelnoj adresi se ne koristi za adresiranje? b) koliko bitova se koristi za indeksiranje tabele stranica? c) kako izgleda format virtuelne adrese samo sa korisnim bitovima?",
-     "expected": "offset 18 bita, indeks 15+15; a) 16 neiskoriscenih; b) 15 po tabeli (30 ukupno); c) 15|15|18"},
-    {"id": "okt23_q7_lru", "exam": "Oktobar 2023, zadatak 7",
-     "text": "Procesu su dodeljena 3 stranicna okvira. Za sledeci niz stranicnih referenci odrediti broj gresaka stranica, i sadrzaj stranicnih okvira nakon zamene stranice, ako je implementiran LRU algoritam. EDHBDEDAEBEDEBG",
-     "expected": "9 gresaka stranica; na kraju okviri {E, B, G}"},
-    {"id": "okt23_q2_daNe", "exam": "Oktobar 2023, zadatak 2",
-     "text": "Na sledeca pitanja odgovoriti sa Da, ili Ne + objasnjenje: a) Ako proces ima vise niti one dele programski kod, podatke i stek. b) Prilikom startovanja C programa, lokalne promenljive funkcije main() se smestaju na stek procesa. c) Programski kod malloc() funkcije nalazi se u adresnom prostoru procesa. d) U sistemu sa 3 nivoa stranicenja (bez kesa i TLB) pribavljanje i izvrsenje instrukcije koja sabira vrednost registra sa sadrzajem memorijske lokacije zahteva 3 pristupa memoriji. e) Sa 32-bitnim fizickim adresama i velicinom stranice od 4KB broj (adresa) virtuelne stranice uvek iznosi 20 bitova.",
-     "expected": "a) Ne (stek nije zajednicki); b) Da; c) Da; d) Ne (ukupno 8); e) Ne (zavisi od virtuelne adrese)"},
-    {"id": "jan24_q7_daNe", "exam": "Januar 2024, zadatak 7",
-     "text": "Na sledeca pitanja odgovoriti sa Da, ili Ne + obrazlozenje u jednoj recenici: a. U sistemu sa stranicenjem u vise nivoa, samo stavka u tabeli stranica poslednjeg nivoa sadrzi fizicku adresu stranice (stranicnog okvira). b. Svaka stavka invertovane tabele stranica pored kontrolnih bitova sadrzi adresu fizicke stranice (stranicnog okvira) koja odgovara virtuelnoj adresi stranice. c. Prilikom obrade greske stranica mora da se izvrsi azuriranje tabele stranica.",
-     "expected": "a) Da; b) Ne (sadrzi virtuelnu stranicu/pid, indeksirana okvirom); c) Da"},
-    {"id": "jan24_q8_adresa2", "exam": "Januar 2024, zadatak 8",
-     "text": "Nacrtati format virtuelne adrese u sistemu koji implementira segmentaciju sa stranicenjem u dva nivoa, ukoliko proces moze imati maksimalno 512 segmenata, velicina stranice je 4KB, a stavka u tabeli stranice je 8B. Koliko iznosi velicina virtuelnog adresnog prostora?",
-     "expected": "9 (segment) | 9 | 9 | 12 (pomeraj) = 39 bita; 2^39 B = 512 GB"},
-    {"id": "jan24_q4_monitor", "exam": "Januar 2024, zadatak 4",
-     "text": "Napisati monitor (Switch) koji procesima P1 i P2 obezbedjuje funkcije za pristup jednoj zajednickoj promenljivoj u memoriji koji treba da je naizmenicno setuju (postavljaju na 1) i resetuju (na 0) koriscenjem funkcija monitora set() i reset().",
-     "expected": "monitor sa uslovnom promenljivom/stanjem koje forsira naizmenicnost set()/reset() (npr. bool next_is_set; cwait/csignal)"},
-    {"id": "jun24_q3_teorija", "exam": "Jun 2024, zadatak 3",
-     "text": "Navesti tri stavke u upravljackom bloku niti koje se menjaju kada dodje do zamene niti (context switch-a)?",
-     "expected": "npr. stanje niti, programski brojac (PC), pokazivac steka (SP) i drugi registri"},
-]
+from os_questions import QUESTIONS
 
 import re
 
