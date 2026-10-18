@@ -1,0 +1,51 @@
+[
+ {
+  "id": "jan24_q4_monitor",
+  "seconds": 106.1,
+  "expected": "monitor sa stanjem koje forsira naizmenicnost (npr. bool next_set) i uslovnim promenljivama sa cwait/csignal",
+  "reply": "monitor Switch {\n    deljena_promenljiva: int stanje = 0;\n    uslov: condition ispunjen;\n\n    inicijalizacija() {\n        stanje = 0;\n    }\n\n    procedure set() {\n        cwait(ispunjen);\n        stanje = 1;\n        csignal(ispunjen);\n    }\n\n    procedure reset() {\n        cwait(ispunjen);\n        stanje = 0;\n        csignal(ispunjen);\n    }\n}\n\nparbegin(P1, P2);\n// Procesi P1 i P2 će koristiti monitor Switch za pristup promenljivoj stanje.\n// Na primer, P1 može pozvati Switch.set() i Switch.reset() po potrebi,\n// a P2 takođe. Monitor osigurava da se samo jedan proces izvršava u bilo kojoj proceduri monitora u datom trenutku.\n\n_Napomena: rešenje je automatski generisao lokalni model. Uporedi ga sa izvorima i proveri rezultat._\n\n---\nRešen primer iz materijala (predavanja/4. Konkurentnost - uzajamno iskljucivanje i sinhronizacija.pdf):\n[isečak materijala kursa izostavljen iz javnog repoa]",
+  "sources": [
+   "predavanja/4. Konkurentnost - uzajamno iskljucivanje i sinhronizacija.pdf (dist: 0.472)",
+   "predavanja/4. Konkurentnost - uzajamno iskljucivanje i sinhronizacija.pdf (nastavak)",
+   "predavanja/4. Konkurentnost - uzajamno iskljucivanje i sinhronizacija.pdf (dist: 0.490)",
+   "predavanja/4. Konkurentnost - uzajamno iskljucivanje i sinhronizacija.pdf (nastavak)",
+   "predavanja/4. Konkurentnost - uzajamno iskljucivanje i sinhronizacija.pdf (dist: 0.544)",
+   "predavanja/4. Konkurentnost - uzajamno iskljucivanje i sinhronizacija.pdf (nastavak)",
+   "predavanja/4. Konkurentnost - uzajamno iskljucivanje i sinhronizacija.pdf (dist: 0.472)"
+  ],
+  "course_notation": true,
+  "posix_junk": false
+ },
+ {
+  "id": "okt23_q4_sastanak",
+  "seconds": 77.7,
+  "expected": "monitor sa brojacem dolazaka i jednom uslovnom promenljivom; prvi proces cwait, drugi csignal; prikaz poziva u P1 i P2",
+  "reply": "monitor SinhronizacijaDvaProcesa {\n    bool proces1_stigao = false;\n    bool proces2_stigao = false;\n    condition c1;\n    condition c2;\n\n    procedure Proces1_Stiže() {\n        proces1_stigao = true;\n        csignal(c2);\n    }\n\n    procedure Proces2_Stiže() {\n        proces2_stigao = true;\n        csignal(c1);\n    }\n\n    procedure ČekajNaDrugog() {\n        if (proces1_stigao && !proces2_stigao) {\n            cwait(c1);\n        }\n    }\n\n    procedure ČekajNaDrugog_P2() {\n        if (proces2_stigao && !proces1_stigao) {\n            cwait(c2);\n        }\n    }\n}\n\n// Ilustracija upotrebe u procesima\n\nparbegin(P1, P2);\n\n// Proces P1\nP1:\n    // P1 prvi stiže i mora da čeka P2\n    SinhronizacijaDvaProcesa.Proces1_Stiže();\n    SinhronizacijaDvaProcesa.ČekajNaDrugog();\n    // Sada oba procesa nastavljaju zajedno\n    // ... zajednička sekvenca ...\n    // Nastavak P1\n    end;\n\n// Proces P2\nP2:\n    // P2 prvi stiže i mora da čeka P1\n    SinhronizacijaDvaProcesa.Proces2_Stiže();\n    SinhronizacijaDvaProcesa.ČekajNaDrugog_P2();\n    // Sada oba procesa nastavljaju zajedno\n    // ... zajednička sekvenca ...\n    // Nastavak P2\n    end;\n\n_Napomena: rešenje je automatski generisao lokalni model. Uporedi ga sa izvorima i proveri rezultat._\n\n---\nRešen primer iz materijala (predavanja/4. Konkurentnost - uzajamno iskljucivanje i sinhronizacija.pdf):\n[isečak materijala kursa izostavljen iz javnog repoa]",
+  "sources": [
+   "predavanja/4. Konkurentnost - uzajamno iskljucivanje i sinhronizacija.pdf (dist: 0.332)",
+   "predavanja/4. Konkurentnost - uzajamno iskljucivanje i sinhronizacija.pdf (dist: 0.383)",
+   "predavanja/4. Konkurentnost - uzajamno iskljucivanje i sinhronizacija.pdf (nastavak)",
+   "predavanja/4. Konkurentnost - uzajamno iskljucivanje i sinhronizacija.pdf (dist: 0.409)",
+   "predavanja/4. Konkurentnost - uzajamno iskljucivanje i sinhronizacija.pdf (dist: 0.332)"
+  ],
+  "course_notation": true,
+  "posix_junk": false
+ },
+ {
+  "id": "jun24_q4_semafori",
+  "seconds": 58.5,
+  "expected": "semafori: jedan po procesu citaocu (inicijalno 1 i 0) plus semafor za poruku; semWait/semSignal",
+  "reply": "semaphore p1_turn = 1;\nsemaphore p2_turn = 0;\nsemaphore buffer_access = 1;\n\nproces P1() {\n    semWait(buffer_access);\n    semWait(p1_turn);\n    // Čitanje poruke iz bafera\n    semSignal(p1_turn);\n    semSignal(buffer_access);\n    // ... ostatak logike P1\n}\n\nproces P2() {\n    semWait(buffer_access);\n    semWait(p2_turn);\n    // Čitanje poruke iz bafera\n    semSignal(p2_turn);\n    semSignal(buffer_access);\n    // ... ostatak logike P2\n}\n\nproces P3() {\n    // Upisivanje poruke u bafer\n    // ...\n}\n\n_Napomena: rešenje je automatski generisao lokalni model. Uporedi ga sa izvorima i proveri rezultat._\n\n---\nRešen primer iz materijala (predavanja/4. Konkurentnost - uzajamno iskljucivanje i sinhronizacija.pdf):\n[isečak materijala kursa izostavljen iz javnog repoa]",
+  "sources": [
+   "predavanja/4. Konkurentnost - uzajamno iskljucivanje i sinhronizacija.pdf (dist: 0.516)",
+   "predavanja/4. Konkurentnost - uzajamno iskljucivanje i sinhronizacija.pdf (nastavak)",
+   "predavanja/4. Konkurentnost - uzajamno iskljucivanje i sinhronizacija.pdf (dist: 0.532)",
+   "predavanja/4. Konkurentnost - uzajamno iskljucivanje i sinhronizacija.pdf (nastavak)",
+   "predavanja/4. Konkurentnost - uzajamno iskljucivanje i sinhronizacija.pdf (dist: 0.542)",
+   "predavanja/4. Konkurentnost - uzajamno iskljucivanje i sinhronizacija.pdf (nastavak)",
+   "predavanja/4. Konkurentnost - uzajamno iskljucivanje i sinhronizacija.pdf (dist: 0.516)"
+  ],
+  "course_notation": true,
+  "posix_junk": false
+ }
+]

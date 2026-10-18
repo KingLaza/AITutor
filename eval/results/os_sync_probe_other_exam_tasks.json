@@ -1,0 +1,77 @@
+[
+ {
+  "id": "sinhro_monitor_semafori",
+  "seconds": 65.9,
+  "expected": "monitor sa logickom promenljivom gotovo + cwait/csignal; semafor inicijalno 0: P signalizira posle prvog dela, Q ceka",
+  "reply": "monitor Sinhro {\n    bool p1_gotov = false;\n    condition c;\n    procedure p1_gotov() {\n        p1_gotov = true;\n        csignal(c);\n    }\n    procedure cekaj_q2() {\n        if (!p1_gotov) cwait(c);\n    }\n}\nvoid P() {\n    // P1 deo procesa P\n    Sinhro.p1_gotov();\n    // P2 deo procesa P\n}\nvoid Q() {\n    // Q1 deo procesa Q\n    Sinhro.cekaj_q2();\n    // Q2 deo procesa Q\n}\nvoid main() {\n    parbegin(P, Q);\n}\n\n// Rešenje korišćenjem semafora\nsemaphore s = 0;\nvoid P_semafor() {\n    // P1 deo procesa P\n    semSignal(s);\n    // P2 deo procesa P\n}\nvoid Q_semafor() {\n    // Q1 deo procesa Q\n    semWait(s);\n    // Q2 deo procesa Q\n}\nvoid main_semafor() {\n    parbegin(P_semafor, Q_semafor);\n}\n\n_Napomena: rešenje je automatski generisao lokalni model. Uporedi ga sa izvorima i proveri rezultat._\n\n---\nRešen primer iz materijala (obrasci/Obrasci sinhronizacije (dodato u AITutor, nije materijal kursa).txt):\n[isečak materijala kursa izostavljen iz javnog repoa]",
+  "sources": [
+   "obrasci/Obrasci sinhronizacije (dodato u AITutor, nije materijal kursa).txt (dist: 0.272)",
+   "obrasci/Obrasci sinhronizacije (dodato u AITutor, nije materijal kursa).txt (dist: 0.334)",
+   "predavanja/4. Konkurentnost - uzajamno iskljucivanje i sinhronizacija.pdf (dist: 0.433)",
+   "predavanja/4. Konkurentnost - uzajamno iskljucivanje i sinhronizacija.pdf (nastavak)",
+   "predavanja/4. Konkurentnost - uzajamno iskljucivanje i sinhronizacija.pdf (dist: 0.433)"
+  ],
+  "course_notation": true,
+  "posix_junk": false
+ },
+ {
+  "id": "monitor_binarni_semafor",
+  "seconds": 59.9,
+  "expected": "monitor sa bool slobodan, semWait: if(!slobodan) cwait; slobodan=false; semSignal: slobodan=true; csignal",
+  "reply": "monitor BinarniSemafor {\n    bool slobodan = true;\n    condition red;\n    procedure semWait() {\n        if (!slobodan) cwait(red);\n        slobodan = false;\n    }\n    procedure semSignal() {\n        slobodan = true;\n        csignal(red);\n    }\n}\n\n_Napomena: rešenje je automatski generisao lokalni model. Uporedi ga sa izvorima i proveri rezultat._\n\n---\nRešen primer iz materijala (obrasci/Obrasci sinhronizacije (dodato u AITutor, nije materijal kursa).txt):\n[isečak materijala kursa izostavljen iz javnog repoa]",
+  "sources": [
+   "obrasci/Obrasci sinhronizacije (dodato u AITutor, nije materijal kursa).txt (dist: 0.255)",
+   "obrasci/Obrasci sinhronizacije (dodato u AITutor, nije materijal kursa).txt (dist: 0.338)",
+   "predavanja/4. Konkurentnost - uzajamno iskljucivanje i sinhronizacija.pdf (dist: 0.453)",
+   "predavanja/4. Konkurentnost - uzajamno iskljucivanje i sinhronizacija.pdf (nastavak)",
+   "predavanja/4. Konkurentnost - uzajamno iskljucivanje i sinhronizacija.pdf (dist: 0.453)"
+  ],
+  "course_notation": true,
+  "posix_junk": false
+ },
+ {
+  "id": "monitor_opsti_semafor",
+  "seconds": 45.5,
+  "expected": "monitor sa brojacem vrednost i brojem blokiranih; semWait/semSignal",
+  "reply": "monitor MojSemafor {\n    int vrednost = n;\n    int blokirani = 0;\n    condition red;\n    procedure semWait() {\n        if (vrednost > 0) vrednost = vrednost - 1;\n        else { blokirani = blokirani + 1; cwait(red); blokirani = blokirani - 1; }\n    }\n    procedure semSignal() {\n        if (blokirani > 0) csignal(red);\n        else vrednost = vrednost + 1;\n    }\n}\n\n_Napomena: rešenje je automatski generisao lokalni model. Uporedi ga sa izvorima i proveri rezultat._\n\n---\nRešen primer iz materijala (obrasci/Obrasci sinhronizacije (dodato u AITutor, nije materijal kursa).txt):\n[isečak materijala kursa izostavljen iz javnog repoa]",
+  "sources": [
+   "obrasci/Obrasci sinhronizacije (dodato u AITutor, nije materijal kursa).txt (dist: 0.251)",
+   "obrasci/Obrasci sinhronizacije (dodato u AITutor, nije materijal kursa).txt (dist: 0.367)",
+   "predavanja/4. Konkurentnost - uzajamno iskljucivanje i sinhronizacija.pdf (dist: 0.502)",
+   "predavanja/4. Konkurentnost - uzajamno iskljucivanje i sinhronizacija.pdf (nastavak)",
+   "predavanja/4. Konkurentnost - uzajamno iskljucivanje i sinhronizacija.pdf (dist: 0.502)"
+  ],
+  "course_notation": true,
+  "posix_junk": false
+ },
+ {
+  "id": "monitor_comunicator",
+  "seconds": 59.8,
+  "expected": "monitor sa jednom promenljivom i flagom puna; uslovne promenljive za slanje i prijem",
+  "reply": "monitor Komunikator {\n    string podaci;\n    bool prazno = true;\n    condition slobodnoZaSlanje, stiglaPoruka;\n    procedure posalji(string s) {\n        if (!prazno) cwait(slobodnoZaSlanje);\n        podaci = s;\n        prazno = false;\n        csignal(stiglaPoruka);\n    }\n    procedure primi(string s) {\n        if (prazno) cwait(stiglaPoruka);\n        s = podaci;\n        prazno = true;\n        csignal(slobodnoZaSlanje);\n    }\n}\n\n_Napomena: rešenje je automatski generisao lokalni model. Uporedi ga sa izvorima i proveri rezultat._\n\n---\nRešen primer iz materijala (obrasci/Obrasci sinhronizacije (dodato u AITutor, nije materijal kursa).txt):\n[isečak materijala kursa izostavljen iz javnog repoa]",
+  "sources": [
+   "obrasci/Obrasci sinhronizacije (dodato u AITutor, nije materijal kursa).txt (dist: 0.300)",
+   "obrasci/Obrasci sinhronizacije (dodato u AITutor, nije materijal kursa).txt (dist: 0.463)",
+   "predavanja/4. Konkurentnost - uzajamno iskljucivanje i sinhronizacija.pdf (dist: 0.487)",
+   "predavanja/4. Konkurentnost - uzajamno iskljucivanje i sinhronizacija.pdf (nastavak)",
+   "predavanja/4. Konkurentnost - uzajamno iskljucivanje i sinhronizacija.pdf (dist: 0.487)"
+  ],
+  "course_notation": true,
+  "posix_junk": false
+ },
+ {
+  "id": "zastoj_proizvodjac_potrosac",
+  "seconds": 41.8,
+  "expected": "zamenjen redosled semWait(mutex) i semWait(empty) kod proizvodjaca; objasnjena sekvenca zastoja",
+  "reply": "semaphore mutex = 1, empty = N, full = 0;\nvoid proizvodjac() { while (true) { proizvedi(); semWait(mutex); semWait(empty); dodaj(); semSignal(mutex); semSignal(full); } }\nvoid potrosac() { while (true) { semWait(full); semWait(mutex); uzmi(); semSignal(mutex); semSignal(empty); potrosi(); } }\nSekvenca: bafer je pun (empty = 0); proizvođač izvrši semWait(mutex) i blokira se na semWait(empty); potrošač izvrši semWait(full), pa se blokira na semWait(mutex); oba čekaju jedan drugog zauvek.\n\n_Napomena: rešenje je automatski generisao lokalni model. Uporedi ga sa izvorima i proveri rezultat._\n\n---\nRešen primer iz materijala (obrasci/Obrasci sinhronizacije (dodato u AITutor, nije materijal kursa).txt):\n[isečak materijala kursa izostavljen iz javnog repoa]",
+  "sources": [
+   "obrasci/Obrasci sinhronizacije (dodato u AITutor, nije materijal kursa).txt (dist: 0.315)",
+   "obrasci/Obrasci sinhronizacije (dodato u AITutor, nije materijal kursa).txt (dist: 0.415)",
+   "predavanja/5. Konkurentnost - uzajamno blokiranje i gladovanje.pdf (dist: 0.417)",
+   "predavanja/5. Konkurentnost - uzajamno blokiranje i gladovanje.pdf (nastavak)",
+   "predavanja/5. Konkurentnost - uzajamno blokiranje i gladovanje.pdf (dist: 0.417)"
+  ],
+  "course_notation": true,
+  "posix_junk": false
+ }
+]

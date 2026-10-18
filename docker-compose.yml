@@ -1,0 +1,78 @@
+# AITutor: baza (PostgreSQL + pgvector), API (.NET), web klijent (nginx).
+#
+# Režim A (podrazumevano): Ollama radi na računaru domaćinu (host), kontejneri mu pristupaju preko host.docker.internal.
+#   docker compose up -d --build
+# Režim B (sve u kontejnerima, uključujući Ollamu; modeli se preuzimaju pri prvom pokretanju):
+#   OLLAMA_BASE_URL=http://ollama:11434 docker compose --profile ollama up -d --build
+#
+# Podešavanja se zadaju kroz .env fajl (vidi .env.example).
+name: aitutor-stack
+
+services:
+  db:
+    image: pgvector/pgvector:0.8.6-pg18-trixie
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-aitutor}
+    volumes:
+      - pgdata:/var/lib/postgresql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    ports:
+      - "127.0.0.1:${DB_PORT:-5433}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  api:
+    build: ./Server
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      ConnectionStrings__Default: Host=db;Port=5432;Database=postgres;Username=postgres;Password=${POSTGRES_PASSWORD:-aitutor}
+      Ollama__BaseUrl: ${OLLAMA_BASE_URL:-http://host.docker.internal:11434}
+      Ollama__ChatModel: ${CHAT_MODEL:-gemma4:e4b}
+      Ollama__EmbeddingModel: ${EMBEDDING_MODEL:-embeddinggemma}
+      Subjects__DefaultSubject: ${DEFAULT_SUBJECT:-Programski prevodioci}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      # Materijal za ingest (podfolderi nose naziv tipa izvora: predavanja, vezbe, ...). Vidi README.
+      - ${MATERIALS_DIR:-./data}:/data/materials:ro
+
+  web:
+    build: ./Client/AITutor_web
+    depends_on:
+      - api
+    ports:
+      - "${WEB_PORT:-8080}:80"
+
+  # Samo uz --profile ollama: Ollama u kontejneru i jednokratno preuzimanje modela.
+  ollama:
+    image: ollama/ollama:latest
+    profiles: ["ollama"]
+    volumes:
+      - ollama_models:/root/.ollama
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  ollama-pull:
+    image: ollama/ollama:latest
+    profiles: ["ollama"]
+    depends_on:
+      ollama:
+        condition: service_healthy
+    environment:
+      OLLAMA_HOST: http://ollama:11434
+    entrypoint: ["/bin/sh", "-c", "ollama pull ${CHAT_MODEL:-gemma4:e4b} && ollama pull ${EMBEDDING_MODEL:-embeddinggemma}"]
+    restart: "no"
+
+volumes:
+  pgdata:
+    name: aitutor_stack_pgdata
+  ollama_models:
+    name: aitutor_stack_ollama_models

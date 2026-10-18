@@ -1,0 +1,44 @@
+1. Koje funkcije zahtevaju prelazak u kernel mod, a koje ne?
+Kernel mod zahtevaju sistemski pozivi i funkcije koje ih koriste: read, write, fork, exec, wait, exit, sleep, pthread_create, pthread_join (kernel niti), scanf, fscanf, printf (read/write), semWait i semSignal, cwait i csignal (pozivi operativnog sistema). Korisnički mod ostaje za obične funkcije i računanje: strcmp, strlen, sin, sqrt, ln, množenje matrica, korisnička funkcija my_func, kao i za atomske mašinske instrukcije test_and_set, exchange i compare_and_swap (jedna instrukcija procesora, ne menja stanje procesa).
+
+2. U kom se stanju nalazi proces i u koje prelazi kada izvrši određenu operaciju?
+Izvršava se -> Blokiran: čeka završetak U/I operacije (read, scanf, fscanf), semWait na semaforu čija je vrednost 0, cwait na uslovnoj promenljivoj. Izvršava se -> Spreman: istekao je vremenski kvant ili ga je istisnuo proces višeg prioriteta. Izvršava se -> Završen: exit ili dobijen signal SIGKILL. Blokiran -> Spreman: završio se U/I ili je neko izvršio semSignal/csignal. Spreman -> Izvršava se: raspoređivač ga je izabrao. Instrukcije test_and_set, exchange i compare_and_swap su obične instrukcije: proces ostaje u stanju Izvršava se. Proces u sekundarnoj memoriji koji je spreman je Spreman/suspendovan; proces u sekundarnoj memoriji koji čeka događaj je Blokiran/suspendovan.
+
+3. Prelaz procesa iz stanja Izvršava se u stanje Blokiran: da li se uvek izvršava u kernel modu?
+Da. Prelaz u stanje Blokiran izaziva sistemski poziv (npr. read, semWait, cwait) ili prekid, pa se uvek izvršava u kernel modu.
+
+4. Šta je deljeno između roditelja i deteta posle fork()?
+Programski kod je zajednički (isti izvršni kod). Dete dobija sopstvenu kopiju steka, heap-a i globalnih promenljivih (promena u jednom procesu nije vidljiva u drugom). Otvorene datoteke (deskriptori) se nasleđuju i dele pokazivač na datoteku. Argumenti funkcije fork() ne postoje (fork nema argumente). fork() vraća roditelju pid deteta, a detetu 0.
+
+5. Šta dele sve niti istog procesa, a šta ne?
+Niti istog procesa dele programski kod, globalne promenljive (segment podataka), heap (dinamički alocirane promenljive) i otvorene datoteke. Niti ne dele stek (svaka nit ima svoj stek za lokalne promenljive i pozive funkcija), registre procesora, programski brojač i stanje izvršavanja niti.
+
+6. Gde se smeštaju globalne, lokalne i dinamički kreirane promenljive?
+Globalne promenljive su u segmentu podataka, lokalne promenljive i parametri funkcija na steku (lokalne promenljive funkcije main() takođe na steku procesa), a dinamički kreirane promenljive (malloc) u heap-u. Programski kod funkcija iz biblioteka (npr. malloc, strlen) nalazi se u adresnom prostoru procesa.
+
+7. Koja je razlika između upravljačkog bloka procesa (PCB) i upravljačkog bloka niti (TCB)?
+PCB opisuje proces i njegove resurse: identifikator procesa, adresni prostor, otvorene datoteke, privilegije, tabele stranica. TCB opisuje jednu nit: stanje niti, programski brojač, pokazivač steka, registre procesora i prioritet. Proces sa više niti ima jedan PCB i više TCB-ova.
+
+8. Koje se akcije obavljaju prilikom zamene niti (context switch) kernel niti?
+Snimi se kontekst tekuće niti (programski brojač, pokazivač steka, registri) u njen TCB; njeno stanje se promeni (Spremna ili Blokirana) i ona se stavi u odgovarajući red; raspoređivač izabere sledeću nit; učita se kontekst izabrane niti iz njenog TCB-a i njeno stanje postaje Izvršava se. Ako nova nit pripada drugom procesu, menja se i adresni prostor (tabela stranica, TLB).
+
+9. Koliko pristupa memoriji zahteva izvršenje instrukcije u sistemu sa n nivoa straničenja, bez keša i TLB-a?
+Svaki pristup memoriji zahteva n pristupa tabelama stranica plus jedan pristup samim podacima ili instrukciji, tj. n+1. Instrukcija koja čita operand iz memorije zahteva pribavljanje instrukcije (n+1) i pristup operandu (n+1), ukupno 2(n+1) pristupa. Na primer, za 3 nivoa to je 8 pristupa, a ne 3.
+
+10. Od čega zavisi broj bita virtuelne stranice?
+Broj bita broja virtuelne stranice = broj bita virtuelne adrese minus log2(veličina stranice). Ne zavisi od veličine fizičke adrese. Sa 32-bitnom fizičkom adresom i stranicom od 4KB broj virtuelne stranice nije nužno 20 bita, jer zavisi od veličine virtuelne adrese.
+
+11. Šta sadrži stavka invertovane tabele stranica?
+Invertovana tabela ima po jednu stavku za svaki fizički okvir. Stavka sadrži broj virtuelne stranice koja je u tom okviru, identifikator procesa i kontrolne bitove, a ne adresu fizičkog okvira (okvir je indeks stavke). Pretraga se radi preko heš funkcije virtuelne adrese.
+
+12. Koja stavka u višenivojskom straničenju sadrži fizičku adresu okvira?
+Samo stavke tabele stranica poslednjeg nivoa sadrže broj fizičkog okvira. Stavke viših nivoa sadrže adresu tabele stranica sledećeg nivoa.
+
+13. Šta se dešava prilikom obrade greške stranice?
+Operativni sistem učitava traženu stranicu sa diska u slobodan okvir (ili zamenjuje neku stranicu algoritmom zamene), pa obavezno ažurira tabelu stranica (broj okvira, bit prisutnosti) i ponovo izvršava instrukciju koja je izazvala grešku.
+
+14. Kojim procesima i nitima savremeni operativni sistemi daju prednost?
+Procesima i nitima orijentisanim na U/I (kratke CPU faze), jer njihov prioritet raste kada ne iskoriste ceo vremenski kvant (višenivojski red sa povratnom spregom, starenje). Tako ostaju interaktivni, a procesi vezani za CPU ne blokiraju sistem.
+
+15. Šta je zaposleno čekanje (busy waiting)?
+Proces u petlji troši procesorsko vreme dok čeka uslov, npr. while (test_and_set(&lock)) ; Nasuprot tome, semWait blokira proces (on ne troši procesor dok čeka).

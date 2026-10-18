@@ -1,0 +1,73 @@
+[
+ {
+  "id": "okt23_q2_daNe",
+  "intent": "Subject",
+  "path": "direktno",
+  "seconds": 91.1,
+  "expected": "a) Ne; b) Da; c) Da; d) Ne (8 pristupa); e) Ne",
+  "reply": "Globalne promenljive se smeštaju u segment podataka, lokalne promenljive i parametri funkcija se smeštaju na steku, a dinamički kreirane promenljive (malloc) se smeštaju u heap.",
+  "sources": [
+   "reseni_blanketi/LV1- Linux sistemsko programiranje i procfs (Rešenja).pdf (dist: 0.405)",
+   "usmeni/Kratke cinjenice (dodato u AITutor, nije materijal kursa).txt (dist: 0.413)",
+   "usmeni/Kratke cinjenice (dodato u AITutor, nije materijal kursa).txt (dist: 0.424)",
+   "vezbe/LV postavka - LV6 - Deljena memorija.pdf (dist: 0.425)",
+   "predavanja/8. Virtuelna memorija.pdf (dist: 0.433)",
+   "vezbe/10. Sistemsko programiranje - Upravljanje memorijom.pdf (dist: 0.442)"
+  ]
+ },
+ {
+  "id": "jan24_q7_daNe",
+  "intent": "Subject",
+  "path": "direktno",
+  "seconds": 39.2,
+  "expected": "a) Da; b) Ne; c) Da",
+  "reply": "a. Da, samo stavke tabele stranica poslednjeg nivoa sadrže broj fizičkog okvira.\nb. Ne, svaka stavka invertovane tabele stranica sadrži virtuelnu adresu stranice koja je smeštena u datu fizičku stranicu, kao i podatke o procesu kojem ta stranica pripada.\nc. Nemam dovoljno informacija u materijalu da odgovorim na ovo pitanje.",
+  "sources": [
+   "usmeni/Kratke cinjenice (dodato u AITutor, nije materijal kursa).txt (dist: 0.312)",
+   "usmeni/Kratke cinjenice (dodato u AITutor, nije materijal kursa).txt (dist: 0.378)",
+   "predavanja/8. Virtuelna memorija.pdf (dist: 0.417)",
+   "predavanja/8. Virtuelna memorija.pdf (dist: 0.436)",
+   "usmeni/Kratke cinjenice (dodato u AITutor, nije materijal kursa).txt (dist: 0.464)",
+   "predavanja/8. Virtuelna memorija.pdf (dist: 0.467)"
+  ]
+ },
+ {
+  "id": "jan24_q1_modovi",
+  "intent": "Task",
+  "path": "L1+L3",
+  "seconds": 106.1,
+  "expected": "a) kernel, blokiran (ako nit nije zavrsena); b) korisnicki, izvrsava se; c) kernel; d) korisnicki, izvrsava se; e) korisnicki, izvrsava se",
+  "reply": "a) Kernel mod, proces je u stanju čekanja (blokiran) dok se ne završi nit.\nb) Korisnički mod, proces nastavlja izvršavanje.\nc) Kernel mod, proces je u stanju čekanja (blokiran) dok se ne izvrši semafor.\nd) Korisnički mod, proces nastavlja izvršavanje.\ne) Korisnički mod, proces nastavlja izvršavanje.\n\n_Napomena: rešenje je automatski generisao lokalni model. Uporedi ga sa izvorima i proveri rezultat._\n\n---\nRešen primer iz materijala (vezbe/Spisak sistemskih poziva (podsetnik).pdf):\n[isečak materijala kursa izostavljen iz javnog repoa]",
+  "sources": [
+   "vezbe/Spisak sistemskih poziva (podsetnik).pdf (dist: 0.421)",
+   "vezbe/Spisak sistemskih poziva (podsetnik).pdf (nastavak)",
+   "vezbe/5. Sistemsko programiranje - Upravljanje procesima i nitima.pdf (dist: 0.431)",
+   "vezbe/5. Sistemsko programiranje - Upravljanje procesima i nitima.pdf (nastavak)",
+   "usmeni/Kratke cinjenice (dodato u AITutor, nije materijal kursa).txt (dist: 0.355)"
+  ]
+ },
+ {
+  "id": "fork_brojanje",
+  "intent": "Task",
+  "path": "L1+L3",
+  "seconds": 58.1,
+  "expected": "4 procesa",
+  "reply": "Rešenje izračunato programski (tačno, bez procene modela):\n\nBroj procesa koje program stvara (zajedno sa početnim): 4\nNovih procesa (uspešnih poziva fork()): 3\nSvaki poziv fork() udvostručuje proces koji ga izvršava; roditelj dobija pid deteta (različito od 0), dete dobija 0, pa uslovi tipa if(fork()) izvršava roditelj, a if(!fork()) dete.",
+  "sources": []
+ },
+ {
+  "id": "jun24_q2_stanja",
+  "intent": "Task",
+  "path": "L1+L3",
+  "seconds": 97.1,
+  "expected": "a) Izvrsava se -> Blokiran; b) ostaje Izvrsava se; c) Izvrsava se -> Zavrsen; d) Izvrsava se -> Blokiran",
+  "reply": "a) Izvršava se -> Blokiran\nb) Izvršava se -> Izvršava se\nc) Izvršava se -> Završen\nd) Izvršava se -> Blokiran\n\n_Napomena: rešenje je automatski generisao lokalni model. Uporedi ga sa izvorima i proveri rezultat._\n\n---\nRešen primer iz materijala (predavanja/2. Upravljanje procesima.pdf):\n[isečak materijala kursa izostavljen iz javnog repoa]",
+  "sources": [
+   "predavanja/2. Upravljanje procesima.pdf (dist: 0.454)",
+   "predavanja/2. Upravljanje procesima.pdf (nastavak)",
+   "obrasci/Obrasci sinhronizacije (dodato u AITutor, nije materijal kursa).txt (dist: 0.463)",
+   "obrasci/Obrasci sinhronizacije (dodato u AITutor, nije materijal kursa).txt (dist: 0.483)",
+   "usmeni/Kratke cinjenice (dodato u AITutor, nije materijal kursa).txt (dist: 0.305)"
+  ]
+ }
+]

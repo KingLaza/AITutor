@@ -6,20 +6,22 @@ namespace AITutor.Core.Ollama;
 public class OllamaEmbeddingService : IEmbeddingService
 {
     private readonly HttpClient _http;
-    private const string Model = "nomic-embed-text";
+    private readonly OllamaOptions _options;
 
-    public OllamaEmbeddingService(HttpClient http) => _http = http;
+    public OllamaEmbeddingService(HttpClient http, OllamaOptions options)
+    {
+        _http = http;
+        _options = options;
+    }
+
+    // embeddinggemma očekuje različit oblik za dokument i za upit.
+    private static string Format(string text, EmbeddingKind kind) =>
+        kind == EmbeddingKind.Query ? $"task: search result | query: {text}" : $"title: none | text: {text}";
 
     public async Task<float[]> GetEmbeddingAsync(string text, EmbeddingKind kind = EmbeddingKind.Document)
     {
-        var prefix = kind == EmbeddingKind.Query ? "search_query: " : "search_document: ";
-        var body = JsonSerializer.Serialize(new
-        {
-            model = Model,
-            prompt = prefix + text,
-            options = new { num_ctx = 8192 }
-        });
-        var resp = await _http.PostAsync("http://localhost:11434/api/embeddings",
+        var body = JsonSerializer.Serialize(new { model = _options.EmbeddingModel, input = Format(text, kind) });
+        var resp = await _http.PostAsync($"{_options.BaseUrl}/api/embed",
             new StringContent(body, Encoding.UTF8, "application/json"));
         var json = await resp.Content.ReadAsStringAsync();
         using var doc = JsonDocument.Parse(json);
@@ -27,7 +29,7 @@ public class OllamaEmbeddingService : IEmbeddingService
         if (doc.RootElement.TryGetProperty("error", out var errorProp))
             throw new InvalidOperationException($"Ollama embedding greška: {errorProp.GetString()}");
 
-        return doc.RootElement.GetProperty("embedding")
+        return doc.RootElement.GetProperty("embeddings")[0]
             .EnumerateArray().Select(x => x.GetSingle()).ToArray();
     }
 }

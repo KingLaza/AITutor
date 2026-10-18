@@ -8,6 +8,7 @@ public static class ChunkingStrategyFactory
         "pismeni" => new PerTaskChunkingStrategy(),
         "usmeni" => new SequentialNumberedChunkingStrategy(),
         "reseni_blanketi" => new WholeDocumentChunkingStrategy(),
+        "obrasci" => new SectionChunkingStrategy(),
         _ => throw new NotSupportedException($"Nepoznat source_type: {sourceType}")
     };
 }

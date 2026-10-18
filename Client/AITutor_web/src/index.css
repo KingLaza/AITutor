@@ -38,6 +38,24 @@ body {
   letter-spacing: -0.02em;
 }
 
+.subject-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.subject-row select {
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 13px;
+  background: var(--panel);
+  color: var(--text);
+}
+
 .header p {
   margin: 4px 0 0;
   color: var(--muted);
@@ -85,6 +103,58 @@ body {
 
 .bubble.loading {
   color: var(--muted);
+}
+
+.message {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.message.user {
+  align-items: flex-end;
+}
+
+.message.assistant {
+  align-items: flex-start;
+}
+
+.sources {
+  font-size: 12px;
+  color: var(--muted);
+  max-width: 75%;
+}
+
+.sources summary {
+  cursor: pointer;
+}
+
+.sources ul {
+  margin: 4px 0 0;
+  padding-left: 18px;
+}
+
+.hint-actions {
+  align-self: flex-start;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.hint-level {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.hint-actions button {
+  border: 1px solid var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: pointer;
 }
 
 .composer {

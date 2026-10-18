@@ -1,0 +1,140 @@
+[
+ {
+  "kind": "casual",
+  "message": "Cao",
+  "seconds": 40.2,
+  "intent": "Casual",
+  "reply": "Zdravo! 👋 Kako ti mogu pomoći danas sa programskim prevodiocima? Ako imaš neko konkretno pitanje ili ti treba pomoć oko nečega, slobodno mi reci! 😊",
+  "sources": []
+ },
+ {
+  "kind": "casual",
+  "message": "Sta sve umes i kako mi mozes pomoci oko ispita?",
+  "seconds": 18.4,
+  "intent": "Casual",
+  "reply": "Zdravo! Ja sam tvoj AITutor, i tu sam da pomognem u učenju Programskih prevodnica. Mogu ti pomoći objašnjavanjem složenih pojmova, rešavanjem zadataka sa starih ispita ili ti pomoći da vežbaš gradivo. Samo mi reci šta ti najviše treba!",
+  "sources": []
+ },
+ {
+  "kind": "subject",
+  "message": "Sta je LL(1) gramatika?",
+  "seconds": 27.1,
+  "intent": "Subject",
+  "reply": "LL(1) gramatika bez $\\varepsilon$ pravila je beskontekstna gramatika kod koje su za sva pravila za isti neterminalni simbol $A$, skupovi $\\text{First}(\\alpha_1), \\text{First}(\\alpha_2), \\ldots, \\text{First}(\\alpha_n)$ disjunktni po parovima, tj. $\\text{First}(\\alpha_i) \\cap \\text{First}(\\alpha_j) = \\emptyset$ za $i \\neq j$.",
+  "sources": [
+   "predavanja/PP 06 LL(1) gramatike.pdf (dist: 0.210)",
+   "predavanja/PP 06 LL(1) gramatike.pdf (dist: 0.221)",
+   "predavanja/PP 06 LL(1) gramatike.pdf (dist: 0.221)",
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.222)"
+  ]
+ },
+ {
+  "kind": "subject",
+  "message": "Koja je razlika izmedju kompilatora i interpretatora?",
+  "seconds": 18.8,
+  "intent": "Subject",
+  "reply": "Kompilator najpre vrši analizu programa, a zatim generiše masinski kod celog programa. Interpretatori koriste strategiju da prevode naredbu po naredbu programa i izvršavaju celinu čim je formiraju.",
+  "sources": [
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.152)",
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.209)",
+   "predavanja/PP 04 Leksicka analiza.pdf (dist: 0.261)",
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.269)"
+  ]
+ },
+ {
+  "kind": "offtopic",
+  "message": "Sta je nuklearna fizika?",
+  "seconds": 27.4,
+  "intent": "Subject",
+  "reply": "Nemam dovoljno informacija u materijalu da odgovorim na ovo pitanje.",
+  "sources": [
+   "vezbe/PP03_JFlex.pdf (dist: 0.308)",
+   "vezbe/PP03_JFlex.pdf (dist: 0.324)",
+   "vezbe/Generisanje medjukoda - reseni zadaci.pdf (dist: 0.326)",
+   "vezbe/PP03_JFlex.pdf (dist: 0.331)"
+  ]
+ },
+ {
+  "kind": "offtopic",
+  "message": "Koji je glavni grad Francuske?",
+  "seconds": 22.9,
+  "intent": "Subject",
+  "reply": "Nemam dovoljno informacija u materijalu da odgovorim na ovo pitanje.",
+  "sources": [
+   "vezbe/PP03_JFlex.pdf (dist: 0.317)",
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.327)",
+   "predavanja/PP 07 LR gramatike.pdf (dist: 0.330)",
+   "vezbe/PP03_JFlex.pdf (dist: 0.333)"
+  ]
+ },
+ {
+  "kind": "task_in_material",
+  "message": "Definisati klasu za while petlju u AST-u i napisati metodu translate()",
+  "seconds": 129.4,
+  "intent": "Task",
+  "reply": "Naravno, rešiću zadatak studenta prateći strukturu i metodologiju iz rešenog primera za `WhileStatement`.\n\n**ZADATAK STUDENTA:**\nDefinisati klasu za while petlju u AST-u i napisati metodu `translate()`.\n\n**REŠENJE:**\n\nDa bi se definisala klasa za `while` petlju u Apstraktnom Sintaksnom Stablu (AST), koristićemo strukturu sličnu onoj koja je korišćena za `WhileStatement` u rešenom primeru.\n\n**1. Definicija klase:**\n\nKlasa za `while` petlju treba da nasleđuje `Statement` (ili `ASTNode`, u zavisnosti od hijerarhije, ali prateći primer za `WhileStatement`, koristićemo `Statement`). Ona mora da sadrži referencu na uslov petlje (`Expression`) i telo petlje (`Statement`).\n\n```java\nclass WhileStatement extends Statement {\n    private Expression condition;\n    private Statement body;\n\n    public WhileStatement(Expression condition, Statement body) {\n        this.condition = condition;\n        this.body = body;\n    }\n    \n    // Implementacija translate metode sledi u sledećem koraku\n}\n```\n\n**2. Implementacija metode `translate()`:**\n\nNa osnovu rešenog primera za `WhileStatement`, generisani međukod mora da prati sledeći tok:\n1. Generisanje početne labele (`startLab`).\n2. Prevođenje uslova petlje.\n3. Učitavanje vrednosti uslova u registar (npr. `R1`).\n4. Preskakanje na kraj petlje ako je uslov nula (`JumpIfZero R1, endLab`).\n5. Prevođenje tela petlje (`body.translate(out)`).\n6. Preskakanje nazad na početak petlje (`Jump startLab`).\n7. Definisanje krajnje labele (`endLab:`).\n\n```java\npublic void translate(BufferedWriter out) throws IOException {\n    // Najpre generišemo labele za pocetak i kraj petlje\n    String startLab = ASTNode.genLab();\n    String endLab = ASTNode.genLab();\n\n    // Ispisujemo početnu labelu\n    out.write(startLab + \":\");\n    out.newLine();\n\n    // Prevodimo uslov petlje.\n    condition.translate(out);\n    \n    // Učitavamo rezultat uslova u registar R1.\n    condition.genLoad(\"R1\", out);\n    \n    // Ako je uslov nula, preskačemo na kraj petlje.\n    out.write(\"\\tJumpIfZero\\tR1, \" + endLab);\n    out.newLine();\n\n    // Prevodimo telo petlje.\n    body.translate(out);\n    \n    // Preskačemo nazad na početak petlje.\n    out.write(\"\\tJump\\t\" + startLab);\n    out.newLine();\n\n    // Ispisujemo krajnju labelu.\n    out.write(endLab + \":\");\n    out.newLine();\n}\n```\n\n**Zaključak:**\n\nGornji kod implementira klasu `WhileStatement` i metodu `translate()` koja konvertuje `while` petlju iz AST-a u generisani međukod niskog nivoa, prateći strukturu iz rešenog primera za `WhileStatement`.\n\n_Napomena: rešenje je automatski generisao lokalni model. Uporedi ga sa izvorima i proveri rezultat._",
+  "sources": [
+   "vezbe/Zadatak - While petlja.pdf (dist: 0.289)",
+   "vezbe/Zadatak - While petlja.pdf (nastavak)",
+   "vezbe/Generisanje medjukoda - reseni zadaci.pdf (dist: 0.290)",
+   "vezbe/Generisanje medjukoda - reseni zadaci.pdf (nastavak)",
+   "predavanja/PP 11 Optimizacija koda.pdf (dist: 0.264)"
+  ]
+ },
+ {
+  "kind": "task_variant",
+  "message": "Definisati klasu za predstavljanje do-while petlje u AST-u, definisana smenom DoWhileStatement -> DO Statement WHILE Expression, i implementirati translate",
+  "seconds": 162.5,
+  "intent": "Task",
+  "reply": "Naravno, rešiću ovaj zadatak prateći strukturu i metodologiju iz rešenog primera za `WhileStatement`, ali prilagođen za `DoWhileStatement`.\n\n### REŠENJE:\n\nDa bi se definisala klasa za predstavljanje `do-while` petlje u AST-u, moramo pratiti definiciju:\n$$\\text{DoWhileStatement} \\rightarrow \\text{DO Statement WHILE Expression}$$\n\nImplementiraćemo klasu koja nasleđuje odgovarajuću klasu (pretpostavljamo da je to `Statement`, kao u primeru za `WhileStatement`), definišući članove koji predstavljaju telo petlje (`Statement`) i uslov (`Expression`).\n\n**1. Definicija klase `DoWhileStatement`**\n\n```java\nclass DoWhileStatement extends Statement {\n    private Statement body;\n    private Expression condition;\n\n    public DoWhileStatement(Statement body, Expression condition) {\n        this.body = body;\n        this.condition = condition;\n    }\n    \n    // Implementacija translate metode sledi u sledećem koraku\n}\n```\n\n**2. Implementacija metode `translate`**\n\nPrvo moramo definisati izgled generisanog međukoda niskog nivoa. Za `do-while` petlju, telo se izvršava bar jednom, a zatim se proverava uslov. Ako je uslov tačan, petlja se ponavlja.\n\nMogući međukod:\n```\nstartLab:\nIMC <Body>\nIMC <Condition>\nJumpIfZeroR1, endLab\nendLab:\n```\n\n**Objašnjenje logike:**\n1. Generišemo početnu labelu (`startLab`).\n2. Prevodimo telo petlje (`Body`).\n3. Proveravamo uslov (`Condition`).\n4. Učitavamo vrednost uslova u registar R1.\n5. Ako je uslov nula (false), preskačemo telo i idemo na kraj (`endLab`).\n6. Ako uslov nije nula (true), vraćamo se na početak petlje (`startLab`).\n7. Na kraju petlje (`endLab`) se završava izvršavanje.\n\n**Metoda za generisanje međukoda:**\n\n```java\npublic void translate(BufferedWriter out) throws IOException {\n    // Najpre generišemo labele za pocetak i kraj petlje\n    String startLab = ASTNode.genLab();\n    String endLab = ASTNode.genLab();\n\n    // 1. Ispis početne labela\n    out.write(startLab + \":\");\n    out.newLine();\n\n    // 2. Prevodimo naredbu unutar do petlje (telo)\n    body.translate(out);\n\n    // 3. Provera uslova WHILE\n    // Prevodimo uslov u međukod\n    condition.translate(out);\n    // Učitavamo rezultat uslova u registar R1\n    condition.genLoad(\"R1\", out);\n    \n    // Ako je R1 = 0 (uslov je false), preskačemo kraj petlje\n    out.write(\"\\tJumpIfZero\\tR1, \" + endLab);\n    out.newLine();\n\n    // 4. Vraćanje na početak petlje ako je uslov true\n    out.write(\"\\tJump\\t\" + startLab);\n    out.newLine();\n\n    // 5. Kraj petlje\n    out.write(endLab + \":\");\n    out.newLine();\n}\n```\n\n***\n\n**Napomena:** Rešenje je prilagođeno strukturi iz rešenog primera za `WhileStatement` (koristeći `genLab()`, `translate()`, `genLoad()`, `JumpIfZero`, `Jump`), ali je logički prilagođeno `do-while` konstrukciji gde se telo izvršava pre provere uslova.\n\n_Napomena: rešenje je automatski generisao lokalni model. Uporedi ga sa izvorima i proveri rezultat._",
+  "sources": [
+   "vezbe/Zadatak - While petlja.pdf (dist: 0.201)",
+   "vezbe/Zadatak - While petlja.pdf (nastavak)",
+   "vezbe/Generisanje medjukoda - reseni zadaci.pdf (dist: 0.205)",
+   "vezbe/Generisanje medjukoda - reseni zadaci.pdf (nastavak)",
+   "predavanja/PP 11 Optimizacija koda.pdf (dist: 0.288)"
+  ]
+ },
+ {
+  "kind": "task_ll1",
+  "message": "Transformisati datu gramatiku u LL(1) gramatiku i dokazati da je LL(1): S -> S a | b",
+  "seconds": 145.2,
+  "intent": "Task",
+  "reply": "Naravno, rešiću ovaj zadatak prateći strukturu i metodologiju iz rešenih primera.\n\n**Zadatak:** Transformisati datu gramatiku u LL(1) gramatiku i dokazati da je LL(1):\n$$S \\rightarrow S a \\mid b$$\n\n---\n\n### REŠENJE:\n\n**Korak 1: Provera da li gramatika jeste LL(1) gramatika.**\n\nGramatika je:\n$$S \\rightarrow S a \\mid b$$\n\nAnaliziramo smene koje imaju isti neterminalni simbol na levoj strani, u ovom slučaju, $S$.\n\nImamo dva pravila koja počinju sa $S$:\n1. $S \\rightarrow S a$\n2. $S \\rightarrow b$\n\nPoredimo ova dva pravila prema definiciji LL(1) gramatike. LL(1) gramatika ne sme sadržati smene oblika $X \\rightarrow Y\\alpha_1 \\mid Y\\alpha_2$ gde je $Y$ neterminalni simbol, jer bi se u trenutku analize, kada je na vrhu stoga $S$, ne moglo odlučiti da li se treba primeniti prva ili druga šema, jer su oba pravila počinjala sa istim simbolom ($S$).\n\nU ovom slučaju, oba pravila počinju sa istim neterminalnim simbolom $S$. Stoga, **gramatika $S \\rightarrow S a \\mid b$ nije LL(1) gramatika**.\n\n**Korak 2: Primena Lave Faktorizacije.**\n\nPošto gramatika nije LL(1), primenjujemo levu faktorizaciju.\n\nImamo smene:\n$$S \\rightarrow S a \\mid b$$\n\nPrvi simbol desne strane za prvu smenu je $S$.\nPrvi simbol desne strane za drugu smenu je $b$.\n\nPošto se prvi simbol desne strane za prvu smenu ($S$) ne poklapa sa prvim simbolom desne strane za drugu smenu ($b$), **ne možemo primeniti standardnu levu faktorizaciju** u smislu $X \\rightarrow Y\\alpha_1 \\mid Y\\alpha_2$ jer se $Y$ (koji je $S$) ne pojavljuje u oba slučaja kao početni simbol.\n\nMeđutim, ova gramatika je klasičan primer **leva rekurzivnosti**.\n\n**Transformacija iz Lave Rekurzivnosti (Primenjujemo postupak iz Teorije, jer je ovo najprikladniji metod za ovaj oblik):**\n\nGramatika:\n$$S \\rightarrow S a \\mid b$$\n\nTransformišemo je u ne-rekurzivnu formu koristeći pomoćni simbol $S'$:\n\n1. **Izolujemo rekurzivni deo:**\n   $$S \\rightarrow b S'$$\n2. **Definišemo pomoćni simbol:**\n   $$S' \\rightarrow a S' \\mid \\epsilon$$\n\n**Nova (transformisana) gramatika je:**\n$$S \\rightarrow b S'$$\n$$S' \\rightarrow a S' \\mid \\epsilon$$\n\n**Korak 3: Dokazivanje da je transformisana gramatika LL(1).**\n\nProverimo novu gramatiku:\n$$S \\rightarrow b S'$$\n$$S' \\rightarrow a S' \\mid \\epsilon$$\n\nAnaliziramo smene koje imaju isti neterminalni simbol na levoj strani:\n\n1. **Za $S$:** Imamo samo jednu smenu: $S \\rightarrow b S'$. Nema problema.\n2. **Za $S'$:** Imamo dve smene:\n    * $S' \\rightarrow a S'$\n    * $S' \\rightarrow \\epsilon$\n\nAnaliziramo $FIRST$ i $FOLLOW$ skupove za $S'$:\n\n*   **$FIRST(a S')$:** Pošto $a$ je terminalni simbol, $FIRST(a S') = \\{a\\}$.\n*   **$FIRST\n\n_Napomena: rešenje je automatski generisao lokalni model. Uporedi ga sa izvorima i proveri rezultat._",
+  "sources": [
+   "vezbe/PP04_LL(1)Gramatike.pdf (dist: 0.186)",
+   "vezbe/PP04_LL(1)Gramatike.pdf (nastavak)",
+   "vezbe/PP04_LL(1)Gramatike.pdf (dist: 0.223)",
+   "vezbe/PP04_LL(1)Gramatike.pdf (nastavak)",
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.197)"
+  ]
+ },
+ {
+  "kind": "task_cup",
+  "message": "Napisati cup specifikaciju za sintaksni analizator jezika sa if-else naredbom",
+  "seconds": 171.8,
+  "intent": "Task",
+  "reply": "Zdravo! Ja sam AITutor, tvoj tutor za predmet \"Programski prevodioci\" na Elektronskom fakultetu u Nišu. Razumem zadatak. Moraš da napišeš CUP specifikaciju za sintaksni analizator jezika sa `if-else` naredbom, prateći strukturu i stil rešenja iz datog primera.\n\nPošto mi nisi dao specifičan tekst ili detalje o tome kako bi se taj jezik trebao predstaviti (terminalni simboli, gramatika), koristiću strukturu i koncepte iz datog primera (Primer 3) i prilagodiću ih za opšti slučaj `if-else` strukture, fokusirajući se na samu CUP specifikaciju.\n\nEvo rešenja, strukturirano po principima koji su navedeni u materijalu:\n\n***\n\n### REŠENJE:\n\n**CUP specifikacija za sintaksni analizator jezika sa `if-else` naredbom**\n\nZa kreiranje sintaksnog analizatora za jezik sa `if-else` naredbom, koristiće se CUP specifikacija. Gramatika mora da definiše strukturu programa, deklaracije (ako ih ima), i ključne naredbe, uključujući `if-else`.\n\nPretpostavljajući da jezik ima osnovne elemente kao što su identifikatori (`ID`), konstante (`CONST`), i operacije, gramatika bi mogla izgledati sledeće:\n\n```cup\n// Deklaracija terminalnih simbola (Tokena)\n% Tokeni: ID, CONST, IF, THEN, ELSE, SEMICOLON, LPAREN, RPAREN, ASSIGN, etc.\n\n// Gramatika\nprogram -> deklaracija* naredba*\ndeklaracija -> ... // Definicija deklaracija (ako ih ima)\nnaredba -> if_naredba\nnaredba -> druga_naredba // Ostale naredbe (npr. dodela, ulaz/izlaz)\n\n// Definicija IF-ELSE strukture\nif_naredba -> IF Izraz THEN naredba ELSE naredba\nif_naredba -> IF Izraz THEN naredba // Ako je else opcionalan\n\n// Definicija izraza (primer)\nIzraz -> Fizraz { /* Akcija za izračunavanje izraza */ }\nFizraz -> ID\nFizraz -> CONST\nFizraz -> Fizraz '+' Fizraz\nFizraz -> Fizraz '*' Fizraz\n```\n\n**Objašnjenje i prilagođavanje strukture:**\n\n1.  **Gramatika:** Definisan je glavni tok (`program`) koji sadrži niz deklaracija i niz naredbi. Ključna tačka je definicija `if_naredba`, koja direktno odražava strukturu `if Izraz THEN naredba ELSE naredba`. Takođe, dodao sam varijantu gde je `ELSE` opcionalan, što je uobičajeno u ovakvim jezicima.\n2.  **Terminalni simboli:** U CUP specifikaciji bi se morali definisati svi tokeni (npr. `ID`, `IF`, `THEN`, `ELSE`, `SEMICOLON`, itd.) koji se generišu iz leksičkog analizatora.\n3.  **Akcije:** U delu `{ ... }` bi se postavljale akcije (koje su definisane u `CUP$action` klasi, kao u primeru), koje se izvršavaju kada se određena produkcija uspešno parsira.\n\n**Napomena:** Pošto mi nije dat kompletan set terminalnih simbola niti specifična gramatika za jezik, ovo je najlogičnija implementacija strukture CUP specifikacije bazirana na zahtevu za `if-else` naredbom, uz imitaciju stila datog primera. Za potpunu implementaciju, neophodno je definisati sve terminalne simbole i sve potrebne akcije.\n\n_Napomena: rešenje je automatski generisao lokalni model. Uporedi ga sa izvorima i proveri rezultat._",
+  "sources": [
+   "vezbe/PP06_cup.pdf (dist: 0.264)",
+   "vezbe/PP06_cup.pdf (nastavak)",
+   "vezbe/PP06_cup.pdf (dist: 0.266)",
+   "vezbe/PP06_cup.pdf (nastavak)",
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.263)"
+  ]
+ },
+ {
+  "kind": "task_ar",
+  "message": "Za datu C funkciju int f(int n) { if (n<2) return 1; return n*f(n-1); } nacrtati aktivacioni slog i napisati asembler za IA-32",
+  "seconds": 162.1,
+  "intent": "Task",
+  "reply": "Zdravo! Ja sam AITutor, tvoj tutor za predmet \"Programski prevodioci\" na Elektronskom fakultetu u Nišu. Razumem zadatak. Moraću da primenim postupak iz teorije ili da prilagodim strukturu rešenja iz datih primera, jer je ovo zadatak koji zahteva generisanje IA-32 koda za rekurzivnu funkciju.\n\nPošto je zadatak sličan onima iz primera (generisanje IA-32 koda i aktivacionog sloga), koristiću strukturu iz primera, prilagođavajući je za rekurzivnu funkciju $f(n)$.\n\n### Analiza funkcije\n\nFunkcija je:\n```c\nint f(int n) {\n    if (n < 2) return 1;\n    return n * f(n-1);\n}\n```\nOvo je rekurzivna funkcija.\n\n### Rešenje\n\n#### Funkcija f: Aktivacioni slog\n\n**Aktivacioni slog:**\n\n| Parametar | Adresa |\n| :--- | :--- |\n| $n$ | [EBP+8] |\n| Adresa povratka | [EBP+12] |\n| Stara vrednost EBP | [EBP] |\n\n**IA-32 kod:**\n\n**Upis EBP na stek:**\n```assembly\nPUSH EBP\nMOV EBP, ESP\n```\n\n**Telo funkcije:**\n(Provera uslova $n < 2$)\n```assembly\nCMP EAX, 2       ; Pretpostavljamo da je n u EAX ili ga učitamo\nJGE LAB_RECURSION ; Ako je n >= 2, idemo na rekurziju\n; Ako je n < 2 (bazni slučaj)\nMOV EAX, 1       ; Vrati 1\nJMP LAB_RETURN   ; Idi na povratak\n```\n*Napomena: Pošto je $n$ u [EBP+8], moramo ga učitati u registar za poređenje.*\n\n```assembly\nMOV EAX, [EBP+8] ; Učitaj n\nCMP EAX, 2\nJGE LAB_RECURSION ; Ako je n >= 2, idemo na rekurziju\n; Bazni slučaj: n < 2\nMOV EAX, 1\nJMP LAB_RETURN\n```\n\n**Rekurzivni slučaj ($n \\ge 2$):**\n(Izračunavanje $n \\times f(n-1)$)\n\n1.  **Poziv $f(n-1)$:**\n    *   Izračunavanje novog parametra $n-1$:\n        ```assembly\n        MOV ECX, [EBP+8] ; Kopiraj n u ECX\n        DEC ECX           ; ECX = n-1\n        ```\n    *   Upis stvarnih parametara na stek (za poziv $f(n-1)$):\n        ```assembly\n        PUSH ECX          ; Parametar n-1\n        ```\n    *   Poziv funkcije:\n        ```assembly\n        CALL f            ; Poziv f(n-1). Rezultat je u EAX\n        ```\n2.  **Množenje:**\n    *   Rezultat $f(n-1)$ je u EAX. Moramo pomnožiti ga sa $n$.\n    *   Učitaj $n$ (koje je u [EBP+8]) u neki registar, recimo EBX.\n        ```assembly\n        MOV EBX, [EBP+8]  ; EBX = n\n        IMUL EBX           ; EAX = EAX * EBX (Rezultat = f(n-1) * n)\n        ```\n    *   Rezultat je sada u EAX.\n    ```assembly\n    LAB_RECURSION:\n        ; ... (Poziv f(n-1) i množenje, kao gore)\n        ; Rezultat je u EAX\n        ; ...\n\n_Napomena: rešenje je automatski generisao lokalni model. Uporedi ga sa izvorima i proveri rezultat._",
+  "sources": [
+   "vezbe/Zadatak 1.pdf (dist: 0.229)",
+   "vezbe/Zadatak 1.pdf (nastavak)",
+   "vezbe/Zadatak4.pdf (dist: 0.279)",
+   "vezbe/Zadatak4.pdf (nastavak)",
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.294)"
+  ]
+ }
+]

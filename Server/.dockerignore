@@ -1,0 +1,6 @@
+**/bin/
+**/obj/
+AITutor.Tests/
+AITutor/
+*.user
+.vs/

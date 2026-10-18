@@ -1,0 +1,47 @@
+[
+ {
+  "id": "jan24_q4_monitor",
+  "seconds": 58.0,
+  "expected": "monitor sa stanjem koje forsira naizmenicnost (npr. bool next_set) i uslovnim promenljivama sa cwait/csignal",
+  "reply": "monitor Switch {\n    int x = 0;\n    bool naredniJeSet = true;\n    condition red;\n    procedure set() {\n        if (!naredniJeSet) cwait(red);\n        x = 1;\n        naredniJeSet = false;\n        csignal(red);\n    }\n    procedure reset() {\n        if (naredniJeSet) cwait(red);\n        x = 0;\n        naredniJeSet = true;\n        csignal(red);\n    }\n}\nvoid P1() { while (true) Switch.set(); }\nvoid P2() { while (true) Switch.reset(); }\nvoid main() { parbegin(P1, P2); }\n\n_Napomena: rešenje je automatski generisao lokalni model. Uporedi ga sa izvorima i proveri rezultat._\n\n---\nRešen primer iz materijala (obrasci/Obrasci sinhronizacije (dodato u AITutor, nije materijal kursa).txt):\n[isečak materijala kursa izostavljen iz javnog repoa]",
+  "sources": [
+   "obrasci/Obrasci sinhronizacije (dodato u AITutor, nije materijal kursa).txt (dist: 0.319)",
+   "predavanja/4. Konkurentnost - uzajamno iskljucivanje i sinhronizacija.pdf (dist: 0.472)",
+   "predavanja/4. Konkurentnost - uzajamno iskljucivanje i sinhronizacija.pdf (nastavak)",
+   "obrasci/Obrasci sinhronizacije (dodato u AITutor, nije materijal kursa).txt (dist: 0.481)",
+   "predavanja/4. Konkurentnost - uzajamno iskljucivanje i sinhronizacija.pdf (dist: 0.472)"
+  ],
+  "course_notation": true,
+  "posix_junk": false
+ },
+ {
+  "id": "okt23_q4_sastanak",
+  "seconds": 44.5,
+  "expected": "monitor sa brojacem dolazaka i jednom uslovnom promenljivom; prvi proces cwait, drugi csignal; prikaz poziva u P1 i P2",
+  "reply": "monitor Sastanak {\n    int stigli = 0;\n    condition svi;\n    procedure stigni() {\n        stigli = stigli + 1;\n        if (stigli < 2) cwait(svi);\n        else { stigli = 0; csignal(svi); }\n    }\n}\nvoid P1() {\n    /* kod pre sastanka */\n    Sastanak.stigni();\n    /* kod posle sastanka */\n}\nvoid P2() {\n    /* kod pre sastanka */\n    Sastanak.stigni();\n    /* kod posle sastanka */\n}\nvoid main() {\n    parbegin(P1, P2);\n}\n\n_Napomena: rešenje je automatski generisao lokalni model. Uporedi ga sa izvorima i proveri rezultat._\n\n---\nRešen primer iz materijala (predavanja/4. Konkurentnost - uzajamno iskljucivanje i sinhronizacija.pdf):\n[isečak materijala kursa izostavljen iz javnog repoa]",
+  "sources": [
+   "predavanja/4. Konkurentnost - uzajamno iskljucivanje i sinhronizacija.pdf (dist: 0.332)",
+   "predavanja/4. Konkurentnost - uzajamno iskljucivanje i sinhronizacija.pdf (nastavak)",
+   "obrasci/Obrasci sinhronizacije (dodato u AITutor, nije materijal kursa).txt (dist: 0.379)",
+   "obrasci/Obrasci sinhronizacije (dodato u AITutor, nije materijal kursa).txt (dist: 0.472)",
+   "predavanja/4. Konkurentnost - uzajamno iskljucivanje i sinhronizacija.pdf (dist: 0.332)"
+  ],
+  "course_notation": true,
+  "posix_junk": false
+ },
+ {
+  "id": "jun24_q4_semafori",
+  "seconds": 46.1,
+  "expected": "semafori: jedan po procesu citaocu (inicijalno 1 i 0) plus semafor za poruku; semWait/semSignal",
+  "reply": "semaphore s1 = 1, s2 = 0, full = 0, empty = 1;\n\nvoid P3() {\n    while (true) {\n        semWait(empty);\n        /* upiši poruku u bafer */\n        semSignal(full);\n    }\n}\n\nvoid P1() {\n    while (true) {\n        semWait(s1);\n        semWait(full);\n        /* pročitaj poruku iz bafera */\n        semSignal(empty);\n        semSignal(s2);\n    }\n}\n\nvoid P2() {\n    while (true) {\n        semWait(s2);\n        semWait(full);\n        /* pročitaj poruku iz bafera */\n        semSignal(empty);\n        semSignal(s1);\n    }\n}\n\nvoid main() {\n    parbegin(P1, P2, P3);\n}\n\n_Napomena: rešenje je automatski generisao lokalni model. Uporedi ga sa izvorima i proveri rezultat._\n\n---\nRešen primer iz materijala (obrasci/Obrasci sinhronizacije (dodato u AITutor, nije materijal kursa).txt):\n[isečak materijala kursa izostavljen iz javnog repoa]",
+  "sources": [
+   "obrasci/Obrasci sinhronizacije (dodato u AITutor, nije materijal kursa).txt (dist: 0.301)",
+   "obrasci/Obrasci sinhronizacije (dodato u AITutor, nije materijal kursa).txt (dist: 0.385)",
+   "predavanja/4. Konkurentnost - uzajamno iskljucivanje i sinhronizacija.pdf (dist: 0.516)",
+   "predavanja/4. Konkurentnost - uzajamno iskljucivanje i sinhronizacija.pdf (nastavak)",
+   "predavanja/4. Konkurentnost - uzajamno iskljucivanje i sinhronizacija.pdf (dist: 0.516)"
+  ],
+  "course_notation": true,
+  "posix_junk": false
+ }
+]

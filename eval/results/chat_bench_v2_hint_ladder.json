@@ -1,0 +1,394 @@
+[
+ {
+  "kind": "casual",
+  "message": "Cao",
+  "seconds": 30.9,
+  "intent": "Casual",
+  "reply": "Zdravo! Kako ti mogu pomoći danas u vezi sa Programskim prevodiocima? Slobodno pitaj ako ti nešto padne na pamet ili ako ti treba pomoć oko nekog konkretnog teme.",
+  "sources": [],
+  "hintLevel": null
+ },
+ {
+  "kind": "casual",
+  "message": "Sta sve umes i kako mi mozes pomoci oko ispita?",
+  "seconds": 16.6,
+  "intent": "Casual",
+  "reply": "Zdravo! Ja sam AITutor, tvoj prijateljski asistent za učenje Programskih prevodnica. Mogu ti pomoći objašnjavanjem specifičnih pojmova, pomoći oko rešavanja zadataka sa starih ispita ili jednostavno ispitivanjem gradiva. Samo mi reci šta ti je potrebno!",
+  "sources": [],
+  "hintLevel": null
+ },
+ {
+  "kind": "subject",
+  "message": "Sta je LL(1) gramatika?",
+  "seconds": 42.7,
+  "intent": "Subject",
+  "reply": "LL(1) gramatika je beskonteksna gramatika kod koje za svaki par pravila za isti neterminalni simbol A važi da se prvi simbol svih desnih strana različitih pravila ne seku. Ako gramatika sadrži epsilon pravila, uslov je da za sva pravila A -> al | al2 | ... | aln i A -> eps važi da FIRST(ai) ∩ FIRST(aj) = ∅ za svako i != j, i ako je al_i -> eps, onda mora da važi i FIRST(aj) ∩ FOLLOW(A) = ∅ za svako j != i.",
+  "sources": [
+   "predavanja/PP 06 LL(1) gramatike.pdf (dist: 0.289)",
+   "predavanja/PP 06 LL(1) gramatike.pdf (dist: 0.309)",
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.318)",
+   "vezbe/PP04_LL(1)Gramatike.pdf (dist: 0.322)",
+   "predavanja/PP 06 LL(1) gramatike.pdf (dist: 0.324)",
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.326)"
+  ],
+  "hintLevel": null
+ },
+ {
+  "kind": "subject",
+  "message": "Koja je razlika izmedju kompilatora i interpretatora?",
+  "seconds": 28.7,
+  "intent": "Subject",
+  "reply": "Osnovna razlika je u tome što kompilator najpre vrši analizu celog programa, a zatim generiše masinski kod celog programa. Interpretatori koriste drugu strategiju, prevode naredbu po naredbu programa i čim formiraju celinu koja može da se izvrši, izvrsavaju je.",
+  "sources": [
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.227)",
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.502)",
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.513)",
+   "predavanja/PP 04 Leksicka analiza.pdf (dist: 0.539)",
+   "predavanja/PP 01 Uvod.pdf (dist: 0.544)",
+   "predavanja/PP 04 Leksicka analiza.pdf (dist: 0.546)"
+  ],
+  "hintLevel": null
+ },
+ {
+  "kind": "subject_border",
+  "message": "Koje su faze kompajliranja?",
+  "seconds": 43.2,
+  "intent": "Subject",
+  "reply": "Osnovne faze u proceru prevodjenja visih programskih jezika su leksička analiza, sintaksna analiza, semantička analiza, generisanje medjukoda i generisanje koda.",
+  "sources": [
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.535)",
+   "predavanja/PP 10 Medjukodovi.pdf (dist: 0.551)",
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.564)",
+   "predavanja/PP 01 Uvod.pdf (dist: 0.586)",
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.588)",
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.596)"
+  ],
+  "hintLevel": null
+ },
+ {
+  "kind": "subject_border",
+  "message": "Sta je rekurzivni spust?",
+  "seconds": 35.5,
+  "intent": "Subject",
+  "reply": "Nemam dovoljno informacija u materijalu da odgovorim na ovo pitanje.",
+  "sources": [
+   "predavanja/PP 05 Sintaksna analiza.pdf (dist: 0.524)",
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.543)",
+   "vezbe/PP04_LL(1)Gramatike.pdf (dist: 0.560)",
+   "predavanja/PP 12 Generisanje izlaznog koda - novo.pdf (dist: 0.561)",
+   "vezbe/PP_09 Upravljanje_memorijom.pdf (dist: 0.564)",
+   "vezbe/PP04_LL(1)Gramatike.pdf (dist: 0.566)"
+  ],
+  "hintLevel": null
+ },
+ {
+  "kind": "offtopic",
+  "message": "Sta je nuklearna fizika?",
+  "seconds": 5.8,
+  "intent": "Subject",
+  "reply": "Nemam dovoljno informacija u materijalu da odgovorim na ovo pitanje.",
+  "sources": [
+   "predavanja/PP 10 Medjukodovi.pdf (dist: 0.712)",
+   "vezbe/PP02_LeksickaAnaliza.pdf (dist: 0.721)",
+   "predavanja/PP 11 Optimizacija koda.pdf (dist: 0.727)",
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.733)",
+   "predavanja/PP 02 Formalni jezici.pdf (dist: 0.741)",
+   "vezbe/PP08 _GenerisanjeMedjukoda.pdf (dist: 0.742)"
+  ],
+  "hintLevel": null
+ },
+ {
+  "kind": "offtopic",
+  "message": "Koji je glavni grad Francuske?",
+  "seconds": 5.8,
+  "intent": "Subject",
+  "reply": "Nemam dovoljno informacija u materijalu da odgovorim na ovo pitanje.",
+  "sources": [
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.709)",
+   "predavanja/PP 11 Optimizacija koda.pdf (dist: 0.719)",
+   "vezbe/AST u medjukod.pdf (dist: 0.726)",
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.729)",
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.732)",
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.733)"
+  ],
+  "hintLevel": null
+ },
+ {
+  "kind": "offtopic_hard",
+  "message": "Sta je TCP protokol?",
+  "seconds": 5.5,
+  "intent": "Subject",
+  "reply": "Nemam dovoljno informacija u materijalu da odgovorim na ovo pitanje.",
+  "sources": [
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.672)",
+   "predavanja/PP 09 Semanticka analiza.pdf (dist: 0.681)",
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.681)",
+   "predavanja/PP 10 Medjukodovi.pdf (dist: 0.696)",
+   "vezbe/PP03_JFlex.pdf (dist: 0.698)",
+   "predavanja/PP 12 Generisanje izlaznog koda - novo.pdf (dist: 0.698)"
+  ],
+  "hintLevel": null
+ },
+ {
+  "kind": "offtopic_hard",
+  "message": "Kako radi SQL JOIN?",
+  "seconds": 5.6,
+  "intent": "Subject",
+  "reply": "Nemam dovoljno informacija u materijalu da odgovorim na ovo pitanje.",
+  "sources": [
+   "reseni_blanketi/Generisanje medjukoda - reseni zadaci.pdf (dist: 0.622)",
+   "vezbe/LR gramatike_resenje.pdf (dist: 0.648)",
+   "predavanja/PP 02 Formalni jezici.pdf (dist: 0.649)",
+   "pismeni/PP_2019_01.pdf (dist: 0.653)",
+   "predavanja/PP 04 Leksicka analiza.pdf (dist: 0.658)",
+   "pismeni/PP_2017_01.pdf (dist: 0.663)"
+  ],
+  "hintLevel": null
+ },
+ {
+  "kind": "followup_1",
+  "message": "Sta je FIRST skup?",
+  "seconds": 36.3,
+  "intent": "Subject",
+  "reply": "FIRST skup je skup terminalnih simbola kojima počinju reči izvedene iz reči alfa. Matematički se definiše kao FIRST(alfa) = {s | alfa -> sbeta, gde je alfa u V+, s u Vt, beta u V*}.",
+  "sources": [
+   "predavanja/PP 06 LL(1) gramatike.pdf (dist: 0.452)",
+   "predavanja/PP 06 LL(1) gramatike.pdf (dist: 0.499)",
+   "vezbe/PP04_LL(1)Gramatike.pdf (dist: 0.503)",
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.530)",
+   "vezbe/PP04_LL(1)Gramatike.pdf (dist: 0.564)",
+   "vezbe/PP04_LL(1)Gramatike.pdf (dist: 0.574)"
+  ],
+  "hintLevel": null
+ },
+ {
+  "kind": "followup_2",
+  "message": "a FOLLOW?",
+  "seconds": 34.2,
+  "intent": "Subject",
+  "reply": "FOLLOW funkcija startnog simbola gramatike sadrži granični simbol #. Za određivanje FOLLOW(X) posmatraju se desne strane smena u kojima se X pojavljuje.",
+  "sources": [
+   "predavanja/PP 06 LL(1) gramatike.pdf (dist: 0.557)",
+   "predavanja/PP 06 LL(1) gramatike.pdf (dist: 0.571)",
+   "vezbe/PP04_LL(1)Gramatike.pdf (dist: 0.572)",
+   "predavanja/PP 06 LL(1) gramatike.pdf (dist: 0.576)",
+   "predavanja/PP 06 LL(1) gramatike.pdf (dist: 0.582)",
+   "predavanja/PP 06 LL(1) gramatike.pdf (dist: 0.584)"
+  ],
+  "hintLevel": null
+ },
+ {
+  "kind": "followup_3",
+  "message": "hvala",
+  "seconds": 12.9,
+  "intent": "Casual",
+  "reply": "Nema na čemu! Drago mi je da sam mogao da pomognem. Ako ti nešto padne na pamet ili ti zatreba pojašnjenje bilo kog pojma, slobodno pitaj.",
+  "sources": [],
+  "hintLevel": null
+ },
+ {
+  "kind": "task_in_material_L1",
+  "message": "Definisati klasu za while petlju u AST-u i napisati metodu translate()",
+  "seconds": 41.3,
+  "intent": "Task",
+  "reply": "1. Definisati klasu koja nasleđuje Statement i sadrži reference na uslov petlje i telo petlje.\n2. Implementirati metodu translate() u definisanoj klasi.\n3. U metodi translate() generisati oznaku za početak petlje koristeći genLab().\n4. Ispisati uslov petlje i generisati instrukciju JumpIfZero koja preskače telo petlje ako je uslov nula.\n5. Ispisati telo petlje, a zatim generisati instrukciju Jump koja vraća na početak petlje.\n6. Ispisati oznaku za kraj petlje koristeći genLab().\n\nSličan zadatak u materijalu: vezbe/Zadatak - While petlja.pdf\n\nPokušaj prvo sam. Ako zapneš, traži sledeći nagoveštaj ili prikaži rešenje.",
+  "sources": [
+   "vezbe/Zadatak - While petlja.pdf (dist: 0.263)",
+   "vezbe/Zadatak - While petlja.pdf (nastavak)",
+   "predavanja/PP 11 Optimizacija koda.pdf (dist: 0.580)"
+  ],
+  "hintLevel": 1
+ },
+ {
+  "kind": "task_in_material_L2",
+  "message": "Sledeći nagoveštaj",
+  "seconds": 36.2,
+  "intent": "Task",
+  "reply": "Potrebno je definisati novu klasu koja nasleđuje klasu Statement. Ova klasa mora da sadrži reference na uslov petlje (Expression) i na telo petlje (Statement). Implementacija metode translate() u ovoj klasi je ključna jer ona odgovara za konverziju strukture petlje u međukod niskog nivoa. U metodi translate() se koristi genLab() za generisanje oznaka koje će označavati početak i kraj petlje.\n\nPokušaj da nastaviš sam odavde. Ako zapneš, traži sledeći nagoveštaj ili prikaži rešenje.",
+  "sources": [
+   "vezbe/Zadatak - While petlja.pdf (dist: 0.263)",
+   "vezbe/Zadatak - While petlja.pdf (nastavak)",
+   "predavanja/PP 11 Optimizacija koda.pdf (dist: 0.580)"
+  ],
+  "hintLevel": 2
+ },
+ {
+  "kind": "task_in_material_L3",
+  "message": "Prikaži rešenje",
+  "seconds": 59.9,
+  "intent": "Task",
+  "reply": "class WhileStatement extends Statement {\n    private Expression condition;\n    private Statement body;\n\n    public WhileStatement(Expression condition, Statement body) {\n        this.condition = condition;\n        this.body = body;\n    }\n\n    public void translate(BufferedWriter out) throws IOException {\n        String startLab = ASTNode.genLab();\n        String endLab = ASTNode.genLab();\n        out.write(startLab + \":\");\n        out.newLine();\n        condition.translate(out);\n        condition.genLoad(\"R1\", out);\n        out.write(\"\\tJumpIfZero\\tR1, \" + endLab);\n        out.newLine();\n        body.translate(out);\n        out.write(\"\\tJump\\t\" + startLab);\n        out.newLine();\n        out.write(endLab + \":\");\n        out.newLine();\n    }\n}\n\n_Napomena: rešenje je automatski generisao lokalni model. Uporedi ga sa izvorima i proveri rezultat._\n\n---\nRešen primer iz materijala (vezbe/Zadatak - While petlja.pdf):\n[isečak materijala kursa izostavljen iz javnog repoa]",
+  "sources": [
+   "vezbe/Zadatak - While petlja.pdf (dist: 0.263)",
+   "vezbe/Zadatak - While petlja.pdf (nastavak)",
+   "reseni_blanketi/Generisanje medjukoda - reseni zadaci.pdf (dist: 0.358)",
+   "reseni_blanketi/Generisanje medjukoda - reseni zadaci.pdf (nastavak)",
+   "predavanja/PP 11 Optimizacija koda.pdf (dist: 0.580)"
+  ],
+  "hintLevel": 3
+ },
+ {
+  "kind": "task_variant_L1",
+  "message": "Definisati klasu za predstavljanje do-while petlje u AST-u, definisana smenom DoWhileStatement -> DO Statement WHILE Expression, i implementirati translate",
+  "seconds": 44.4,
+  "intent": "Task",
+  "reply": "1. Definisati klasu za predstavljanje do-while petlje u AST-u koristeći definisanu smenu.\n2. Implementirati metodu translate u toj klasi koja konvertuje do-while petlju u međukod niskog nivoa.\n3. Generisati label za početak petlje i label za kraj petlje.\n4. Ispisati telo petlje, a zatim uslov petlje, i na kraju generisati skok nazad na početak petlje.\n\nSličan zadatak u materijalu: vezbe/Zadatak - While petlja.pdf\n\nPokušaj prvo sam. Ako zapneš, traži sledeći nagoveštaj ili prikaži rešenje.",
+  "sources": [
+   "vezbe/Zadatak - While petlja.pdf (dist: 0.284)",
+   "vezbe/Zadatak - While petlja.pdf (nastavak)",
+   "predavanja/PP 11 Optimizacija koda.pdf (dist: 0.600)"
+  ],
+  "hintLevel": 1
+ },
+ {
+  "kind": "task_variant_L2",
+  "message": "Sledeći nagoveštaj",
+  "seconds": 39.2,
+  "intent": "Task",
+  "reply": "Prvo, treba definisati novu klasu koja nasleđuje od Statement klase i koja predstavlja DoWhileStatement. Ova klasa mora imati atribute za telo petlje (Statement) i uslov petlje (Expression). Zatim, u toj klasi treba implementirati metodu translate koja će izvršavati konverziju DoWhileStatement u međukod niskog nivoa. U metodi translate, potrebno je generisati label za početak petlje i label za kraj petlje. Nakon toga, treba ispisati telo petlje, zatim uslov petlje, i na kraju generisati skok nazad na početak petlje.\n\nPokušaj da nastaviš sam odavde. Ako zapneš, traži sledeći nagoveštaj ili prikaži rešenje.",
+  "sources": [
+   "vezbe/Zadatak - While petlja.pdf (dist: 0.284)",
+   "vezbe/Zadatak - While petlja.pdf (nastavak)",
+   "predavanja/PP 11 Optimizacija koda.pdf (dist: 0.600)"
+  ],
+  "hintLevel": 2
+ },
+ {
+  "kind": "task_variant_L3",
+  "message": "Prikaži rešenje",
+  "seconds": 35.5,
+  "intent": "Task",
+  "reply": "class DoWhileStatement extends Statement {\n    private Statement body;\n    private Expression condition;\n\n    public DoWhileStatement(Statement body, Expression condition) {\n        this.body = body;\n        this.condition = condition;\n    }\n\n    public void translate(BufferedWriter out) throws IOException {\n        String startLab = ASTNode.genLab();\n        String endLab = ASTNode.genLab();\n\n        out.write(startLab + \":\");\n        out.newLine();\n        body.translate(out);\n        out.write(\"\\tJump\\t\" + endLab);\n        out.newLine();\n\n        out.write(endLab + \":\");\n        out.newLine();\n        condition.translate(out);\n        condition.genLoad(\"R1\", out);\n        out.write(\"\\tJumpIfZero\\tR1, \" + startLab);\n        out.newLine();\n    }\n}\n\n_Napomena: rešenje je automatski generisao lokalni model. Uporedi ga sa izvorima i proveri rezultat._\n\n---\nRešen primer iz materijala (vezbe/Zadatak - While petlja.pdf):\n[isečak materijala kursa izostavljen iz javnog repoa]",
+  "sources": [
+   "vezbe/Zadatak - While petlja.pdf (dist: 0.284)",
+   "vezbe/Zadatak - While petlja.pdf (nastavak)",
+   "reseni_blanketi/Generisanje medjukoda - reseni zadaci.pdf (dist: 0.379)",
+   "reseni_blanketi/Generisanje medjukoda - reseni zadaci.pdf (nastavak)",
+   "predavanja/PP 11 Optimizacija koda.pdf (dist: 0.600)"
+  ],
+  "hintLevel": 3
+ },
+ {
+  "kind": "task_ll1_L1",
+  "message": "Transformisati datu gramatiku u LL(1) gramatiku i dokazati da je LL(1): S -> S a | b",
+  "seconds": 38.2,
+  "intent": "Task",
+  "reply": "1. Proveriti da li je datu gramatiku moguće transformisati u oblik bez levo-rekurzivnih smena.\n2. Izvršiti transformaciju gramatike kako bi se eliminisale levo-rekurzivne smene.\n3. Izračunati skupove FIRST za sve produkte u transformisanoj gramatici.\n4. Izračunati skupove FOLLOW za sve neterminale u transformisanoj gramatici.\n5. Proveriti uslov LL(1) za svaki par pravila koji dele isti neterminal na levoj strani.\n\nSličan zadatak u materijalu: vezbe/PP04_LL(1)Gramatike.pdf\n\nPokušaj prvo sam. Ako zapneš, traži sledeći nagoveštaj ili prikaži rešenje.",
+  "sources": [
+   "vezbe/PP04_LL(1)Gramatike.pdf (dist: 0.383)",
+   "vezbe/PP04_LL(1)Gramatike.pdf (nastavak)",
+   "predavanja/PP 06 LL(1) gramatike.pdf (dist: 0.374)"
+  ],
+  "hintLevel": 1
+ },
+ {
+  "kind": "task_ll1_L2",
+  "message": "Sledeći nagoveštaj",
+  "seconds": 38.8,
+  "intent": "Task",
+  "reply": "Prvo treba proveriti da li je gramatika S -> S a | b levo-rekurzivna, što je očigledno jer se simbol S pojavljuje na početku jedne od pravila. Zatim se vrši transformacija eliminacijom levo-rekurzivnih smena. Za pravilo S -> S a, uvodi se novi neterminal, recimo S', i pravilo se menja u S -> S' i S' -> a S'. Takođe, za pravilo S -> b ostaje nepromenjeno. Ova transformacija eliminiše levo-rekurzivnost, čime se gramatika priprema za dalje LL(1) analize.\n\nPokušaj da nastaviš sam odavde. Ako zapneš, traži sledeći nagoveštaj ili prikaži rešenje.",
+  "sources": [
+   "vezbe/PP04_LL(1)Gramatike.pdf (dist: 0.383)",
+   "vezbe/PP04_LL(1)Gramatike.pdf (nastavak)",
+   "predavanja/PP 06 LL(1) gramatike.pdf (dist: 0.374)"
+  ],
+  "hintLevel": 2
+ },
+ {
+  "kind": "task_ll1_L3",
+  "message": "Prikaži rešenje",
+  "seconds": 157.2,
+  "intent": "Task",
+  "reply": "Leva faktorizacija\nData gramatika je:\nS -> S a | b\n\nGramatika nije LL(1) jer postoje dve smene koje imaju isti neterminalni simbol na levoj strani (S) i imaju isti prvi simbol na desnoj strani (S).\nS -> S a\nS -> b\n\nPrimenjujemo levu faktorizaciju.\nZamenjujemo smene:\nS -> S S'\nS' -> a | ε\n\nNova gramatika je:\nS -> S S'\nS' -> a | ε\nS -> b\n\nProvera LL(1) gramatike\nMoramo proveriti da li za svaki par pravila za isti neterminalni simbol A, skupovi FIRST i FOLLOW ispunjavaju uslove.\n\nNeterminali su S i S'.\n\nZa neterminal S:\nPravila za S su:\n1. S -> S S'\n2. S -> b\n\nFIRST(S S') = FIRST(S)\nFIRST(b) = {b}\n\nMoramo da izračunamo FIRST(S). Pošto je S sam po sebi u pravilima, moramo da primenimo rekurzivnu definiciju.\n\nFIRST(S) = FIRST(S S') U FIRST(b)\nFIRST(S) = FIRST(S) INTERSECT FIRST(S S') U {b}\n\nOvo ukazuje na levo rekurzivnost, ali pošto je transformacija već urađena, proveravamo uslove za LL(1) na novoj gramatici.\n\nZa S:\nPravilo 1: S -> S S'\nPravilo 2: S -> b\n\nFIRST(S S') = FIRST(S)\nFIRST(b) = {b}\n\nDa bi gramatika bila LL(1), mora biti da je FIRST(S S') INTERSECT FIRST(b) = ∅.\nFIRST(S) sadrži {b} jer S -> b.\nFIRST(S S') sadrži FIRST(S).\n\nAko je S -> b, onda FIRST(S) = {b}.\nAko je S -> S S', onda FIRST(S) = FIRST(S) INTERSECT FIRST(S S').\n\nPošto je S -> b, onda FIRST(S) sadrži {b}.\nAko je S -> S S', onda FIRST(S) sadrži FIRST(S).\n\nPošto je S -> b, onda FIRST(S) = {b}.\nAko je S -> S S', onda FIRST(S) = FIRST(S) INTERSECT FIRST(S S').\nAko je FIRST(S) = {b}, onda FIRST(S S') = {b}.\nTada je FIRST(S S') INTERSECT FIRST(b) = {b} INTERSECT {b} = {b} != ∅.\nDakle, gramatika nije LL(1) u ovom obliku jer je došlo do preklapanja.\n\nMeđutim, u kontekstu levog faktorizovanja, nakon transformacije, proveravamo da li su uslovi ispunjeni.\n\nZa S:\nPravilo 1: S -> S S'\nPravilo 2: S -> b\n\nFIRST(S S') = FIRST(S)\nFIRST(b) = {b}\n\nDa bi bila LL(1), mora biti da je FIRST(S S') INTERSECT FIRST(b) = ∅.\nPošto je S -> b, FIRST(S) = {b}.\nPošto je S -> S S', FIRST(S) = FIRST(S) INTERSECT FIRST(S S').\n\nAko je S -> b, onda FIRST(S) = {b}.\nAko je S -> S S', onda FIRST(S) = FIRST(S) INTERSECT FIRST(S S').\n\nAko uzmemo da je S -> b, onda FIRST(S) = {b}.\nAko uzmemo da je S -> S S', onda FIRST(S) = FIRST(S) INTERSECT FIRST(S S').\n\nOvaj primer pokazuje da je levu rekurzivnost potrebno ukloniti pre provere LL(1) uslova, ali pošto je zadatak bio samo transformacija i dokaz, a transformacija je urađena, moramo proveriti uslove na novoj gramatici.\n\nZa S:\nPravilo 1: S -> S S'\nPravilo 2: S -> b\n\nFIRST(S S') = FIRST(S)\nFIRST(b) = {b}\n\nAko je S -> b, onda FIRST(S) = {b}.\nAko je S -> S S', onda FIRST(S) = FIRST(S) INTERSECT FIRST(S S').\n\nAko je S -> b, onda FIRST(S) = {b}.\nAko je S -> S S', onda FIRST(S) = {b} INTERSECT FIRST(S S').\n\nOvo je problematično jer S se pojavljuje na desnoj strani.\n\nAko se primeni levu faktorizaciju, dobijamo:\nS -> S S'\nS' -> a | ε\nS -> b\n\nZa S:\nPravilo 1: S -> S S'\nPravilo 2: S -> b\n\nFIRST(S S') = FIRST(S)\nFIRST(b) = {b}\n\nAko je S -> b, onda FIRST(S) = {b}.\nAko je S -> S S', onda FIRST(S) = FIRST(S) INTERSECT FIRST(S S').\n\nAko je S -> b, onda FIRST(S) = {b}.\nAko je S -> S S', onda FIRST(S) = {b} INTERSECT FIRST(S S').\n\nPošto je S -> b, onda FIRST(S) = {b}.\nTada je FIRST(S S') = {b}.\nFIRST(S S') INTERSECT FIRST(b) = {b} INTERSECT {b} = {b} != ∅.\nGramatika nije LL(1) nakon levog faktorizovanja jer i dalje postoji preklapanje.\n\nZaključak: Gramatika S -> S a | b nije LL(1) i levu faktorizaciju ne može rešiti u potpunosti jer je problem levo rekurzivnost koja se ne rešava samo levom faktorizacijom.\n\n_Napomena: rešenje je automatski generisao lokalni model. Uporedi ga sa izvorima i proveri rezultat._\n\n---\nRešen primer iz materijala (vezbe/PP04_LL(1)Gramatike.pdf):\n[isečak materijala kursa izostavljen iz javnog repoa]",
+  "sources": [
+   "vezbe/PP04_LL(1)Gramatike.pdf (dist: 0.383)",
+   "vezbe/PP04_LL(1)Gramatike.pdf (nastavak)",
+   "vezbe/PP04_LL(1)Gramatike.pdf (dist: 0.395)",
+   "vezbe/PP04_LL(1)Gramatike.pdf (nastavak)",
+   "predavanja/PP 06 LL(1) gramatike.pdf (dist: 0.374)"
+  ],
+  "hintLevel": 3
+ },
+ {
+  "kind": "task_cup_L1",
+  "message": "Napisati cup specifikaciju za sintaksni analizator jezika sa if-else naredbom",
+  "seconds": 46.4,
+  "intent": "Task",
+  "reply": "1. Definisati non-terminale i terminale jezika koji treba parsirati.\n2. Navesti pravila gramatike koja opisuju strukturu if-else naredbe.\n3. Implementirati specifikaciju koristeći sintaksu Cup-a.\n4. Osigurati da su svi terminali i non-terminali ispravno deklarisani u specifikaciji.\n\nSličan zadatak u materijalu: vezbe/PP06_cup.pdf\n\nPokušaj prvo sam. Ako zapneš, traži sledeći nagoveštaj ili prikaži rešenje.",
+  "sources": [
+   "vezbe/PP06_cup.pdf (dist: 0.307)",
+   "vezbe/PP06_cup.pdf (nastavak)",
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.363)"
+  ],
+  "hintLevel": 1
+ },
+ {
+  "kind": "task_cup_L2",
+  "message": "Sledeći nagoveštaj",
+  "seconds": 47.4,
+  "intent": "Task",
+  "reply": "Prvo, moramo identifikovati sve elemente koji čine jezik, odnosno definisati sve terminale (ključne reči, identifikatori, operatori) i non-terminale (strukture koje se mogu razlagati) za if-else naredbu. Ovo je osnova za sve dalje korake. Zatim, moramo precizno zapisati pravila gramatike koja opisuju kako se ta if-else struktura može formirati, koristeći non-terminale definisane u prvom koraku. Ova gramatika služi kao šema za generisanje sintaksnog analizatora.\n\nPokušaj da nastaviš sam odavde. Ako zapneš, traži sledeći nagoveštaj ili prikaži rešenje.",
+  "sources": [
+   "vezbe/PP06_cup.pdf (dist: 0.307)",
+   "vezbe/PP06_cup.pdf (nastavak)",
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.363)"
+  ],
+  "hintLevel": 2
+ },
+ {
+  "kind": "task_cup_L3",
+  "message": "Prikaži rešenje",
+  "seconds": 100.5,
+  "intent": "Task",
+  "reply": "%{\nimport java.cup.runtime.*;\nimport java.util.ArrayList;\nimport java.util.List;\n\n// Definicija tipova za AST čvorove\nclass ASTNode {\n    public String type;\n    public List<ASTNode> children;\n\n    public ASTNode(String type) {\n        this.type = type;\n        this.children = new ArrayList<>();\n    }\n}\n\nclass IfStatementNode extends ASTNode {\n    public ASTNode condition;\n    public ASTNode thenBlock;\n    public ASTNode elseBlock;\n\n    public IfStatementNode(ASTNode condition, ASTNode thenBlock, ASTNode elseBlock) {\n        super(\"IfStatement\");\n        this.condition = condition;\n        this.thenBlock = thenBlock;\n        this.elseBlock = elseBlock;\n    }\n}\n\nclass AssignmentNode extends ASTNode {\n    public String variableName;\n    public ASTNode expression;\n\n    public AssignmentNode(String variableName, ASTNode expression) {\n        super(\"Assignment\");\n        this.variableName = variableName;\n        this.expression = expression;\n    }\n}\n\nclass BinaryOperationNode extends ASTNode {\n    public String operator;\n    public ASTNode left;\n    public ASTNode right;\n\n    public BinaryOperationNode(String operator, ASTNode left, ASTNode right) {\n        super(\"BinaryOperation\");\n        this.operator = operator;\n        this.left = left;\n        this.right = right;\n    }\n}\n\nclass VariableNode extends ASTNode {\n    public String name;\n\n    public VariableNode(String name) {\n        super(\"Variable\");\n        this.name = name;\n    }\n}\n\nclass ConstantNode extends ASTNode {\n    public String value;\n\n    public ConstantNode(String value) {\n        super(\"Constant\");\n        this.value = value;\n    }\n}\n\n// Klasa za rukovanje tokenima\npublic class Lexer {\n    public Symbol next_token() {\n        // Implementacija leksičkog analizatora\n        // Za potrebe ovog primera, vraćamo placeholder\n        return new Symbol(0, 0, 0, null);\n    }\n}\n\n// Klasa za sintaksni analizator\npublic class Parser {\n    public ASTNode parse() {\n        // Implementacija sintaksne analize i izgradnje AST-a\n        // Za potrebe ovog primera, vraćamo placeholder\n        return new ASTNode(\"Program\");\n    }\n}\n%}\n\n%token ID CONST\n%token LPAREN RPAREN\n%token SEMICOLON COLON\n%token IF THEN ELSE\n\n%start Program\n\n%%\n\nProgram : ID LPAREN ID RPAREN SEMICOLON Block\n       ;\n\nBlock : BEGIN StatementList END\n      ;\n\nStatementList : StatementStatementList\n              | /* empty */\n              ;\n\nStatement : Declaration\n          | Assignment\n          | IfStatement\n          | Block\n          ;\n\nDeclaration : ID COLON Type\n            ;\n\nType : INTEGER\n     | CHAR\n     ;\n\nAssignment : ID SEMICOLON\n          | ID COLON= Expression SEMICOLON\n          ;\n\nIfStatement : IF Expression THEN StatementBlock ELSE StatementBlock\n            ;\n\nStatementBlock : BEGIN StatementList END\n              ;\n\nExpression : Expression PLUS Term\n           | Term\n           ;\n\nTerm : Term STAR Factor\n     | Factor\n     ;\n\nFactor : ID\n      | CONST\n      | LPAREN Expression RPAREN\n      ;\n\n%%\n```\n\n_Napomena: rešenje je automatski generisao lokalni model. Uporedi ga sa izvorima i proveri rezultat._\n\n---\nRešen primer iz materijala (vezbe/PP06_cup.pdf):\n[isečak materijala kursa izostavljen iz javnog repoa]",
+  "sources": [
+   "vezbe/PP06_cup.pdf (dist: 0.307)",
+   "vezbe/PP06_cup.pdf (nastavak)",
+   "vezbe/PP08 _GenerisanjeMedjukoda.pdf (dist: 0.362)",
+   "vezbe/PP08 _GenerisanjeMedjukoda.pdf (nastavak)",
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.363)"
+  ],
+  "hintLevel": 3
+ },
+ {
+  "kind": "task_ar_L1",
+  "message": "Za datu C funkciju int f(int n) { if (n<2) return 1; return n*f(n-1); } nacrtati aktivacioni slog i napisati asembler za IA-32",
+  "seconds": 57.6,
+  "intent": "Task",
+  "reply": "1. Odrediti potrebne polja aktivacionog sloga za funkciju f na osnovu njenog definisanja i poziva.\n2. Nacrtati strukturu aktivacionog sloga, uključujući mesta za parametre, lokalne podatke i adresu povratka.\n3. Prevesti logiku funkcije f u IA-32 asembler, koristeći odgovarajuće instrukcije za poređenje, uslovni skokovi i rekurzivni poziv.\n4. Implementirati mehanizam za upravljanje aktivacionim slogom, uključujući upis i čitanje parametara i smestanje rezultata.\n\nSličan zadatak u materijalu: vezbe/Zadatak 1.pdf\n\nPokušaj prvo sam. Ako zapneš, traži sledeći nagoveštaj ili prikaži rešenje.",
+  "sources": [
+   "vezbe/Zadatak 1.pdf (dist: 0.404)",
+   "vezbe/Zadatak 1.pdf (nastavak)",
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.574)"
+  ],
+  "hintLevel": 1
+ },
+ {
+  "kind": "task_ar_L2",
+  "message": "Sledeći nagoveštaj",
+  "seconds": 51.0,
+  "intent": "Task",
+  "reply": "Prvo, potrebno je analizirati definiciju funkcije f i sve njene pozive da bismo utvrdili koje informacije moraju biti sačuvane u aktivacionom slogu. S obzirom na rekurzivnu prirodu funkcije, svaki poziv zahteva svoj sopstveni aktivacioni slog. Nakon toga, treba definisati strukturu tog sloga, uključujući mesta za argument n, adresu povratka i eventualne lokalne podatke. Struktura mora biti adekvatna za praćenje stanja tokom rekurzivnog procesa.\n\nPokušaj da nastaviš sam odavde. Ako zapneš, traži sledeći nagoveštaj ili prikaži rešenje.",
+  "sources": [
+   "vezbe/Zadatak 1.pdf (dist: 0.404)",
+   "vezbe/Zadatak 1.pdf (nastavak)",
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.574)"
+  ],
+  "hintLevel": 2
+ },
+ {
+  "kind": "task_ar_L3",
+  "message": "Prikaži rešenje",
+  "seconds": 66.9,
+  "intent": "Task",
+  "reply": "Aktivacioni slog\n\nIA-32 kod:\nUpis EBP na stek\nPUSH\nEBP\nPromena vrednosti pokazivaca EBP:\nMOV EBP, ESP\nRezervacija prostora za lokalnu promenljivu:\nSUB ESP, 4\nTelo funkcije:\nCMP EAX, 2\nJL BASE_CASE\nMOV EAX, [EBP+8]\nSUB EAX, 1\nPUSH EAX\nCALL f\nIMUL EAX, EAX\nJMP END_FUNCTION\nBASE_CASE:\nMOV EAX, 1\nEND_FUNCTION:\nMOV [EBP-4], EAX\nIzbacivanje lokalnih promenljivih iz steka:\nMOV ESP, EBP\nUzimasnje stare vrednosti EBP-a:\nPOP EBP\nRET\n\nStruktura aktivacionog sloga:\n[Adresa povratka]\nStara vrednost EBP\nn (argument)\nLokalna promenljiva (res)\n\n_Napomena: rešenje je automatski generisao lokalni model. Uporedi ga sa izvorima i proveri rezultat._\n\n---\nRešen primer iz materijala (vezbe/Zadatak 1.pdf):\n[isečak materijala kursa izostavljen iz javnog repoa]",
+  "sources": [
+   "vezbe/Zadatak 1.pdf (dist: 0.404)",
+   "vezbe/Zadatak 1.pdf (nastavak)",
+   "vezbe/Zadatak 3.pdf (dist: 0.433)",
+   "vezbe/Zadatak 3.pdf (nastavak)",
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.574)"
+  ],
+  "hintLevel": 3
+ }
+]

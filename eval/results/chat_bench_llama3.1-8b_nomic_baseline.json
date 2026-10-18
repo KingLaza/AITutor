@@ -1,0 +1,140 @@
+[
+ {
+  "kind": "casual",
+  "message": "Cao",
+  "seconds": 26.2,
+  "intent": "Casual",
+  "reply": "Zdravo! Šta se događa? Hoću li vam pomoći sa nečim?",
+  "sources": []
+ },
+ {
+  "kind": "casual",
+  "message": "Sta sve umes i kako mi mozes pomoci oko ispita?",
+  "seconds": 25.9,
+  "intent": "Casual",
+  "reply": "Zdravo! Kao AITutor, sad sam ovdje da vam pomognem. Da li ste imali neki konkretni problem ili pitanje vezano za gradivo, ili bi željeli da razgovaramo o mogućim problemima vezano za predmet?",
+  "sources": []
+ },
+ {
+  "kind": "subject",
+  "message": "Sta je LL(1) gramatika?",
+  "seconds": 42.1,
+  "intent": "Subject",
+  "reply": "LL(1) gramatika je beskontekstna gramatika bez ε-pravila koja zadovoljava uslov da su za sva pravila za isti neterminalni simbol oblika A → α1 | α2 | · · · | αn skupovi First(α1), First(α2), . . . , First(αn) disjunktni po parovima.",
+  "sources": [
+   "predavanja/PP 06 LL(1) gramatike.pdf (dist: 0.210)",
+   "predavanja/PP 06 LL(1) gramatike.pdf (dist: 0.221)",
+   "predavanja/PP 06 LL(1) gramatike.pdf (dist: 0.221)",
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.222)"
+  ]
+ },
+ {
+  "kind": "subject",
+  "message": "Koja je razlika izmedju kompilatora i interpretatora?",
+  "seconds": 33.1,
+  "intent": "Subject",
+  "reply": "Razlika izmedju kompilatora i interpretatora je u tome sto kompilator najpre vrsi analizu programa, a zatim generise masinski kod celog programa, dok interpretatori koriste drugu strategiju: prevode naredbu po naredbu programa i cim formiraju celinu koja moze da se izvrsi izvrsavaju je.",
+  "sources": [
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.152)",
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.209)",
+   "predavanja/PP 04 Leksicka analiza.pdf (dist: 0.261)",
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.269)"
+  ]
+ },
+ {
+  "kind": "offtopic",
+  "message": "Sta je nuklearna fizika?",
+  "seconds": 45.9,
+  "intent": "Subject",
+  "reply": "Nemam dovoljno informacija u materijalu da odgovorim na ovo pitanje.",
+  "sources": [
+   "vezbe/PP03_JFlex.pdf (dist: 0.308)",
+   "vezbe/PP03_JFlex.pdf (dist: 0.324)",
+   "vezbe/Generisanje medjukoda - reseni zadaci.pdf (dist: 0.326)",
+   "vezbe/PP03_JFlex.pdf (dist: 0.331)"
+  ]
+ },
+ {
+  "kind": "offtopic",
+  "message": "Koji je glavni grad Francuske?",
+  "seconds": 29.3,
+  "intent": "Subject",
+  "reply": "Nemam dovoljno informacija u materijalu da odgovorim na ovo pitanje.",
+  "sources": [
+   "vezbe/PP03_JFlex.pdf (dist: 0.317)",
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.327)",
+   "predavanja/PP 07 LR gramatike.pdf (dist: 0.330)",
+   "vezbe/PP03_JFlex.pdf (dist: 0.333)"
+  ]
+ },
+ {
+  "kind": "task_in_material",
+  "message": "Definisati klasu za while petlju u AST-u i napisati metodu translate()",
+  "seconds": 142.4,
+  "intent": "Task",
+  "reply": "Klasa WhileStatement\n=====================\n\n```java\npublic class WhileStatement extends Statement {\n    private Expression condition;\n    private Statement body;\n\n    public WhileStatement(Expression condition, Statement body) {\n        this.condition = condition;\n        this.body = body;\n    }\n\n    @Override\n    public void translate(BufferedWriter out) throws IOException {\n        String startLab = ASTNode.genLab();\n        String endLab = ASTNode.genLab();\n\n        out.write(startLab + \":\");\n        out.newLine();\n\n        condition.translate(out);\n        condition.genLoad(\"R1\", out);\n        out.write(\"\\tJumpIfZero\\tR1, \" + endLab);\n        out.newLine();\n\n        body.translate(out);\n        out.write(\"\\tJump\\t\" + startLab);\n        out.newLine();\n\n        out.write(endLab + \":\");\n        out.newLine();\n    }\n}\n```\n\nU ovom kodu, klasa `WhileStatement` ima dve instance varijable: `condition` i `body`, koje predstavljaju izraz uvjeta i naredbu tijela petlje, respektivno. Metoda `translate` generiše međukod za while petlju, koristeći metode `genLab` i `genLoad` iz klase `ASTNode` za generisanje oznaka i load instrukcija.\n\n_Napomena: rešenje je automatski generisao lokalni model. Uporedi ga sa izvorima i proveri rezultat._",
+  "sources": [
+   "vezbe/Zadatak - While petlja.pdf (dist: 0.289)",
+   "vezbe/Zadatak - While petlja.pdf (nastavak)",
+   "vezbe/Generisanje medjukoda - reseni zadaci.pdf (dist: 0.290)",
+   "vezbe/Generisanje medjukoda - reseni zadaci.pdf (nastavak)",
+   "predavanja/PP 11 Optimizacija koda.pdf (dist: 0.264)"
+  ]
+ },
+ {
+  "kind": "task_variant",
+  "message": "Definisati klasu za predstavljanje do-while petlje u AST-u, definisana smenom DoWhileStatement -> DO Statement WHILE Expression, i implementirati translate",
+  "seconds": 168.8,
+  "intent": "Task",
+  "reply": "Klasa za predstavljanje do-while petlje u AST-u:\n\n```java\npublic class DoWhileStatement extends Statement {\n    private Statement body;\n    private Expression condition;\n\n    public DoWhileStatement(Statement body, Expression condition) {\n        this.body = body;\n        this.condition = condition;\n    }\n\n    @Override\n    public void translate(BufferedWriter out) throws IOException {\n        String startLab = ASTNode.genLab();\n        String endLab = ASTNode.genLab();\n\n        out.write(startLab + \":\");\n        out.newLine();\n\n        body.translate(out);\n\n        out.write(\"\\tJump\\t\" + startLab);\n        out.newLine();\n\n        out.write(endLab + \":\");\n        out.newLine();\n\n        condition.translate(out);\n        condition.genLoad(\"R1\", out);\n        out.write(\"\\tJumpIfZero\\tR1, \" + startLab);\n        out.newLine();\n    }\n}\n```\n\nU ovom kodu, klasa `DoWhileStatement` ima dve polja: `body` i `condition`, koja predstavljaju telo i uslov petlje, respektivno. Metoda `translate` generiše međukod za do-while petlju, koristeći metode `translate` i `genLoad` iz klase `ASTNode` za generisanje međukoda za uslov i telo petlje.\n\n_Napomena: rešenje je automatski generisao lokalni model. Uporedi ga sa izvorima i proveri rezultat._",
+  "sources": [
+   "vezbe/Zadatak - While petlja.pdf (dist: 0.201)",
+   "vezbe/Zadatak - While petlja.pdf (nastavak)",
+   "vezbe/Generisanje medjukoda - reseni zadaci.pdf (dist: 0.205)",
+   "vezbe/Generisanje medjukoda - reseni zadaci.pdf (nastavak)",
+   "predavanja/PP 11 Optimizacija koda.pdf (dist: 0.288)"
+  ]
+ },
+ {
+  "kind": "task_ll1",
+  "message": "Transformisati datu gramatiku u LL(1) gramatiku i dokazati da je LL(1): S -> S a | b",
+  "seconds": 133.0,
+  "intent": "Task",
+  "reply": "Da bi se transformisala data gramatika u LL(1) gramatiku, moramo primeniti levu faktorizaciju. \n\nKorak 1: Provera da li gramatika jeste LL(1) gramatika\n\nU ovom slučaju, gramatika nije LL(1) jer sadrži smenu S -> S a | b, gde S je isti neterminalni simbol na levoj i desnoj strani.\n\nKorak 2: Analiza skupova smena koje na levoj strani imaju isti neterminalni simbol\n\nU ovom slučaju, postoje dve takve smene: S -> S a | b. \n\nFIRST(S a) = {a} \nFIRST(b) = {b} \nFIRST(S a) ∩ FIRST(b) = ∅\n\nSamo jedna od navedenih smena se preslikava u prazan niz.\n\nFOLLOW(S) = {ε}\n\nFIRST(S a) ∩ FOLLOW(S) = ∅\n\nKorak 3: Leva faktorizacija\n\nS -> S' S''\nS'' -> a | b\n\nSada je gramatika u LL(1) obliku.\n\nZaključak: Gramatika S -> S a | b nije LL(1) gramatika, ali se može transformisati u LL(1) gramatiku primenom leve faktorizacije.\n\n_Napomena: rešenje je automatski generisao lokalni model. Uporedi ga sa izvorima i proveri rezultat._",
+  "sources": [
+   "vezbe/PP04_LL(1)Gramatike.pdf (dist: 0.186)",
+   "vezbe/PP04_LL(1)Gramatike.pdf (nastavak)",
+   "vezbe/PP04_LL(1)Gramatike.pdf (dist: 0.223)",
+   "vezbe/PP04_LL(1)Gramatike.pdf (nastavak)",
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.197)"
+  ]
+ },
+ {
+  "kind": "task_cup",
+  "message": "Napisati cup specifikaciju za sintaksni analizator jezika sa if-else naredbom",
+  "seconds": 152.0,
+  "intent": "Task",
+  "reply": "Rešenje:\n\nKreirati Cup specifikaciju za generisanje sintaksnog analizatora jezika sa if-else naredbom:\n\n1. Program → program ( NizImena ) ; DeklPromBlok.\n2. DeklProm→ var NizDekl\n3. NizDekl→ NizDekl Deklaracija\n4. | Deklaracija\n5. Deklaracija → NizImena: Tip\n6. NizImena→ NizImena, ID\n7. | ID\n8. Tip → integer\n9. | char\n10. Blok→ begin NizNar end\n11. NizNar→ NizNar; Naredba\n12. | Naredba\n13. Naredba → Ulaz\n14. | Izlaz\n15. | Dodela\n16. | IfNar\n17. | Blok\n18. IfNar→ if Izraz then Naredba else Naredba\n19. Ulaz→ read ( ID )\n20. Izlaz → write ( Izraz)\n21. Dodela→ ID := Izraz\n22. Izraz→ Izraz+ Pizraz\n23. | Pizraz\n24. Pizraz→ Pizraz* Fizraz\n25. | Fizraz\n26. Fizraz→ ID\n27. | CONST\n28. | ( Izraz)\n\nOvaj primer sadrži sve potrebne deklaracije i definicije za sintaksni analizator jezika sa if-else naredbom.\n\n_Napomena: rešenje je automatski generisao lokalni model. Uporedi ga sa izvorima i proveri rezultat._",
+  "sources": [
+   "vezbe/PP06_cup.pdf (dist: 0.264)",
+   "vezbe/PP06_cup.pdf (nastavak)",
+   "vezbe/PP06_cup.pdf (dist: 0.266)",
+   "vezbe/PP06_cup.pdf (nastavak)",
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.263)"
+  ]
+ },
+ {
+  "kind": "task_ar",
+  "message": "Za datu C funkciju int f(int n) { if (n<2) return 1; return n*f(n-1); } nacrtati aktivacioni slog i napisati asembler za IA-32",
+  "seconds": 205.8,
+  "intent": "Task",
+  "reply": "Da bi rešio ovaj zadatak, moraću da koristim strukturu i oblik rešenja iz prethodnog primera, koji je bio za funkciju allocate. Sada ću prepisati strukturu i oblik rešenja i prilagoditi zadatak.\n\n**Aktivacioni slog:**\n\n| Adresa | Vrednost |\n| --- | --- |\n| EBP+12 | n |\n| EBP+8 | rezultat |\n\n**IA-32 kod:**\n\nUpis EBP na stek: `PUSH EBP`\n\nPromena vrednosti pokazivaca EBP: `MOV EBP, ESP`\n\nTelo funkcije:\n\n1. Pribavi n u EAX: `MOV EAX, [EBP+12]`\n2. Uporedi n sa 2: `CMP EAX, 2`\n3. JNE (ne jednak): `JNE lab1`\n4. Vrati 1: `MOV [EBP+8], 1`\n5. lab1: `MOV EAX, [EBP+12]`\n6. Poziv funkcije f(n-1): `PUSH EAX` `CALL f` `ADD ESP, 4`\n7. Vrati rezultat: `MOV [EBP+8], EAX`\n\nIzbacivanje lokalnih promenljivih iz steka: `MOV ESP, EBP`\n\nUzimasnje stare vrednosti EBP-a: `POP EBP`\n\n**Komentar:**\n\nSve promenljive int tretiramo da su 32bit, a podrazumevamo da se kontekst procesora čuva na početku, a restaurira na kraju potprograma. Zbog toga su ovi delovi u rešenju izostavljeni. Osim toga, interesuje nas samo 32bit rezultat množenja iz EAX, po dogovoru.\n\nNapomena: Moguće je da u rešenju postoje greške, tako da su sugestije na mail dobrodošle. Osim toga, pojedine optimizacije prilikom generisanja koda u ovom rešenju nisu primenjene.\n\n_Napomena: rešenje je automatski generisao lokalni model. Uporedi ga sa izvorima i proveri rezultat._",
+  "sources": [
+   "vezbe/Zadatak 1.pdf (dist: 0.229)",
+   "vezbe/Zadatak 1.pdf (nastavak)",
+   "vezbe/Zadatak4.pdf (dist: 0.279)",
+   "vezbe/Zadatak4.pdf (nastavak)",
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.294)"
+  ]
+ }
+]

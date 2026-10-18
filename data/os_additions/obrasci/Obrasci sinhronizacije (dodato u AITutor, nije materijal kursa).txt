@@ -1,0 +1,190 @@
+NAPOMENA: Ovi obrasci su dodati u AITutor kao rešeni primeri tipičnih zadataka sa semaforima i monitorima. Nisu iz materijala kursa; pisani su u notaciji predavanja (semWait, semSignal, parbegin, monitor, cwait, csignal).
+
+### Obrazac 1: naizmenično izvršavanje dva procesa (semafori)
+Problem: procesi P1 i P2 naizmenično izvršavaju svoje akcije (P1, P2, P1, P2, ...).
+Rešenje: po jedan semafor za svaki proces; P1 počinje (s1 = 1), P2 čeka (s2 = 0). Svaki proces čeka na svom semaforu, izvrši akciju i signalizira drugom.
+semaphore s1 = 1, s2 = 0;
+void P1() { while (true) { semWait(s1); /* akcija P1 */ semSignal(s2); } }
+void P2() { while (true) { semWait(s2); /* akcija P2 */ semSignal(s1); } }
+void main() { parbegin(P1, P2); }
+
+### Obrazac 2: dva procesa naizmenično čitaju poruke koje upisuje treći proces (semafori)
+Problem: proces P3 upisuje poruke u bafer, a procesi P1 i P2 naizmenično čitaju poruke (P1 čita prvu, P2 drugu, P1 treću, ...).
+Rešenje: s1 = 1 i s2 = 0 određuju čiji je red da čita; full = 0 signalizira da je poruka u baferu spremna; empty = 1 signalizira da je bafer slobodan za novu poruku.
+semaphore s1 = 1, s2 = 0, full = 0, empty = 1;
+void P3() { while (true) { semWait(empty); /* upiši poruku u bafer */ semSignal(full); } }
+void P1() { while (true) { semWait(s1); semWait(full); /* pročitaj poruku iz bafera */ semSignal(empty); semSignal(s2); } }
+void P2() { while (true) { semWait(s2); semWait(full); /* pročitaj poruku iz bafera */ semSignal(empty); semSignal(s1); } }
+void main() { parbegin(P1, P2, P3); }
+
+### Obrazac 3: sastanak (randezvous) dva procesa pomoću semafora
+Problem: proces koji prvi stigne do određene tačke mora da sačeka drugi proces; tek tada nastavljaju oba.
+Rešenje: dva binarna semafora inicijalizovana na 0; svaki proces prvo signalizira da je stigao, pa čeka drugi.
+semaphore a = 0, b = 0;
+void P1() { /* kod pre sastanka */ semSignal(a); semWait(b); /* kod posle sastanka */ }
+void P2() { /* kod pre sastanka */ semSignal(b); semWait(a); /* kod posle sastanka */ }
+void main() { parbegin(P1, P2); }
+
+### Obrazac 4: sastanak (randezvous) dva procesa pomoću monitora
+Problem: isti kao u obrascu 3, ali sa monitorom. Brojač stiglih procesa; prvi proces čeka na uslovnoj promenljivoj, drugi ga budi i vraća brojač na 0.
+monitor Randezvous {
+    int stigli = 0;
+    condition svi;
+    procedure stigni() {
+        stigli = stigli + 1;
+        if (stigli < 2) cwait(svi);
+        else { stigli = 0; csignal(svi); }
+    }
+}
+void P1() { /* kod pre sastanka */ Randezvous.stigni(); /* kod posle sastanka */ }
+void P2() { /* kod pre sastanka */ Randezvous.stigni(); /* kod posle sastanka */ }
+void main() { parbegin(P1, P2); }
+
+### Obrazac 5: monitor koji forsira naizmeničnost operacija set() i reset() (Switch)
+Problem: procesi naizmenično postavljaju zajedničku promenljivu na 1 (set) i na 0 (reset). Monitor pamti čiji je red i blokira proces koji pokuša operaciju van reda.
+monitor Switch {
+    int x = 0;
+    bool naredniJeSet = true;
+    condition red;
+    procedure set() {
+        if (!naredniJeSet) cwait(red);
+        x = 1;
+        naredniJeSet = false;
+        csignal(red);
+    }
+    procedure reset() {
+        if (naredniJeSet) cwait(red);
+        x = 0;
+        naredniJeSet = true;
+        csignal(red);
+    }
+}
+void P1() { while (true) Switch.set(); }
+void P2() { while (true) Switch.reset(); }
+void main() { parbegin(P1, P2); }
+
+### Obrazac 6: uzajamno isključivanje kritične sekcije (semafor)
+semaphore mutex = 1;
+void P() { while (true) { /* kod pre kritične sekcije */ semWait(mutex); /* kritična sekcija */ semSignal(mutex); /* ostatak koda */ } }
+void main() { parbegin(P, P, P); }
+
+### Obrazac 7: ograničeni bafer, proizvođač i potrošač (semafori)
+Problem: proizvođač dodaje, a potrošač uzima elemente iz bafera od N mesta. mutex štiti bafer, empty broji slobodna mesta, full broji popunjena mesta.
+semaphore mutex = 1, empty = N, full = 0;
+void proizvodjac() { while (true) { proizvedi(); semWait(empty); semWait(mutex); dodaj(); semSignal(mutex); semSignal(full); } }
+void potrosac() { while (true) { semWait(full); semWait(mutex); uzmi(); semSignal(mutex); semSignal(empty); potrosi(); } }
+void main() { parbegin(proizvodjac, potrosac); }
+
+### Obrazac 8: ograničeni bafer, proizvođač i potrošač (monitor)
+Problem: isti kao u obrascu 7, ali monitor sam obezbeđuje uzajamno isključivanje, pa su potrebne samo dve uslovne promenljive.
+monitor boundedbuffer {
+    char buffer[N];
+    int nextin = 0, nextout = 0, count = 0;
+    condition notfull, notempty;
+    procedure append(char x) {
+        if (count == N) cwait(notfull);
+        buffer[nextin] = x;
+        nextin = (nextin + 1) % N;
+        count = count + 1;
+        csignal(notempty);
+    }
+    procedure take(char x) {
+        if (count == 0) cwait(notempty);
+        x = buffer[nextout];
+        nextout = (nextout + 1) % N;
+        count = count - 1;
+        csignal(notfull);
+    }
+}
+
+### Obrazac 9: jednosmerna sinhronizacija, prvi deo procesa P uvek pre drugog dela procesa Q (semafori)
+Problem: deo P1 procesa P mora da se izvrši pre dela Q2 procesa Q. Proces Q čeka tek pre dela koji zavisi od P1.
+Rešenje: jedan semafor inicijalizovan na 0; P signalizira posle P1, Q čeka pre Q2.
+semaphore s = 0;
+void P() { /* P1: prvi deo procesa P */ semSignal(s); /* P2: ostatak procesa P */ }
+void Q() { /* Q1: deo koji ne zavisi od P */ semWait(s); /* Q2: deo koji sme tek posle P1 */ }
+void main() { parbegin(P, Q); }
+
+### Obrazac 10: jednosmerna sinhronizacija, prvi deo procesa P uvek pre drugog dela procesa Q (monitor Sinhro)
+Problem: isti kao u obrascu 9, ali pomoću monitora. Promenljiva gotovo pamti da je P1 već završen (da signal ne bi bio izgubljen ako Q stigne kasnije).
+monitor Sinhro {
+    bool gotovo = false;
+    condition c;
+    procedure prviDeoGotov() {
+        gotovo = true;
+        csignal(c);
+    }
+    procedure cekajPrviDeo() {
+        if (!gotovo) cwait(c);
+    }
+}
+void P() { /* P1 */ Sinhro.prviDeoGotov(); /* P2 */ }
+void Q() { /* Q1 */ Sinhro.cekajPrviDeo(); /* Q2 */ }
+void main() { parbegin(P, Q); }
+
+### Obrazac 11: monitor koji implementira binarni semafor
+Problem: napisati monitor sa funkcijama semWait() i semSignal() koji se ponaša kao binarni semafor.
+monitor BinarniSemafor {
+    bool slobodan = true;
+    condition red;
+    procedure semWait() {
+        if (!slobodan) cwait(red);
+        slobodan = false;
+    }
+    procedure semSignal() {
+        slobodan = true;
+        csignal(red);
+    }
+}
+
+### Obrazac 12: monitor koji implementira opšti (n-arni) semafor
+Problem: napisati monitor MojSemafor sa funkcijama semWait() i semSignal() koji se ponaša kao brojački semafor početne vrednosti n. Brojač blokirani pamti koliko procesa čeka, da semSignal ne bi izgubio jedinicu kada niko ne čeka.
+monitor MojSemafor {
+    int vrednost = n;
+    int blokirani = 0;
+    condition red;
+    procedure semWait() {
+        if (vrednost > 0) vrednost = vrednost - 1;
+        else { blokirani = blokirani + 1; cwait(red); blokirani = blokirani - 1; }
+    }
+    procedure semSignal() {
+        if (blokirani > 0) csignal(red);
+        else vrednost = vrednost + 1;
+    }
+}
+
+### Obrazac 13: monitor za komunikaciju procesa preko jedne zajedničke promenljive (jedno mesto bafera)
+Problem: više procesa šalje i prima poruke preko jedne zajedničke promenljive (npr. tipa string); slanje je moguće samo kada je promenljiva prazna, a prijem samo kada je puna.
+monitor Comunicator {
+    string poruka;
+    bool puna = false;
+    condition slobodno, stiglaPoruka;
+    procedure posalji(string s) {
+        if (puna) cwait(slobodno);
+        poruka = s;
+        puna = true;
+        csignal(stiglaPoruka);
+    }
+    procedure primi(string s) {
+        if (!puna) cwait(stiglaPoruka);
+        s = poruka;
+        puna = false;
+        csignal(slobodno);
+    }
+}
+
+### Obrazac 14: pogrešno rešenje problema proizvođač-potrošač sa uzajamnim blokiranjem (semafori)
+Problem: prikazati kod proizvođač-potrošač koji dovodi do uzajamnog blokiranja. Zastoj nastaje kada proizvođač zameni redosled semWait(mutex) i semWait(empty): kada je bafer pun, proizvođač drži mutex i čeka na empty, a potrošač čeka na mutex da bi oslobodio mesto.
+semaphore mutex = 1, empty = N, full = 0;
+void proizvodjac() { while (true) { proizvedi(); semWait(mutex); semWait(empty); dodaj(); semSignal(mutex); semSignal(full); } }
+void potrosac() { while (true) { semWait(full); semWait(mutex); uzmi(); semSignal(mutex); semSignal(empty); potrosi(); } }
+Sekvenca: bafer je pun (empty = 0); proizvođač izvrši semWait(mutex) i blokira se na semWait(empty); potrošač izvrši semWait(full), pa se blokira na semWait(mutex); oba čekaju jedan drugog zauvek.
+
+### Obrazac 15: zaposleno čekanje (busy waiting) i uzajamno isključivanje instrukcijom test_and_set
+Zaposleno čekanje je petlja u kojoj proces troši procesorsko vreme dok čeka uslov.
+int lock = 0;
+void P() { while (test_and_set(&lock) == 1) ; /* zaposleno čekanje */ /* kritična sekcija */ lock = 0; }
+void main() { parbegin(P, P); }
+
+### Obrazac 16: varijante naizmeničnosti (monitor ili semafori)
+Isti obrasci 1 i 5 važe kada procesi (ili niti jednog procesa) naizmenično povećavaju i smanjuju zajedničku promenljivu (x = x + 1 u jednoj funkciji, x = x - 1 u drugoj), kada naizmenično pristupaju dvema zajedničkim promenljivama a i b, ili kada ih ima više od dva (tada se koristi brojač reda umesto jedne logičke promenljive).

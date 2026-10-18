@@ -1,0 +1,208 @@
+[
+ {
+  "kind": "casual",
+  "message": "Cao",
+  "seconds": 9.0,
+  "intent": "Casual",
+  "reply": "Ćao! Nadam se da ti je sve u redu. Ako ti nešto zatreba u vezi sa Programskim prevodiocima, slobodno mi javi. Mogu da pomognem sa objašnjenjem nekog pojma ili oko zadataka.",
+  "sources": []
+ },
+ {
+  "kind": "casual",
+  "message": "Sta sve umes i kako mi mozes pomoci oko ispita?",
+  "seconds": 14.9,
+  "intent": "Casual",
+  "reply": "Zdravo! Ja sam AITutor, tvoj prijateljski asistent za predmet Programski prevodioci. Mogu ti pomoći objašnjavanjem pojmova iz gradiva, pomoći oko rešavanja zadataka sa starih ispita ili možemo zajedno da prođemo kroz materijal za ispit. Samo mi reci šta ti je potrebno.",
+  "sources": []
+ },
+ {
+  "kind": "subject",
+  "message": "Sta je LL(1) gramatika?",
+  "seconds": 18.6,
+  "intent": "Subject",
+  "reply": "LL(1) gramatika je beskonteksna gramatika kod koje za svaki skup smena koje na levoj strani imaju isti neterminalni simbol A važi da se prvi simbol svakog niza smena ne preklapa, tj. FIRST(alfa_i) ∩ FIRST(alfa_j) = ∅ za sve parove i != j. Takođe, ako se neki niz smene preslikava u prazan niz eps, onda mora da važi da FIRST(alfa_i) ∩ FOLLOW(A) = ∅ za sve ostale nizove.",
+  "sources": [
+   "predavanja/PP 06 LL(1) gramatike.pdf (dist: 0.289)",
+   "predavanja/PP 06 LL(1) gramatike.pdf (dist: 0.309)",
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.318)",
+   "vezbe/PP04_LL(1)Gramatike.pdf (dist: 0.322)",
+   "predavanja/PP 06 LL(1) gramatike.pdf (dist: 0.324)",
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.326)"
+  ]
+ },
+ {
+  "kind": "subject",
+  "message": "Koja je razlika izmedju kompilatora i interpretatora?",
+  "seconds": 27.8,
+  "intent": "Subject",
+  "reply": "Kompilator najpre vrši analizu celog programa, a zatim generiše masinski kod celog programa. Interpretatori koriste drugu strategiju, prevode naredbu po naredbu programa i čim formiraju celinu koja može da se izvrši, izvrsavaju je.",
+  "sources": [
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.227)",
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.502)",
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.513)",
+   "predavanja/PP 04 Leksicka analiza.pdf (dist: 0.539)",
+   "predavanja/PP 01 Uvod.pdf (dist: 0.544)",
+   "predavanja/PP 04 Leksicka analiza.pdf (dist: 0.546)"
+  ]
+ },
+ {
+  "kind": "offtopic",
+  "message": "Sta je nuklearna fizika?",
+  "seconds": 5.9,
+  "intent": "Subject",
+  "reply": "Nemam dovoljno informacija u materijalu da odgovorim na ovo pitanje.",
+  "sources": [
+   "predavanja/PP 10 Medjukodovi.pdf (dist: 0.712)",
+   "vezbe/PP02_LeksickaAnaliza.pdf (dist: 0.721)",
+   "predavanja/PP 11 Optimizacija koda.pdf (dist: 0.727)",
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.733)",
+   "predavanja/PP 02 Formalni jezici.pdf (dist: 0.741)",
+   "vezbe/PP08 _GenerisanjeMedjukoda.pdf (dist: 0.742)"
+  ]
+ },
+ {
+  "kind": "offtopic",
+  "message": "Koji je glavni grad Francuske?",
+  "seconds": 5.9,
+  "intent": "Subject",
+  "reply": "Nemam dovoljno informacija u materijalu da odgovorim na ovo pitanje.",
+  "sources": [
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.709)",
+   "predavanja/PP 11 Optimizacija koda.pdf (dist: 0.719)",
+   "vezbe/AST u medjukod.pdf (dist: 0.726)",
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.729)",
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.732)",
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.733)"
+  ]
+ },
+ {
+  "kind": "offtopic_hard",
+  "message": "Sta je TCP protokol?",
+  "seconds": 5.9,
+  "intent": "Subject",
+  "reply": "Nemam dovoljno informacija u materijalu da odgovorim na ovo pitanje.",
+  "sources": [
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.672)",
+   "predavanja/PP 09 Semanticka analiza.pdf (dist: 0.681)",
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.681)",
+   "predavanja/PP 10 Medjukodovi.pdf (dist: 0.696)",
+   "vezbe/PP03_JFlex.pdf (dist: 0.698)",
+   "predavanja/PP 12 Generisanje izlaznog koda - novo.pdf (dist: 0.698)"
+  ]
+ },
+ {
+  "kind": "offtopic_hard",
+  "message": "Kako radi SQL JOIN?",
+  "seconds": 5.9,
+  "intent": "Subject",
+  "reply": "Nemam dovoljno informacija u materijalu da odgovorim na ovo pitanje.",
+  "sources": [
+   "reseni_blanketi/Generisanje medjukoda - reseni zadaci.pdf (dist: 0.622)",
+   "vezbe/LR gramatike_resenje.pdf (dist: 0.648)",
+   "predavanja/PP 02 Formalni jezici.pdf (dist: 0.649)",
+   "pismeni/PP_2019_01.pdf (dist: 0.653)",
+   "predavanja/PP 04 Leksicka analiza.pdf (dist: 0.658)",
+   "pismeni/PP_2017_01.pdf (dist: 0.663)"
+  ]
+ },
+ {
+  "kind": "subject_border",
+  "message": "Koje su faze kompajliranja?",
+  "seconds": 44.2,
+  "intent": "Subject",
+  "reply": "Osnovne faze u proceru prevodjenja visih programskih jezika su leksička analiza, sintaksna analiza, semantička analiza, generisanje medjukoda i generisanje koda.",
+  "sources": [
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.535)",
+   "predavanja/PP 10 Medjukodovi.pdf (dist: 0.551)",
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.564)",
+   "predavanja/PP 01 Uvod.pdf (dist: 0.586)",
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.588)",
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.596)"
+  ]
+ },
+ {
+  "kind": "subject_border",
+  "message": "Sta je rekurzivni spust?",
+  "seconds": 8.3,
+  "intent": "Subject",
+  "reply": "Nemam dovoljno informacija u materijalu da odgovorim na ovo pitanje.",
+  "sources": [
+   "predavanja/PP 05 Sintaksna analiza.pdf (dist: 0.524)",
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.543)",
+   "vezbe/PP04_LL(1)Gramatike.pdf (dist: 0.560)",
+   "predavanja/PP 12 Generisanje izlaznog koda - novo.pdf (dist: 0.561)",
+   "vezbe/PP_09 Upravljanje_memorijom.pdf (dist: 0.564)",
+   "vezbe/PP04_LL(1)Gramatike.pdf (dist: 0.566)"
+  ]
+ },
+ {
+  "kind": "task_in_material",
+  "message": "Definisati klasu za while petlju u AST-u i napisati metodu translate()",
+  "seconds": 60.0,
+  "intent": "Task",
+  "reply": "class WhileStatement extends Statement{\nprivate Expression condition;\nprivate Statement body;\npublic WhileStatement(Expression condition, Statement body) {\nthis.condition = condition;\nthis.body = body;\n}\npublic void translate( BufferedWriter out )throws IOException{\nString startLab = ASTNode.genLab();\nString endLab = ASTNode.genLab();\nout.write( startLab + \":\" );\nout.newLine();\ncondition.translate( out );\ncondition.genLoad( \"R1\", out );\nout.write( \"\\tJumpIfZero\\tR1, \" + endLab );\nout.newLine();\nbody.translate( out );\nout.write( \"\\tJump\\t\" + startLab );\nout.newLine();\nout.write( endLab + \":\" );\nout.newLine();\n}\n}\n\n_Napomena: rešenje je automatski generisao lokalni model. Uporedi ga sa izvorima i proveri rezultat._",
+  "sources": [
+   "vezbe/Zadatak - While petlja.pdf (dist: 0.263)",
+   "vezbe/Zadatak - While petlja.pdf (nastavak)",
+   "reseni_blanketi/Generisanje medjukoda - reseni zadaci.pdf (dist: 0.358)",
+   "reseni_blanketi/Generisanje medjukoda - reseni zadaci.pdf (nastavak)",
+   "predavanja/PP 11 Optimizacija koda.pdf (dist: 0.580)"
+  ]
+ },
+ {
+  "kind": "task_variant",
+  "message": "Definisati klasu za predstavljanje do-while petlje u AST-u, definisana smenom DoWhileStatement -> DO Statement WHILE Expression, i implementirati translate",
+  "seconds": 67.8,
+  "intent": "Task",
+  "reply": "class DoWhileStatement extends Statement {\n    private Statement body;\n    private Expression condition;\n\n    public DoWhileStatement(Statement body, Expression condition) {\n        this.body = body;\n        this.condition = condition;\n    }\n\n    public void translate(BufferedWriter out) throws IOException {\n        String startLab = ASTNode.genLab();\n        String endLab = ASTNode.genLab();\n\n        out.write(startLab + \":\");\n        out.newLine();\n\n        // Izvršavanje tela petlje\n        body.translate(out);\n\n        // Provera uslova\n        out.write(\"\\tIMC <Condition>\");\n        condition.translate(out);\n        condition.genLoad(\"R1\", out);\n        out.newLine();\n\n        // Preskakanje ako je uslov nula\n        out.write(\"\\tJumpIfZero R1, \" + endLab);\n        out.newLine();\n\n        // Povratak na početak petlje\n        out.write(\"\\tJump \" + startLab);\n        out.newLine();\n\n        // Kraj petlje\n        out.write(endLab + \":\");\n        out.newLine();\n    }\n}\n\n_Napomena: rešenje je automatski generisao lokalni model. Uporedi ga sa izvorima i proveri rezultat._",
+  "sources": [
+   "reseni_blanketi/Generisanje medjukoda - reseni zadaci.pdf (dist: 0.379)",
+   "reseni_blanketi/Generisanje medjukoda - reseni zadaci.pdf (nastavak)",
+   "vezbe/Zadatak - While petlja.pdf (dist: 0.284)",
+   "vezbe/Zadatak - While petlja.pdf (nastavak)",
+   "predavanja/PP 11 Optimizacija koda.pdf (dist: 0.600)"
+  ]
+ },
+ {
+  "kind": "task_ll1",
+  "message": "Transformisati datu gramatiku u LL(1) gramatiku i dokazati da je LL(1): S -> S a | b",
+  "seconds": 133.8,
+  "intent": "Task",
+  "reply": "Leva faktorizacija\n\nDati gramatika je:\nS -> S a | b\n\nGramatika nije LL(1) jer postoje dve staze za isti neterminalni simbol S koje počinju istim simbolom (S).\nS -> S a\nS -> b\n\nPrimenjujemo levu faktorizaciju.\nSkup zajedničkih prefiksa je S.\nZamenjujemo smene:\nS -> S S'\nS' -> a | ε\n\nProvera LL(1) gramatike\n\nDa bismo dokazali da je gramatika LL(1), moramo proveriti uslov da za svaki par pravila za isti neterminalni simbol A, skupovi FIRST(desna strana pravila) ne smeju biti prazni ili se seku.\n\nNeterminalni simboli su S i S'.\n\nZa neterminalni simbol S:\nPravila su:\nS -> S S'\nS -> b\n\nFIRST(S S') = FIRST(S)\nFIRST(b) = {b}\n\nMoramo da izračunamo FIRST(S). Pošto je S samostalno pravilo, moramo da primenimo rekurzivnu definiciju.\n\nFIRST(S) = FIRST(S S') U FIRST(b)\nFIRST(S) = FIRST(S) U {b}\n\nOvo ukazuje na levo rekurzivno pravilo koje je već rešeno levom faktorizacijom. Sada proveravamo uslove za S i S'.\n\nZa neterminalni simbol S':\nPravila su:\nS' -> a\nS' -> ε\n\nFIRST(a) = {a}\nFIRST(ε) = {ε}\n\nFIRST(S') = FIRST(a) U FIRST(ε) = {a} U {ε} = {a, ε}\n\nProvera uslova LL(1) za S:\nFIRST(S S') = FIRST(S)\nFIRST(b) = {b}\n\nPošto je S -> S S', moramo da proverimo da li je S levo rekurzivno. Ako je S levo rekurzivno, transformacija je bila ispravna.\n\nNakon transformacije, gramatika je:\nS -> S S'\nS' -> a | ε\nS -> b\n\nOvo je pogrešno. Nakon levog faktorizovanja, sva pravila koja su bila za S moraju biti transformisana.\n\nOriginalna gramatika:\nS -> S a | b\n\nLevu faktorizaciju primenjujemo na S:\nS -> S (a | ε)\nS' -> a | ε\n\nAko je S -> S a, onda je zajednički prefiks S.\nS -> S S'\nS' -> a\n\nAko je S -> b, onda je zajednički prefiks b.\n\nPošto su prefiksi različiti (S i b), levu faktorizaciju ne primenjujemo na ceo skup pravila za S, već na ta dva pravila.\n\nPravila za S:\nS -> S a\nS -> b\n\nFIRST(S a) = FIRST(S)\nFIRST(b) = {b}\n\nPošto je FIRST(S a) i FIRST(b) različiti, gramatika je već LL(1) ako ne postoji levo rekurzivno pravilo.\n\nProvera levo rekurzivnosti:\nS -> S a. Ovo je levo rekurzivno pravilo.\n\nOslobađanje od levo-rekurzivnih smena:\nS -> S a\nZamenjujemo S sa novim neterminalnim simbolom S_new.\nS -> S_new a\nS_new -> a\n\nNova gramatika:\nS -> S_new a | b\nS_new -> a\n\nProvera LL(1) gramatike:\n\nNeterminalni simboli: S, S_new.\n\nZa S:\nPravila:\nS -> S_new a\nS -> b\n\nFIRST(S_new a) = FIRST(S_new)\nFIRST(b) = {b}\n\nIzračunavanje FIRST(S_new):\nS_new -> a\nFIRST(S_new) = {a}\n\nDakle, FIRST(S_new a) = {a}.\n\nFIRST(S) = FIRST(S_new a) U FIRST(b) = {a} U {b} = {a, b}.\n\nDa li su skupovi FIRST različiti?\nFIRST(S_new a) = {a}\nFIRST(b) = {b}\nDa, {a} != {b}.\n\nZa S_new:\nPravilo:\nS_new -> a\n\nFIRST(S_new) = {a}.\n\nNema drugih neterminalnih simbola, pa nema potrebe za proverom FOLLOW.\n\nZaključak: Gramatika je LL(1) jer za svaki neterminalni simbol A, skupovi FIRST za sva pravila koja počinju sa istim simbolom su disjunktni.\n\n_Napomena: rešenje je automatski generisao lokalni model. Uporedi ga sa izvorima i proveri rezultat._",
+  "sources": [
+   "vezbe/PP04_LL(1)Gramatike.pdf (dist: 0.383)",
+   "vezbe/PP04_LL(1)Gramatike.pdf (nastavak)",
+   "vezbe/PP04_LL(1)Gramatike.pdf (dist: 0.395)",
+   "vezbe/PP04_LL(1)Gramatike.pdf (nastavak)",
+   "predavanja/PP 06 LL(1) gramatike.pdf (dist: 0.374)"
+  ]
+ },
+ {
+  "kind": "task_cup",
+  "message": "Napisati cup specifikaciju za sintaksni analizator jezika sa if-else naredbom",
+  "seconds": 70.8,
+  "intent": "Task",
+  "reply": "grammar Language;\n\n%tokens\nID    { ID_TOKEN }\nINTEGER { INTEGER_TOKEN }\nASSIGN { ASSIGN_TOKEN }\nLPAREN { LPAREN_TOKEN }\nRPAREN { RPAREN_TOKEN }\nSEMICOLON { SEMICOLON_TOKEN }\nCOMMA { COMMA_TOKEN }\nIF    { IF_TOKEN }\nTHEN  { THEN_TOKEN }\nELSE  { ELSE_TOKEN }\nBEGIN { BEGIN_TOKEN }\nEND   { END_TOKEN }\n\n%start Program\n\nProgram  -> ProgramBlock EOF;\n\nProgramBlock -> var DeclarationList;\n\nDeclarationList -> Declaration DeclarationList | /* empty */;\n\nDeclaration -> ID ':' Type;\n\nID_TOKEN    = [a-zA-Z_][a-zA-Z0-9_]*;\nINTEGER_TOKEN = [0-9]+;\nASSIGN_TOKEN = '=';\nLPAREN_TOKEN = '(';\nRPAREN_TOKEN = ')';\nSEMICOLON_TOKEN = ';';\nCOMMA_TOKEN = ',';\nIF_TOKEN = 'if';\nTHEN_TOKEN = 'then';\nELSE_TOKEN = 'else';\nBEGIN_TOKEN = 'begin';\nEND_TOKEN = 'end';\nEOF = !.*;\n\nType -> integer | char;\n\n/* Izrazi */\nExpression -> Expression '+' Term | Term;\nTerm       -> Term '*' Factor | Factor;\nFactor     -> ID | INTEGER | '(' Expression ')';\n\n/* Naredbe */\nStatement -> Assignment | Block | IfStatement | SemicolonStatement;\n\nAssignment -> ID ASSIGN Expression SEMICOLON;\n\nBlock -> BEGIN StatementList END;\n\nStatementList -> Statement StatementList | /* empty */;\n\nIfStatement -> IF Expression THEN Statement ELSE Statement;\n\nSemicolonStatement -> SEMICOLON;\n\n_Napomena: rešenje je automatski generisao lokalni model. Uporedi ga sa izvorima i proveri rezultat._",
+  "sources": [
+   "vezbe/PP06_cup.pdf (dist: 0.307)",
+   "vezbe/PP06_cup.pdf (nastavak)",
+   "vezbe/PP08 _GenerisanjeMedjukoda.pdf (dist: 0.362)",
+   "vezbe/PP08 _GenerisanjeMedjukoda.pdf (nastavak)",
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.363)"
+  ]
+ },
+ {
+  "kind": "task_ar",
+  "message": "Za datu C funkciju int f(int n) { if (n<2) return 1; return n*f(n-1); } nacrtati aktivacioni slog i napisati asembler za IA-32",
+  "seconds": 63.6,
+  "intent": "Task",
+  "reply": "Aktivacioni slog\n\nIA-32 kod:\nUpis EBP na stek\nPUSH EBP\nPromena vrednosti pokazivaca EBP:\nMOV EBP, ESP\nRezervacija prostora za lokalnu promenljivu:\nSUB ESP, 4\nTelo funkcije:\nUporedi n sa 2:\nCMP EAX, 2\nJLE BASE_CASE\nMUL EAX\nMOV [EBP-4], EAX\nJMP END_FUNCTION\nBASE_CASE:\nMOV [EBP-4], 1\nJMP END_FUNCTION\nEND_FUNCTION:\nSmestanje rezultata u ECX:\nMOV ECX, [EBP-4]\nIzbacivanje lokalnih promenljivih iz steka:\nMOV ESP, EBP\nUzimasnje stare vrednosti EBP-a:\nPOP EBP\nRET\n\nn Adresa povratka Stara vrednost EBP\n\n_Napomena: rešenje je automatski generisao lokalni model. Uporedi ga sa izvorima i proveri rezultat._",
+  "sources": [
+   "vezbe/Zadatak 1.pdf (dist: 0.404)",
+   "vezbe/Zadatak 1.pdf (nastavak)",
+   "vezbe/Zadatak 3.pdf (dist: 0.433)",
+   "vezbe/Zadatak 3.pdf (nastavak)",
+   "usmeni/100_pitanja_skripta_tekstualno.txt (dist: 0.574)"
+  ]
+ }
+]

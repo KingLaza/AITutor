@@ -1,0 +1,40 @@
+[
+ {
+  "id": "okt23_q2_daNe",
+  "intent": "Subject",
+  "path": "direktno",
+  "seconds": 101.0,
+  "expected": "a) Ne; b) Da; c) Da; d) Ne (8 pristupa); e) Ne",
+  "reply": "a) Ne - Niti dele stek, jer svaka nit ima svoj stek za lokalne promenljive i pozive funkcija.\nb) Da - Lokalne promenljive funkcije main() se smeštaju na stek procesa.\nc) Da - Programski kod funkcija iz biblioteka (npr. malloc, strlen) nalazi se u adresnom prostoru procesa.\nd) Ne - Za 3 nivoa stranicenja, instrukcija koja čita operand iz memorije zahteva 3+1 = 4 pristupa memoriji.\ne) Ne - Broj virtuelne stranice zavisi od veličine virtuelne adrese, a ne nužno od veličine fizičke adrese.",
+  "sources": [
+   "usmeni/Kratke cinjenice (dodato u AITutor, nije materijal kursa).txt (dist: 0.371)",
+   "predavanja/3. Niti.pdf (dist: 0.422)",
+   "reseni_blanketi/LV2 - Upravljanje procesima i nitima (Rešenja).pdf (dist: 0.454)",
+   "vezbe/3. Osnove Linuxa - System programming.pdf (dist: 0.462)",
+   "vezbe/10. Sistemsko programiranje - Upravljanje memorijom.pdf (dist: 0.370)",
+   "predavanja/8. Virtuelna memorija.pdf (dist: 0.461)",
+   "usmeni/Kratke cinjenice (dodato u AITutor, nije materijal kursa).txt (dist: 0.266)",
+   "reseni_blanketi/LV1- Linux sistemsko programiranje i procfs (Rešenja).pdf (dist: 0.405)",
+   "usmeni/Kratke cinjenice (dodato u AITutor, nije materijal kursa).txt (dist: 0.413)",
+   "usmeni/Kratke cinjenice (dodato u AITutor, nije materijal kursa).txt (dist: 0.424)"
+  ]
+ },
+ {
+  "id": "jan24_q7_daNe",
+  "intent": "Subject",
+  "path": "direktno",
+  "seconds": 55.9,
+  "expected": "a) Da; b) Ne; c) Da",
+  "reply": "a) Da - Samo stavke tabele stranica poslednjeg nivoa sadrže broj fizičkog okvira.\nb) Ne - Stavka invertovane tabele stranica sadrži broj virtuelne stranice koja je u tom okviru, identifikator procesa i kontrolne bitove, a ne adresu fizičkog okvira jer okvir je indeks stavke.\nc) Da - Operativni sistem obavezno ažurira tabelu stranica prilikom obrade greške stranice.",
+  "sources": [
+   "usmeni/Kratke cinjenice (dodato u AITutor, nije materijal kursa).txt (dist: 0.449)",
+   "predavanja/8. Virtuelna memorija.pdf (dist: 0.544)",
+   "usmeni/Kratke cinjenice (dodato u AITutor, nije materijal kursa).txt (dist: 0.312)",
+   "usmeni/Kratke cinjenice (dodato u AITutor, nije materijal kursa).txt (dist: 0.378)",
+   "predavanja/8. Virtuelna memorija.pdf (dist: 0.417)",
+   "predavanja/8. Virtuelna memorija.pdf (dist: 0.436)",
+   "usmeni/Kratke cinjenice (dodato u AITutor, nije materijal kursa).txt (dist: 0.464)",
+   "predavanja/8. Virtuelna memorija.pdf (dist: 0.467)"
+  ]
+ }
+]

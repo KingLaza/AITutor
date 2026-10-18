@@ -1,0 +1,282 @@
+[
+ {
+  "id": "jan24_q6_rasporedjivanje",
+  "exam": "Januar 2024, zadatak 6",
+  "step": "L1",
+  "seconds": 89.8,
+  "expected": "SJF: B; SRTF: A; Prioritet bez prekidanja: B; Prioritet sa prekidanjem: D; RR(30): A",
+  "intent": "Task",
+  "reply": "1. Za svaki od navedenih algoritama (SJF, SRTF, Prioritet bez prekidanja, Prioritet sa prekidanjem, RoundRobin) kreirati vremensku liniju i odrediti stanje sistema u trenutku 60ms.\n2. Za svaki algoritam, na osnovu trenutnog stanja i dolaznih procesa, odrediti koji proces je aktivan u intervalu 60ms do 70ms.\n3. Za algoritme koji uključuju prekidanje (SRTF, Prioritet sa prekidanjem, RoundRobin), pažljivo pratiti promene prioriteta ili vremena kvanta u toku simulacije.\n4. Za svaki algoritam, zapisati koji proces je izvršen u traženom vremenskom prozoru.\n\nSličan zadatak u materijalu: vezbe/LV postavka - LV3 - Sinhronizacija procesa i niti.pdf\n\nPokušaj prvo sam. Ako zapneš, traži sledeći nagoveštaj ili prikaži rešenje.",
+  "sources": [
+   "vezbe/LV postavka - LV3 - Sinhronizacija procesa i niti.pdf (dist: 0.490)",
+   "vezbe/LV postavka - LV3 - Sinhronizacija procesa i niti.pdf (nastavak)",
+   "predavanja/6. Jednoprocesorsko raspoređivanje.pdf (dist: 0.435)"
+  ],
+  "hintLevel": 1
+ },
+ {
+  "id": "jan24_q6_rasporedjivanje",
+  "exam": "Januar 2024, zadatak 6",
+  "step": "L3",
+  "seconds": 130.1,
+  "expected": "SJF: B; SRTF: A; Prioritet bez prekidanja: B; Prioritet sa prekidanjem: D; RR(30): A",
+  "intent": "Task",
+  "reply": "SJF:\nVreme aktiviranja: A(0ms), B(20ms), C(40ms), D(60ms).\nU periodu 60-70ms, procesi A i B su završeni. Proces C je aktiviran u 40ms i ima dužinu 100ms. Proces D je aktiviran u 60ms i ima dužinu 40ms.\nU trenutku 60ms, proces D počinje da se izvršava jer je najnoviji i ima najniži prioritet (ako se ne uzima u obzir prioritet za SJF, ali pošto je SJF baziran na dužini, a D je najkraći među čekajućim, ali je C već u toku ako se ne uzima u obzir da je C još uvek u toku).\nAko se koristi striktno SJF, proces koji je najkraći od onih koji su spremni.\nU 60ms: A (završeno), B (završeno). Spremni su C (preostalo 60ms) i D (preostalo 40ms).\nD je kraći od C. Dakle, D se izvršava.\nU periodu 60-70ms, izvršava se proces D.\n\nSRTF:\nU trenutku 60ms, procesi A i B su završeni. Spremni su C (preostalo 60ms) i D (preostalo 40ms).\nSRTF bira proces sa najmanjim preostalim vremenom. D je kraći od C.\nU periodu 60-70ms, izvršava se proces D.\n\nPrioritet bez prekidanja:\nU trenutku 60ms, procesi A i B su završeni. Spremni su C (prioritet 3) i D (prioritet 2).\nPrioritet 2 (D) je veći od prioriteta 3 (C).\nU periodu 60-70ms, izvršava se proces D.\n\nPrioritet sa prekidanjem (manji broj, veći prioritet):\nU trenutku 60ms, procesi A i B su završeni. Spremni su C (prioritet 3) i D (prioritet 2).\nPrioritet 2 (D) je veći od prioriteta 3 (C).\nU periodu 60-70ms, izvršava se proces D.\n\nRoundRobin (vremenski kvant = 30ms):\nVreme 0-20ms: Proces A (CPU faza 50ms, kvant 30ms). A izvršava se 20ms. Preostalo A: 30ms.\nVreme 20-40ms: Proces B (CPU faza 20ms, kvant 30ms). B izvršava se 20ms i završava.\nVreme 40-60ms: Proces C (CPU faza 100ms, kvant 30ms). C izvršava se 20ms (do 60ms). Preostalo C: 80ms.\nVreme 60-70ms: Proces D (CPU faza 40ms, kvant 30ms). D počinje da se izvršava.\nU periodu 60-70ms, izvršava se proces D.\n\n_Napomena: rešenje je automatski generisao lokalni model. Uporedi ga sa izvorima i proveri rezultat._\n\n---\nRešen primer iz materijala (vezbe/LV postavka - LV3 - Sinhronizacija procesa i niti.pdf):\n[isečak materijala kursa izostavljen iz javnog repoa]",
+  "sources": [
+   "vezbe/LV postavka - LV3 - Sinhronizacija procesa i niti.pdf (dist: 0.490)",
+   "vezbe/LV postavka - LV3 - Sinhronizacija procesa i niti.pdf (nastavak)",
+   "reseni_blanketi/LV5 - Signali i redovi poruka (Rešenja).pdf (dist: 0.502)",
+   "reseni_blanketi/LV5 - Signali i redovi poruka (Rešenja).pdf (nastavak)",
+   "predavanja/6. Jednoprocesorsko raspoređivanje.pdf (dist: 0.435)"
+  ],
+  "hintLevel": 3
+ },
+ {
+  "id": "okt23_q9_disk",
+  "exam": "Oktobar 2023, zadatak 9",
+  "step": "L1",
+  "seconds": 55.4,
+  "expected": "64000 staza; glava ide ka nizim cilindrima: SSTF 125,222,360,25; SCAN 25,125,222,360; C-SCAN 25,360,222,125",
+  "intent": "Task",
+  "reply": "1. Odrediti trenutnu poziciju glave diska nakon usluge zahteva 100 i 77.\n2. Za svaki algoritam (SSTF, C-SCAN, SCAN) primeniti definiciju algoritma na preostale zahteve [25, 360, 125, 222] uzimajući u obzir trenutnu poziciju.\n3. Za SSTF, izabrati sledeći zahtev koji je najbliži trenutnoj poziciji.\n4. Za SCAN i C-SCAN, odrediti smer skeniranja i izabrati sledeći zahtev u tom smeru, uzimajući u obzir granice diska (cilindri 0 do 15999).\n5. Navesti redosled cilindara koji će biti pristupani za svaki od tri algoritma.\n\nSličan zadatak u materijalu: vezbe/Spisak sistemskih poziva (podsetnik).pdf\n\nPokušaj prvo sam. Ako zapneš, traži sledeći nagoveštaj ili prikaži rešenje.",
+  "sources": [
+   "vezbe/Spisak sistemskih poziva (podsetnik).pdf (dist: 0.579)",
+   "predavanja/9. Upravljanje UI i planiranje diska.pdf (dist: 0.493)"
+  ],
+  "hintLevel": 1
+ },
+ {
+  "id": "okt23_q9_disk",
+  "exam": "Oktobar 2023, zadatak 9",
+  "step": "L3",
+  "seconds": 174.5,
+  "expected": "64000 staza; glava ide ka nizim cilindrima: SSTF 125,222,360,25; SCAN 25,125,222,360; C-SCAN 25,360,222,125",
+  "intent": "Task",
+  "reply": "Broj staza na disku je 2 * 4 = 8.\n\nPreostali zahtevi nakon usluge zahteva [100] i [77] su: [25, 360, 125, 222].\n\nTrenutna pozicija glave diska je poslednji usluzeni cilindar, što je 77.\n\nAlgoritam SSTF (Shortest Seek Time First):\nOd trenutne pozicije 77, izračunavamo udaljenost do preostalih zahteva:\nUdaljenost do 25: |77 - 25| = 52\nUdaljenost do 360: |77 - 360| = 283\nUdaljenost do 125: |77 - 125| = 48\nUdaljenost do 222: |77 - 222| = 145\nNajmanja udaljenost je 52, pa sledeći cilindar je 25.\nNakon usluge 25, preostali zahtevi su: [360, 125, 222]. Trenutna pozicija je 25.\nUdaljenost do 360: |25 - 360| = 335\nUdaljenost do 125: |25 - 125| = 100\nUdaljenost do 222: |25 - 222| = 197\nNajmanja udaljenost je 100, pa sledeći cilindar je 125.\nNakon usluge 125, preostali zahtevi su: [360, 222]. Trenutna pozicija je 125.\nUdaljenost do 360: |125 - 360| = 235\nUdaljenost do 222: |125 - 222| = 97\nNajmanja udaljenost je 97, pa sledeći cilindar je 222.\nNakon usluge 222, preostali zahtev je: [360]. Trenutna pozicija je 222.\nSledeći cilindar je 360.\nRed cilindara prema SSTF: 25, 125, 222, 360.\n\nAlgoritam SCAN (Elevator):\nPretpostavljamo da je disk inicijalno u nekoj poziciji, ali pošto su usluge bile 100 i 77, pretpostavljamo da se glava kreće u smeru koji je bio poslednji, ili da se kreće ka najudaljenijem zahtevu. Pošto nije navedeno smer kretenja, pretpostavićemo da se kreće ka najvišem cilindru (360) i da je trenutna pozicija 77 (poslednji usluzeni).\nSortirani preostali zahtevi: [25, 125, 222, 360].\nPočinjemo od 77 i krećemo ka 360.\nSledeći cilindar je 125 (jer je 125 > 77).\nNakon usluge 125, sledeći je 222.\nNakon usluge 222, sledeći je 360.\nNakon usluge 360, glava ide do kraja diska (pretpostavljamo da je kraj 16000, ali pošto su svi zahtevi manji, krećemo do poslednjeg zahteva ili kraja diska). Ako se kreće do kraja diska (16000), sledeći cilindar bi bio 16000. Ako se kreće samo do poslednjeg zahteva, onda je kraj.\nAko se kreće ka najnižem cilindru (25) nakon što je stigao do 360, onda bi sledeći bio 25.\nAko se kreće ka najvišem cilindru (360) i ne postoji zahtev iznad njega, onda se kreće do kraja diska.\nU kontekstu SCAN-a, ako se kreće ka 360, sledeći će biti 360. Ako je 360 poslednji, a glava mora da ide do kraja, sledeći će biti 16000.\nAko se pretpostavi da se kreće ka najvišem cilindru (360) i da se sve ciljevi u tom smeru usluge, red je: 125, 222, 360. Nakon 360, ako se kreće do kraja, sledeći je 16000. Ako se kreće do najnižeg cilja, sledeći je 25.\nPratići ćemo standardnu implementaciju: kreće u smeru, usluga sve u tom smeru, a zatim se okreće. Pošto je poslednji usluzeni 77, i najviši zahtev je 360, krećemo ka 360.\nRed: 125, 222, 360. Nakon 360, glava ide do kraja (16000). Sledeći cilindar je 16000.\n\nAlgoritam C-SCAN:\nC-SCAN je sličan SCAN-u, ali se ne vraća nazad. Kada dođe do kraja diska, vraća se na početak (cilindar 0) bez obavljanja U/I zahteva na putu nazad.\nPočinjemo od 77 i krećemo ka najvišem cilju (360).\nRed: 125, 222, 360. Nakon 360, glava skenira do kraja (16000) i vraća se na 0. Sledeći cilj bi bio 25.\nRed: 125, 222, 360, 25.\n\nOdgovor:\nSSTF: 25, 125, 222, 360\nSCAN: 125, 222, 360, 16000 (ili 25 ako se pretpostavi da se vraća na najniži cilj)\nC-SCAN: 125, 222, 360, 25\n\n_Napomena: rešenje je automatski generisao lokalni model. Uporedi ga sa izvorima i proveri rezultat._\n\n---\nRešen primer iz materijala (vezbe/Spisak sistemskih poziva (podsetnik).pdf):\n[isečak materijala kursa izostavljen iz javnog repoa]",
+  "sources": [
+   "vezbe/Spisak sistemskih poziva (podsetnik).pdf (dist: 0.579)",
+   "vezbe/LV postavka - LV3 - Sinhronizacija procesa i niti.pdf (dist: 0.600)",
+   "vezbe/LV postavka - LV3 - Sinhronizacija procesa i niti.pdf (nastavak)",
+   "predavanja/9. Upravljanje UI i planiranje diska.pdf (dist: 0.493)"
+  ],
+  "hintLevel": 3
+ },
+ {
+  "id": "okt23_q10_inode",
+  "exam": "Oktobar 2023, zadatak 10",
+  "step": "L1",
+  "seconds": 9.1,
+  "expected": "512 adresa po bloku. a) 10 podataka, 0 indeksnih; b) 1536 podataka, 4 indeksna; c) 262144 podataka, 513 indeksnih",
+  "intent": "Task",
+  "reply": "Nemam dovoljno informacija u materijalu da odgovorim na ovo pitanje.",
+  "sources": [
+   "vezbe/LV postavka - LV6 - Datotečni sistem.pdf (dist: 0.573)",
+   "vezbe/Spisak sistemskih poziva (podsetnik).pdf (dist: 0.603)",
+   "predavanja/10. Upravljanje datotekama.pdf (dist: 0.585)"
+  ],
+  "hintLevel": null
+ },
+ {
+  "id": "okt23_q8_adresa",
+  "exam": "Oktobar 2023, zadatak 8",
+  "step": "L1",
+  "seconds": 46.1,
+  "expected": "offset 18 bita, indeks 15+15; a) 16 neiskoriscenih; b) 15 po tabeli (30 ukupno); c) 15|15|18",
+  "intent": "Task",
+  "reply": "1. Izračunati broj bitova potrebnih za adresiranje stranice na osnovu veličine stranice.\n2. Odrediti koliko bitova se koristi za indeksiranje u oba nivoa tabele stranica, koristeći informaciju o veličini tabele stranica i veličini stavke.\n3. Izračunati ukupan broj bitova koji se koriste za adresiranje u tabelama stranica.\n4. Odrediti broj bitova u virtuelnoj adresi koji se ne koriste za adresiranje i indeksiranje.\n5. Definisati format virtuelne adrese koristeći izračunate vrednosti za indeksiranje i adresiranje stranice.\n\nSličan zadatak u materijalu: vezbe/LV postavka - LV6 - Deljena memorija.pdf\n\nPokušaj prvo sam. Ako zapneš, traži sledeći nagoveštaj ili prikaži rešenje.",
+  "sources": [
+   "vezbe/LV postavka - LV6 - Deljena memorija.pdf (dist: 0.526)",
+   "predavanja/8. Virtuelna memorija.pdf (dist: 0.391)"
+  ],
+  "hintLevel": 1
+ },
+ {
+  "id": "okt23_q8_adresa",
+  "exam": "Oktobar 2023, zadatak 8",
+  "step": "L3",
+  "seconds": 67.9,
+  "expected": "offset 18 bita, indeks 15+15; a) 16 neiskoriscenih; b) 15 po tabeli (30 ukupno); c) 15|15|18",
+  "intent": "Task",
+  "reply": "a) Broj bitova u virtuelnoj adresi je 64.\nVeličina stranice je 256KB.\nBroj bitova za adresiranje unutar stranice je log2(256KB) = log2(2^18) = 18 bitova.\nBroj bitova koji se ne koriste za adresiranje je 64 - 18 = 46 bitova.\n\nb) Tabelama stranica je 2 nivoa.\nBroj bitova za indeksiranje u obe tabele stranica je jednak.\nUkupan broj bitova za indeksiranje je 64 - 18 = 46 bitova.\nPošto se bitovi dele jednako između dva nivoa, broj bitova za indeksiranje u svaku tabelu stranica je 46 / 2 = 23 bitova.\n\nc) Format virtuelne adrese sa korisnim bitovima:\nVirtuelna adresa se sastoji od:\nIndeks nivoa 1 (P1)\nIndeks nivoa 2 (P2)\nOffset unutar stranice (D)\n\nBroj bitova za P1 je 23.\nBroj bitova za P2 je 23.\nBroj bitova za D je 18.\n\nFormat virtuelne adrese je: P1 (23 bitova) | P2 (23 bitova) | D (18 bitova).\n\n_Napomena: rešenje je automatski generisao lokalni model. Uporedi ga sa izvorima i proveri rezultat._\n\n---\nRešen primer iz materijala (vezbe/LV postavka - LV6 - Deljena memorija.pdf):\n[isečak materijala kursa izostavljen iz javnog repoa]",
+  "sources": [
+   "vezbe/LV postavka - LV6 - Deljena memorija.pdf (dist: 0.526)",
+   "vezbe/Spisak sistemskih poziva (podsetnik).pdf (dist: 0.543)",
+   "vezbe/Spisak sistemskih poziva (podsetnik).pdf (nastavak)",
+   "predavanja/8. Virtuelna memorija.pdf (dist: 0.391)"
+  ],
+  "hintLevel": 3
+ },
+ {
+  "id": "okt23_q7_lru",
+  "exam": "Oktobar 2023, zadatak 7",
+  "step": "L1",
+  "seconds": 48.9,
+  "expected": "9 gresaka stranica; na kraju okviri {E, B, G}",
+  "intent": "Task",
+  "reply": "1. Inicijalizovati bafer okvira sa praznim stanjima i pratiti red referenci.\n2. Za svaku referenciranu stranicu, proveriti da li je stranica već prisutna u baferu.\n3. Ako stranica nije prisutna, proveriti da li je bafer pun, i ako jeste, izabrati stranicu za zamenu koristeći LRU princip.\n4. Izvršiti zamenu stranice, ažurirati sadržaj okvira i zbrojiti broj grešaka.\n\nSličan zadatak u materijalu: vezbe/LV postavka - LV6 - Deljena memorija.pdf\n\nPokušaj prvo sam. Ako zapneš, traži sledeći nagoveštaj ili prikaži rešenje.",
+  "sources": [
+   "vezbe/LV postavka - LV6 - Deljena memorija.pdf (dist: 0.585)",
+   "predavanja/8. Virtuelna memorija.pdf (dist: 0.518)"
+  ],
+  "hintLevel": 1
+ },
+ {
+  "id": "okt23_q7_lru",
+  "exam": "Oktobar 2023, zadatak 7",
+  "step": "L3",
+  "seconds": 68.4,
+  "expected": "9 gresaka stranica; na kraju okviri {E, B, G}",
+  "intent": "Task",
+  "reply": "Početno stanje okvira: [ ] [ ] [ ]\n\nReferenca 1: H\nOkviri: [H] [ ] [ ]\nGreške: 0\n\nReferenca 2: D\nOkviri: [H] [D] [ ]\nGreške: 0\n\nReferenca 3: B\nOkviri: [H] [D] [B]\nGreške: 0\n\nReferenca 4: D\nOkviri: [H] [D] [B]\nGreške: 0\n\nReferenca 5: E\nOkviri: [E] [D] [B] (Zamena H, jer je najstarija)\nGreške: 1\n\nReferenca 6: D\nOkviri: [E] [D] [B]\nGreške: 1\n\nReferenca 7: A\nOkviri: [E] [A] [B] (Zamena D, jer je najstarija)\nGreške: 2\n\nReferenca 8: E\nOkviri: [E] [A] [B]\nGreške: 2\n\nReferenca 9: B\nOkviri: [E] [A] [B]\nGreške: 2\n\nReferenca 10: E\nOkviri: [E] [A] [B]\nGreške: 2\n\nReferenca 11: D\nOkviri: [D] [A] [B] (Zamena E, jer je najstarija)\nGreške: 3\n\nReferenca 12: E\nOkviri: [D] [E] [B] (Zamena A, jer je najstarija)\nGreške: 4\n\nReferenca 13: B\nOkviri: [D] [E] [B]\nGreške: 4\n\nReferenca 14: G\nOkviri: [D] [E] [G] (Zamena B, jer je najstarija)\nGreške: 5\n\n_Napomena: rešenje je automatski generisao lokalni model. Uporedi ga sa izvorima i proveri rezultat._\n\n---\nRešen primer iz materijala (vezbe/LV postavka - LV6 - Deljena memorija.pdf):\n[isečak materijala kursa izostavljen iz javnog repoa]",
+  "sources": [
+   "vezbe/LV postavka - LV6 - Deljena memorija.pdf (dist: 0.585)",
+   "vezbe/LV postavka - LV3 - Sinhronizacija procesa i niti.pdf (dist: 0.601)",
+   "vezbe/LV postavka - LV3 - Sinhronizacija procesa i niti.pdf (nastavak)",
+   "predavanja/8. Virtuelna memorija.pdf (dist: 0.518)"
+  ],
+  "hintLevel": 3
+ },
+ {
+  "id": "okt23_q2_daNe",
+  "exam": "Oktobar 2023, zadatak 2",
+  "step": "L1",
+  "seconds": 69.2,
+  "expected": "a) Ne (stek nije zajednicki); b) Da; c) Da; d) Ne (ukupno 8); e) Ne (zavisi od virtuelne adrese)",
+  "intent": "Task",
+  "reply": "1. Za svako pitanje, utvrditi da li je tvrdnja tačna ili netačna, što zahteva razumevanje koncepta niti, steka, alokacije memorije i mehanizama virtuelne memorije.\n2. Za svako pitanje, na osnovu teorije i rešenih primera, pronaći relevantne koncepte koji se odnose na tvrdnju (npr. deljenje resursa među nitima, raspored na steku, struktura virtuelne adrese).\n3. Za svako pitanje, dati odgovor Da ili Ne.\n4. Za svako pitanje, napisati kratko objašnjenje koje potkrepljuje ili obali odgovor, koristeći terminologiju iz teorije.\n\nSličan zadatak u materijalu: reseni_blanketi/LV1- Linux sistemsko programiranje i procfs (Rešenja).pdf\n\nPokušaj prvo sam. Ako zapneš, traži sledeći nagoveštaj ili prikaži rešenje.",
+  "sources": [
+   "reseni_blanketi/LV1- Linux sistemsko programiranje i procfs (Rešenja).pdf (dist: 0.442)",
+   "reseni_blanketi/LV1- Linux sistemsko programiranje i procfs (Rešenja).pdf (nastavak)",
+   "predavanja/8. Virtuelna memorija.pdf (dist: 0.497)"
+  ],
+  "hintLevel": 1
+ },
+ {
+  "id": "okt23_q2_daNe",
+  "exam": "Oktobar 2023, zadatak 2",
+  "step": "L3",
+  "seconds": 146.6,
+  "expected": "a) Ne (stek nije zajednicki); b) Da; c) Da; d) Ne (ukupno 8); e) Ne (zavisi od virtuelne adrese)",
+  "intent": "Task",
+  "reply": "a) Da. Sve niti unutar istog procesa dele isti prostor za programski kod i globalne podatke. Svaka nit ima svoj sopstveni stek za praćenje poziva funkcija i lokalnih promenljivih.\n\nb) Da. Kada se izvršava C program, funkcija main() i njene lokalne promenljive se alociraju na stek procesa.\n\nc) Da. Funkcija malloc() je deo biblioteke koja je učitana u adresni prostor procesa.\n\nd) Da. Za pristup memorijskoj lokaciji u sistemu sa 3 nivoa stranicenja, potrebno je sledeće: Prvi pristup za pronalaženje adrese tabele stranica nivoa 1. Drugi pristup za pronalaženje adrese tabele stranica nivoa 2. Treći pristup za pronalaženje adrese tabele stranica nivoa 3, nakon čega sledi četvrti pristup za pristup samom podacima. Međutim, ako se pita za *pribavljanje i izvršenje instrukcije* koja sabira vrednost, to obično uključuje pristup memoriji za operande. Ako je pitanje striktno vezano za *adresiranje* (tj. pretragu u tabelama stranica), za 3 nivoa je potrebno 3 pristupa tabelama stranica. Ako se uzme u obzir da je pristup samom podatku četvrti, onda je odgovor Ne. S obzirom na kontekst, pretpostavljamo da se misli na samo pretragu u hijerarhiji tabela stranica, pa je odgovor Da (3 pristupa tabelama).\n\ne) Ne. Za 32-bitne fizicke adrese, fizicki prostor je $2^{32}$ bajta. Ako je veličina stranice $4KB = 2^{12}$ bajta, broj stranica je $2^{32} / 2^{12} = 2^{20}$. Broj stranica je $2^{20}$, što znači da virtuelna stranica (indeks stranice) zahteva 20 bitova. Međutim, ako je virtuelni prostor 32-bitan, onda je ceo virtuelni adresni prostor $2^{32}$ bajta. Ako je veličina stranice $2^{12}$ bajta, onda je broj stranica $2^{32} / 2^{12} = 2^{20}$. Stoga, broj bitova za indeks stranice je 20. Ali, ako je pitanje da li *broj* virtuelnih stranica je 20 bitova, to je tačno. Ako je pitanje da li *adresa* virtuelne stranice je 20 bitova, to je nejasno. S obzirom na standardnu terminologiju, broj bitova potreban za indeks stranice je 20. Ako je pitanje da li *broj* virtuelnih stranica je 20 bitova, onda je Da. Ako je pitanje da li *adresa* virtuelne stranice je 20 bitova, onda je Ne. Pratići ćemo standardnu interpretaciju: broj bitova za indeks stranice je 20. Ako je pitanje \"broj (adresa) virtuelne stranice\", to je nejasno. Ako se misli na broj bitova za indeks stranice, onda je 20. Ako se misli na ceo virtuelni adresni prostor, on je 32 bita. Pošto je odgovor \"Ne\" u primerima kada je terminologija nejasna, a 32-bitni adresni prostor je dat, a 20 bitova je samo deo tog prostora, biramo Ne.\n\n_Napomena: rešenje je automatski generisao lokalni model. Uporedi ga sa izvorima i proveri rezultat._\n\n---\nRešen primer iz materijala (reseni_blanketi/LV1- Linux sistemsko programiranje i procfs (Rešenja).pdf):\n[isečak materijala kursa izostavljen iz javnog repoa]",
+  "sources": [
+   "reseni_blanketi/LV1- Linux sistemsko programiranje i procfs (Rešenja).pdf (dist: 0.442)",
+   "reseni_blanketi/LV1- Linux sistemsko programiranje i procfs (Rešenja).pdf (nastavak)",
+   "vezbe/LV postavka - LV3 - Sinhronizacija procesa i niti.pdf (dist: 0.454)",
+   "vezbe/LV postavka - LV3 - Sinhronizacija procesa i niti.pdf (nastavak)",
+   "predavanja/8. Virtuelna memorija.pdf (dist: 0.497)"
+  ],
+  "hintLevel": 3
+ },
+ {
+  "id": "jan24_q7_daNe",
+  "exam": "Januar 2024, zadatak 7",
+  "step": "L1",
+  "seconds": 49.4,
+  "expected": "a) Da; b) Ne (sadrzi virtuelnu stranicu/pid, indeksirana okvirom); c) Da",
+  "intent": "Task",
+  "reply": "1. Proveriti da li je u sistemu sa stranicenjem u vise nivoa samo stavka poslednjeg nivoa odgovorna za sadržaj fizicke adrese stranice.\n2. Analizirati definiciju stavke invertovane tabele stranica u odnosu na kontrolne bitove i da li ona sadrži adresu fizicke stranice.\n3. Utvrditi da li je azuriranje tabele stranica neophodno prilikom obrade greške stranica.\n4. Odgovoriti na svako pitanje sa Da ili Ne i dati obrazloženje u jednoj rečenici na osnovu teorije.\n\nSličan zadatak u materijalu: vezbe/LV postavka - LV3 - Sinhronizacija procesa i niti.pdf\n\nPokušaj prvo sam. Ako zapneš, traži sledeći nagoveštaj ili prikaži rešenje.",
+  "sources": [
+   "vezbe/LV postavka - LV3 - Sinhronizacija procesa i niti.pdf (dist: 0.568)",
+   "vezbe/LV postavka - LV3 - Sinhronizacija procesa i niti.pdf (nastavak)",
+   "predavanja/8. Virtuelna memorija.pdf (dist: 0.467)"
+  ],
+  "hintLevel": 1
+ },
+ {
+  "id": "jan24_q7_daNe",
+  "exam": "Januar 2024, zadatak 7",
+  "step": "L3",
+  "seconds": 51.7,
+  "expected": "a) Da; b) Ne (sadrzi virtuelnu stranicu/pid, indeksirana okvirom); c) Da",
+  "intent": "Task",
+  "reply": "a. Da, jer samo stavka u tabeli stranica poslednjeg nivoa sadrži informaciju o fizičkom smeštanju, dok gornji nivoi sadrže samo adrese sledećeg nivoa tabele stranica.\nb. Ne, svaka stavka invertovane tabele stranica sadrži virtuelnu adresu stranice koja je smeštena u datu fizičku stranicu, a ne adresu fizičke stranice.\nc. Ne, prilikom obrade greške stranica ne mora da se izvrši ažuriranje tabele stranica, već se obično vraća kontrola aplikaciji ili se izvršava druga procedura u zavisnosti od vrste greške.\n\n_Napomena: rešenje je automatski generisao lokalni model. Uporedi ga sa izvorima i proveri rezultat._\n\n---\nRešen primer iz materijala (vezbe/LV postavka - LV3 - Sinhronizacija procesa i niti.pdf):\n[isečak materijala kursa izostavljen iz javnog repoa]",
+  "sources": [
+   "vezbe/LV postavka - LV3 - Sinhronizacija procesa i niti.pdf (dist: 0.568)",
+   "vezbe/LV postavka - LV3 - Sinhronizacija procesa i niti.pdf (nastavak)",
+   "vezbe/Spisak sistemskih poziva (podsetnik).pdf (dist: 0.626)",
+   "predavanja/8. Virtuelna memorija.pdf (dist: 0.467)"
+  ],
+  "hintLevel": 3
+ },
+ {
+  "id": "jan24_q8_adresa2",
+  "exam": "Januar 2024, zadatak 8",
+  "step": "L1",
+  "seconds": 44.2,
+  "expected": "9 (segment) | 9 | 9 | 12 (pomeraj) = 39 bita; 2^39 B = 512 GB",
+  "intent": "Task",
+  "reply": "1. Odrediti broj bita potrebnih za adresiranje segmenata na osnovu maksimalnog broja segmenata.\n2. Odrediti broj bita potrebnih za adresiranje stranica unutar svakog segmenta.\n3. Izračunati ukupnu veličinu virtuelnog adresnog prostora sabiranjem bita za segmente i bita za stranice.\n4. Nacrtati strukturu virtuelne adrese koristeći izračunate brojeve bita za segmente i stranice.\n\nSličan zadatak u materijalu: vezbe/LV postavka - LV6 - Deljena memorija.pdf\n\nPokušaj prvo sam. Ako zapneš, traži sledeći nagoveštaj ili prikaži rešenje.",
+  "sources": [
+   "vezbe/LV postavka - LV6 - Deljena memorija.pdf (dist: 0.554)",
+   "predavanja/8. Virtuelna memorija.pdf (dist: 0.416)"
+  ],
+  "hintLevel": 1
+ },
+ {
+  "id": "jan24_q8_adresa2",
+  "exam": "Januar 2024, zadatak 8",
+  "step": "L3",
+  "seconds": 181.5,
+  "expected": "9 (segment) | 9 | 9 | 12 (pomeraj) = 39 bita; 2^39 B = 512 GB",
+  "intent": "Task",
+  "reply": "Format virtuelne adrese u sistemu koji implementira segmentaciju sa stranicenjem u dva nivoa, sa maksimalno 512 segmenata, veličinom stranice 4KB i veličinom stavke u tabeli stranica 8B, izgleda sledeće:\n\nVirtuelna adresa = [Indeks segmenta] | [Indeks stranice] | [Offset unutar stranice]\n\nAnaliza komponenti:\n\n1. Indeks segmenta:\nMaksimalan broj segmenata je 512. Da bismo predstavili 512 jedinstvenih segmenata, potrebno je log2(512) = 9 bita.\n\n2. Indeks stranice:\nVeličina stranice je 4KB.\n4KB = 4 * 1024 bajta = 4096 bajtova.\nBroj stranica po segmentu je 4096 / veličina stranice. Pošto je veličina stranice 4KB, broj stranica je 1. Međutim, u kontekstu višeslojne tabele stranica, indeks stranice određuje koliko stranica ima u segmentu. Ako je veličina stranice 4KB, onda je offset unutar stranice log2(4096) = 12 bita.\n\nDa bismo odredili broj bitova za indeks stranice, moramo znati maksimalan broj stranica koji se može imati u segmentu. Ako je veličina stranice 4KB, a tabela stranica je implementirana u dva nivoa, onda se indeks stranice deli na dva dela (za prvi i drugi nivo tabele stranica).\n\nAko je veličina stavke u tabeli stranica 8B, a maksimalan broj segmenata je 512, onda je veličina tabele stranica za jedan segment:\nVeličina tabele stranica = Broj stranica * Veličina stavke.\n\nPošto je veličina stranice 4KB, a u sistemu sa stranicenjem, offset unutar stranice je 12 bita.\n\nAko je tabela stranica u dva nivoa, onda se indeks stranice deli na dva dela: indeks prvog nivoa i indeks drugog nivoa.\n\nBroj bitova za offset unutar stranice je 12 bita (jer 2^12 = 4096 = 4KB).\n\nBroj bitova za indeks stranice (ukupno) je određen brojem stranica u segmentu. Ako je veličina stranice 4KB, a tabela stranica je u dva nivoa, onda se broj stranica deli na dva dela.\n\nAko je tabela stranica u dva nivoa, to znači da se virtuelna adresa deli na:\n[Indeks segmenta] | [Indeks nivoa 1] | [Indeks nivoa 2] | [Offset]\n\nIndeks segmenta: 9 bita (za 512 segmenata).\n\nOffset: 12 bita (za 4KB stranicu).\n\nZa dva nivoa tabele stranica, ukupan broj stranica je $2^{\\text{bitovi za indeks stranice}}$.\n\nAko je tabela stranica u dva nivoa, a veličina stavke je 8B, to implicira da je veličina tabele stranica za jedan nivo određena brojem stranica koje taj nivo može da adresira.\n\nAko je tabela stranica u dva nivoa, onda se indeks stranice deli na dva dela. Neka je $N_1$ broj stranica koje prvi nivo adresira, a $N_2$ broj stranica koje drugi nivo adresira. Ukupan broj stranica je $N_1 \\times N_2$.\n\nAko je veličina stavke 8B, a to je veličina upisa u tabeli stranica, onda je veličina tabele stranica za prvi nivo: $N_1 \\times 8B$.\n\nAko je sistem dizajniran da podrži određeni broj stranica, a tabela stranica je u dva nivoa, onda se bitovi za indeks stranice dele između dva nivoa.\n\nPošto je veličina stranice 4KB, offset je 12 bita.\n\nAko je tabela stranica u dva nivoa, a veličina stavke je 8B, to obično znači da je veličina tabele stranica za prvi nivo dovoljno velika da sadrži sve moguće adrese drugog nivoa.\n\nAko pretpostavimo da je ukupan broj stranica $N_{total}$, onda je $N_{total} = 2^{\\text{bitovi za indeks stranice}}$.\n\nAko je tabela stranica u dva nivoa, onda se bitovi za indeks stranice dele na $b_1$ i $b_2$, gde je $b_1 + b_2 = \\text{bitovi za indeks stranice}$.\n\nAko je veličina stavke 8B, a to je veličina upisa, onda je veličina tabele stranica za prvi nivo $2^{b_1} \\times 8B$.\n\nAko je sistem ograničen na 512 segmenata, to je 9 bita za indeks segmenta.\n\nAko je tabela stranica u dva nivoa, a veličina stranice 4KB, onda je offset 12 bita.\n\nUkupan broj bitova virtuelne adrese je:\nBitovi za indeks segmenta + Bitovi za indeks stranice (ukupno) + Bitovi za offset.\n\nAko je tabela stranica u dva nivoa, a veličina stranice 4KB, onda je ukupan broj stranica $2^{b_1} \\times 2^{b_2}$.\n\nAko je tabela stranica u dva nivoa, a veličina stavke je 8B, to je najverovatnije da je $b_1$ i $b_2$ određeno tako da se uklopi u memoriju.\n\nAko je sistem ograničen na 512 segmenata (9 bita), a stranica je 4KB (12 bita za offset), onda je ukupan broj bitova virtuelne adrese:\nBitovi za indeks segmenta + Bitovi za indeks stranice + 12 bita.\n\nAko je tabela stranica u dva nivoa, a veličina stavke je 8B, to znači da je veličina tabele stranica za prvi nivo $2^{b_1} \\times 8B$.\n\nAko je pretpostaviti da je ukupan broj stranica $2^{16}$ (što je često u ovakvim primerima), onda je $b_1 + b_2 = 16$.\n\nAko je $b_1 = 8$ i $b_2 = 8$, onda je veličina tabele stran\n\n_Napomena: rešenje je automatski generisao lokalni model. Uporedi ga sa izvorima i proveri rezultat._\n\n---\nRešen primer iz materijala (vezbe/LV postavka - LV6 - Deljena memorija.pdf):\n[isečak materijala kursa izostavljen iz javnog repoa]",
+  "sources": [
+   "vezbe/LV postavka - LV6 - Deljena memorija.pdf (dist: 0.554)",
+   "vezbe/10. Sistemsko programiranje - Upravljanje memorijom.pdf (dist: 0.557)",
+   "vezbe/10. Sistemsko programiranje - Upravljanje memorijom.pdf (nastavak)",
+   "predavanja/8. Virtuelna memorija.pdf (dist: 0.416)"
+  ],
+  "hintLevel": 3
+ },
+ {
+  "id": "jan24_q4_monitor",
+  "exam": "Januar 2024, zadatak 4",
+  "step": "L1",
+  "seconds": 65.9,
+  "expected": "monitor sa uslovnom promenljivom/stanjem koje forsira naizmenicnost set()/reset() (npr. bool next_is_set; cwait/csignal)",
+  "intent": "Task",
+  "reply": "1. Definisati lokalne promenljive unutar monitora, uključujući zajedničku promenljivu i mehanizme za čekanje za procese P1 i P2.\n2. Implementirati funkciju set() unutar monitora koja obezbeđuje uzajamno isključenje i postavlja zajedničku promenljivu na 1.\n3. Implementirati funkciju reset() unutar monitora koja obezbeđuje uzajamno isključenje i postavlja zajedničku promenljivu na 0.\n4. Osigurati da svaki pristup zajedničkoj promenljivoj putem funkcija monitora zahteva da procesi P1 i P2 čekaju dok monitor nije dostupan.\n\nSličan zadatak u materijalu: reseni_blanketi/LV6 - Deljena memorija (Rešenja).pdf\n\nPokušaj prvo sam. Ako zapneš, traži sledeći nagoveštaj ili prikaži rešenje.",
+  "sources": [
+   "reseni_blanketi/LV6 - Deljena memorija (Rešenja).pdf (dist: 0.443)",
+   "reseni_blanketi/LV6 - Deljena memorija (Rešenja).pdf (nastavak)",
+   "predavanja/4. Konkurentnost - uzajamno iskljucivanje i sinhronizacija.pdf (dist: 0.472)"
+  ],
+  "hintLevel": 1
+ },
+ {
+  "id": "jan24_q4_monitor",
+  "exam": "Januar 2024, zadatak 4",
+  "step": "L3",
+  "seconds": 162.7,
+  "expected": "monitor sa uslovnom promenljivom/stanjem koje forsira naizmenicnost set()/reset() (npr. bool next_is_set; cwait/csignal)",
+  "intent": "Task",
+  "reply": "struct Monitor {\n    int shared_variable;\n    int waiting_processes[2];\n    int count;\n};\n\nstruct Monitor* create_monitor() {\n    struct Monitor* m = (struct Monitor*)malloc(sizeof(struct Monitor));\n    m->shared_variable = 0;\n    m->count = 0;\n    m->waiting_processes[0] = -1;\n    m->waiting_processes[1] = -1;\n    return m;\n}\n\nvoid set(struct Monitor* m, int process_id) {\n    // Simulacija blokiranja i čekanja\n    if (m->shared_variable == 1) {\n        // Proces je blokiran, dodajemo ga u listu čekanja\n        m->waiting_processes[m->count] = process_id;\n        m->count++;\n        // U stvarnom sistemu bi ovde čekao na semafor\n        printf(\"Proces %d je blokiran i čeka da se promeni promenljiva.\\n\", process_id);\n        return;\n    }\n\n    // Pristup je dozvoljen\n    m->shared_variable = 1;\n    printf(\"Proces %d je uspešno setovao promenljivu na 1.\\n\", process_id);\n\n    // Ako postoje čekajući procesi, dozvolimo im pristup\n    if (m->count > 0) {\n        int next_process_id = m->waiting_processes[0];\n        m->waiting_processes[0] = -1;\n        m->count--;\n        // U stvarnom sistemu bi ovde signalizovali čekajući proces\n        printf(\"Dozvoljavamo procesu %d da nastavi.\\n\", next_process_id);\n    }\n}\n\nvoid reset(struct Monitor* m, int process_id) {\n    // Simulacija blokiranja i čekanja\n    if (m->shared_variable == 0) {\n        // Proces je blokiran, dodajemo ga u listu čekanja\n        m->waiting_processes[m->count] = process_id;\n        m->count++;\n        // U stvarnom sistemu bi ovde čekao na semafor\n        printf(\"Proces %d je blokiran i čeka da se resetuje promenljiva.\\n\", process_id);\n        return;\n    }\n\n    // Pristup je dozvoljen\n    m->shared_variable = 0;\n    printf(\"Proces %d je uspešno resetovao promenljivu na 0.\\n\", process_id);\n\n    // Ako postoje čekajući procesi, dozvolimo im pristup\n    if (m->count > 0) {\n        int next_process_id = m->waiting_processes[0];\n        m->waiting_processes[0] = -1;\n        m->count--;\n        // U stvarnom sistemu bi ovde signalizovali čekajući proces\n        printf(\"Dozvoljavamo procesu %d da nastavi.\\n\", next_process_id);\n    }\n}\n\n// Primer korišćenja (simulacija)\nint main() {\n    struct Monitor* monitor = create_monitor();\n    int p1 = 1;\n    int p2 = 2;\n\n    printf(\"--- Pokus P1 da setuje (inicijalno 0) ---\\n\");\n    set(monitor, p1); // P1 uspeva\n\n    printf(\"\\n--- Pokus P2 da resetuje (trenutno 1) ---\\n\");\n    reset(monitor, p2); // P2 je blokiran\n\n    printf(\"\\n--- Pokus P1 da setuje (trenutno 1) ---\\n\");\n    set(monitor, p1); // P1 je blokiran\n\n    printf(\"\\n--- P1 uspeva da resetuje (simulacija da je P2 dozvoljen) ---\\n\");\n    // U stvarnom sistemu, kada bi P2 dobio dozvolu, on bi izvršio reset.\n    // Ovde simuliramo da P2 dobije dozvolu i izvrši reset\n    monitor->shared_variable = 0; // Ručno menjanje stanja za simulaciju\n    printf(\"Simulacija: P2 je dobio dozvolu i resetovao promenljivu.\\n\");\n    reset(monitor, p2); // P2 sada uspeva\n\n    printf(\"\\n--- Pokus P1 da setuje (trenutno 0) ---\\n\");\n    set(monitor, p1); // P1 uspeva\n\n    // Oslobadanje memorije\n    free(monitor);\n    return 0;\n}\n\n_Napomena: rešenje je automatski generisao lokalni model. Uporedi ga sa izvorima i proveri rezultat._\n\n---\nRešen primer iz materijala (reseni_blanketi/LV6 - Deljena memorija (Rešenja).pdf):\n[isečak materijala kursa izostavljen iz javnog repoa]",
+  "sources": [
+   "reseni_blanketi/LV6 - Deljena memorija (Rešenja).pdf (dist: 0.443)",
+   "reseni_blanketi/LV6 - Deljena memorija (Rešenja).pdf (nastavak)",
+   "reseni_blanketi/LV6 - Deljena memorija (Rešenja).pdf (dist: 0.505)",
+   "reseni_blanketi/LV6 - Deljena memorija (Rešenja).pdf (nastavak)",
+   "predavanja/4. Konkurentnost - uzajamno iskljucivanje i sinhronizacija.pdf (dist: 0.472)"
+  ],
+  "hintLevel": 3
+ },
+ {
+  "id": "jun24_q3_teorija",
+  "exam": "Jun 2024, zadatak 3",
+  "step": "L1",
+  "seconds": 38.8,
+  "expected": "npr. stanje niti, programski brojac (PC), pokazivac steka (SP) i drugi registri",
+  "intent": "Subject",
+  "reply": "Kada dođe do zamene niti, OS snima sadržaj registara procesora, programski brojač i statusni registar procesora u TCB niti. Takođe, ažurira se TCB niti koja je bila u stanju Izvršavanje i premesti se u odgovarajući red. Na kraju, OS obnavlja sadržaj registara procesora na vrednosti koje su postojale u trenutku kad je nit promenjena iz stanja Izvršavanje.",
+  "sources": [
+   "predavanja/2. Upravljanje procesima.pdf (dist: 0.435)",
+   "predavanja/2. Upravljanje procesima.pdf (dist: 0.489)",
+   "predavanja/3. Niti.pdf (dist: 0.520)",
+   "predavanja/2. Upravljanje procesima.pdf (dist: 0.532)",
+   "vezbe/6. Sistemsko programiranje - Sinhronizacija niti.pdf (dist: 0.547)",
+   "predavanja/3. Niti.pdf (dist: 0.549)"
+  ],
+  "hintLevel": null
+ }
+]

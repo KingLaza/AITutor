@@ -1,0 +1,68 @@
+[
+ {
+  "id": "jan24_q6_rasporedjivanje",
+  "exam": "Januar 2024, zadatak 6",
+  "step": "L3",
+  "seconds": 30.9,
+  "expected": "SJF: B; SRTF: A; Prioritet bez prekidanja: B; Prioritet sa prekidanjem: D; RR(30): A",
+  "intent": "Task",
+  "reply": "Rešenje izračunato programski (tačno, bez procene modela):\n\nRaspoređivanje procesa (simulacija po milisekundama):\n- SJF: A 0-50 | B 50-70 | D 70-110 | C 110-210\n    U periodu 60-70ms izvršava se: B\n    Završetak procesa: A=50, B=70, C=210, D=110\n- SRTF: A 0-20 | B 20-40 | A 40-70 | D 70-110 | C 110-210\n    U periodu 60-70ms izvršava se: A\n    Završetak procesa: A=70, B=40, C=210, D=110\n- PRIORITY: A 0-50 | B 50-70 | D 70-110 | C 110-210\n    U periodu 60-70ms izvršava se: B\n    Završetak procesa: A=50, B=70, C=210, D=110\n- PRIORITY_PREEMPTIVE: A 0-20 | B 20-40 | C 40-60 | D 60-100 | C 100-180 | A 180-210\n    U periodu 60-70ms izvršava se: D\n    Završetak procesa: A=210, B=40, C=180, D=100\n- RR (q=30ms): A 0-30 | B 30-50 | A 50-70 | C 70-100 | D 100-130 | C 130-160 | D 160-170 | C 170-210\n    U periodu 60-70ms izvršava se: A\n    Završetak procesa: A=70, B=50, C=210, D=170",
+  "sources": [],
+  "hintLevel": 3
+ },
+ {
+  "id": "okt23_q9_disk",
+  "exam": "Oktobar 2023, zadatak 9",
+  "step": "L3",
+  "seconds": 10.1,
+  "expected": "64000 staza; glava ide ka nizim cilindrima: SSTF 125,222,360,25; SCAN 25,125,222,360; C-SCAN 25,360,222,125",
+  "intent": "Task",
+  "reply": "Rešenje izračunato programski (tačno, bez procene modela):\n\nDisk:\n- Broj staza: 4 strana x 16000 cilindara = 64000\n- Glava je na cilindru 77, kreće se ka nižim cilindrima; preostali zahtevi: [25, 360, 125, 222]\n- SSTF: 125 -> 222 -> 360 -> 25\n- C-SCAN: 25 -> 360 -> 222 -> 125\n- SCAN: 25 -> 125 -> 222 -> 360",
+  "sources": [],
+  "hintLevel": 3
+ },
+ {
+  "id": "okt23_q10_inode",
+  "exam": "Oktobar 2023, zadatak 10",
+  "step": "L3",
+  "seconds": 7.1,
+  "expected": "512 adresa po bloku. a) 10 podataka, 0 indeksnih; b) 1536 podataka, 4 indeksna; c) 262144 podataka, 513 indeksnih",
+  "intent": "Task",
+  "reply": "Rešenje izračunato programski (tačno, bez procene modela):\n\nI-node (blok 4 KB, 10 direktnih adresa, adresa 8 B, 512 adresa po bloku, nivoa indirekcije: 3):\n- Fajl 40KB: 10 blokova sa podacima + 0 indeksnih = 10 blokova; pristupa disku do poslednjeg bloka (fajl otvoren): 1\n- Fajl 6MB: 1536 blokova sa podacima + 4 indeksnih = 1540 blokova; pristupa disku do poslednjeg bloka (fajl otvoren): 3\n- Fajl 1GB: 262144 blokova sa podacima + 513 indeksnih = 262657 blokova; pristupa disku do poslednjeg bloka (fajl otvoren): 3",
+  "sources": [],
+  "hintLevel": 3
+ },
+ {
+  "id": "okt23_q8_adresa",
+  "exam": "Oktobar 2023, zadatak 8",
+  "step": "L3",
+  "seconds": 6.2,
+  "expected": "offset 18 bita, indeks 15+15; a) 16 neiskoriscenih; b) 15 po tabeli (30 ukupno); c) 15|15|18",
+  "intent": "Task",
+  "reply": "Rešenje izračunato programski (tačno, bez procene modela):\n\nFormat virtuelne adrese:\n- Stranica 256 KB -> pomeraj 18 bita\n- Tabela stranica ima 256 KB / 8 B = 32768 stavki -> 15 bita indeksa po nivou (2 nivoa, ukupno 30 bita)\n- Format: P1 15 | P2 15 | pomeraj 18\n- Korisnih bita: 48; neiskorišćenih od 64: 16\n- Veličina virtuelnog adresnog prostora: 2^48 B = 256 TB",
+  "sources": [],
+  "hintLevel": 3
+ },
+ {
+  "id": "okt23_q7_lru",
+  "exam": "Oktobar 2023, zadatak 7",
+  "step": "L3",
+  "seconds": 5.3,
+  "expected": "9 gresaka stranica; na kraju okviri {E, B, G}",
+  "intent": "Task",
+  "reply": "Rešenje izračunato programski (tačno, bez procene modela):\n\nZamena stranica (3 okvira, niz referenci: E D H B D E D A E B E D E B G):\n- LRU: 9 grešaka stranica\n    E: [E - -] greška\n    D: [E D -] greška\n    H: [E D H] greška\n    B: [B D H] greška, izbačena E\n    D: [B D H] pogodak\n    E: [B D E] greška, izbačena H\n    D: [B D E] pogodak\n    A: [A D E] greška, izbačena B\n    E: [A D E] pogodak\n    B: [A B E] greška, izbačena D\n    E: [A B E] pogodak\n    D: [D B E] greška, izbačena A\n    E: [D B E] pogodak\n    B: [D B E] pogodak\n    G: [G B E] greška, izbačena D",
+  "sources": [],
+  "hintLevel": 3
+ },
+ {
+  "id": "jan24_q8_adresa2",
+  "exam": "Januar 2024, zadatak 8",
+  "step": "L3",
+  "seconds": 5.4,
+  "expected": "9 (segment) | 9 | 9 | 12 (pomeraj) = 39 bita; 2^39 B = 512 GB",
+  "intent": "Task",
+  "reply": "Rešenje izračunato programski (tačno, bez procene modela):\n\nFormat virtuelne adrese:\n- Stranica 4 KB -> pomeraj 12 bita\n- Tabela stranica ima 4 KB / 8 B = 512 stavki -> 9 bita indeksa po nivou (2 nivoa, ukupno 18 bita)\n- 512 segmenata -> 9 bita za segment\n- Format: segment 9 | P1 9 | P2 9 | pomeraj 12\n- Korisnih bita: 39\n- Veličina virtuelnog adresnog prostora: 2^39 B = 512 GB",
+  "sources": [],
+  "hintLevel": 3
+ }
+]

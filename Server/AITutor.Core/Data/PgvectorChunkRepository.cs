@@ -22,17 +22,84 @@ public class PgvectorChunkRepository : IChunkRepository
         await cmd.ExecuteNonQueryAsync();
     }
 
-    public async Task<List<ChunkSearchResult>> SearchAsync(float[] queryEmbedding, int topK)
+    public async Task<List<string>> GetSubjectsAsync()
+    {
+        await using var conn = await _dataSource.OpenConnectionAsync();
+        await using var cmd = conn.CreateCommand();
+        cmd.CommandText = "SELECT DISTINCT subject FROM chunks ORDER BY subject";
+        var subjects = new List<string>();
+        await using var reader = await cmd.ExecuteReaderAsync();
+        while (await reader.ReadAsync()) subjects.Add(reader.GetString(0));
+        return subjects;
+    }
+
+    public async Task<ChunkSearchResult?> GetNextChunkAsync(int id)
     {
         await using var conn = await _dataSource.OpenConnectionAsync();
         await using var cmd = conn.CreateCommand();
         cmd.CommandText = @"
-            SELECT content, source_file, embedding <=> $1 AS distance
-            FROM chunks
-            ORDER BY embedding <=> $1
-            LIMIT $2";
+            SELECT n.content, n.source_file, n.source_type, n.id
+            FROM chunks c
+            JOIN chunks n ON n.source_file = c.source_file AND n.source_type = c.source_type
+                         AND n.id = (SELECT min(id) FROM chunks
+                                     WHERE source_file = c.source_file AND source_type = c.source_type AND id > c.id)
+            WHERE c.id = $1";
+        cmd.Parameters.AddWithValue(id);
+        await using var reader = await cmd.ExecuteReaderAsync();
+        if (!await reader.ReadAsync()) return null;
+        return new ChunkSearchResult
+        {
+            Content = reader.GetString(0),
+            SourceFile = reader.IsDBNull(1) ? "" : reader.GetString(1),
+            SourceType = reader.GetString(2),
+            Id = reader.GetInt32(3),
+            IsNeighbor = true
+        };
+    }
+
+    private static readonly HashSet<string> StopWords = new() { "datu", "dati", "koji", "koja", "koje", "pomocu", "napisati", "definisati", "odrediti" };
+
+    // Jeftino "stemovanje" skraćivanjem na 5 slova (srpska morfologija), bez dijakritika; prefiksno poređenje u tsquery-ju.
+    internal static string BuildTsQuery(string text)
+    {
+        var normalized = text.ToLowerInvariant().Replace("dj", "d")
+            .Replace('č', 'c').Replace('ć', 'c').Replace('ž', 'z').Replace('š', 's').Replace('đ', 'd');
+        var tokens = System.Text.RegularExpressions.Regex.Matches(normalized, @"[a-z0-9]+")
+            .Select(m => m.Value)
+            .Where(t => t.Length >= 4 && !StopWords.Contains(t))
+            .Select(t => t[..Math.Min(5, t.Length)] + ":*")
+            .Distinct();
+        return string.Join(" | ", tokens);
+    }
+
+    public async Task<List<ChunkSearchResult>> SearchHybridAsync(float[] queryEmbedding, string queryText, int topK, string[]? sourceTypes = null, string? subject = null)
+    {
+        var tsQuery = BuildTsQuery(queryText);
+        if (tsQuery.Length == 0) return await SearchAsync(queryEmbedding, topK, sourceTypes, subject);
+
+        await using var conn = await _dataSource.OpenConnectionAsync();
+        await using var cmd = conn.CreateCommand();
+        cmd.CommandText = @"
+            WITH base AS (
+                SELECT id, content, source_file, source_type, embedding <=> $1 AS dist,
+                       ts_rank(to_tsvector('simple', translate(lower(coalesce(source_file, '') || ' ' || content), 'čćžšđ', 'cczsd')),
+                               to_tsquery('simple', $2)) AS fts
+                FROM chunks
+                WHERE (cardinality($4::text[]) = 0 OR source_type = ANY($4)) AND ($5::text IS NULL OR lower(subject) = lower($5))
+            ),
+            d AS (SELECT id, row_number() OVER (ORDER BY dist) AS rd FROM base),
+            f AS (SELECT id, row_number() OVER (ORDER BY fts DESC) AS rf FROM base WHERE fts > 0)
+            SELECT b.content, b.source_file, b.dist, b.source_type, b.id
+            FROM base b
+            JOIN d ON d.id = b.id
+            LEFT JOIN f ON f.id = b.id
+            ORDER BY 1.0 / (60 + d.rd) + COALESCE(1.0 / (60 + f.rf), 0) DESC
+            LIMIT $3";
         cmd.Parameters.AddWithValue(new Vector(queryEmbedding));
+        cmd.Parameters.AddWithValue(tsQuery);
         cmd.Parameters.AddWithValue(topK);
+        cmd.Parameters.AddWithValue(sourceTypes ?? Array.Empty<string>());
+        cmd.Parameters.AddWithValue((object?)subject ?? DBNull.Value);
 
         var results = new List<ChunkSearchResult>();
         await using var reader = await cmd.ExecuteReaderAsync();
@@ -42,7 +109,40 @@ public class PgvectorChunkRepository : IChunkRepository
             {
                 Content = reader.GetString(0),
                 SourceFile = reader.IsDBNull(1) ? "" : reader.GetString(1),
-                Distance = reader.GetDouble(2)
+                Distance = reader.GetDouble(2),
+                SourceType = reader.GetString(3),
+                Id = reader.GetInt32(4)
+            });
+        }
+        return results;
+    }
+
+    public async Task<List<ChunkSearchResult>> SearchAsync(float[] queryEmbedding, int topK, string[]? sourceTypes = null, string? subject = null)
+    {
+        await using var conn = await _dataSource.OpenConnectionAsync();
+        await using var cmd = conn.CreateCommand();
+        cmd.CommandText = @"
+            SELECT content, source_file, embedding <=> $1 AS distance, source_type, id
+            FROM chunks
+            WHERE (cardinality($3::text[]) = 0 OR source_type = ANY($3)) AND ($4::text IS NULL OR lower(subject) = lower($4))
+            ORDER BY embedding <=> $1
+            LIMIT $2";
+        cmd.Parameters.AddWithValue(new Vector(queryEmbedding));
+        cmd.Parameters.AddWithValue(topK);
+        cmd.Parameters.AddWithValue(sourceTypes ?? Array.Empty<string>());
+        cmd.Parameters.AddWithValue((object?)subject ?? DBNull.Value);
+
+        var results = new List<ChunkSearchResult>();
+        await using var reader = await cmd.ExecuteReaderAsync();
+        while (await reader.ReadAsync())
+        {
+            results.Add(new ChunkSearchResult
+            {
+                Content = reader.GetString(0),
+                SourceFile = reader.IsDBNull(1) ? "" : reader.GetString(1),
+                Distance = reader.GetDouble(2),
+                SourceType = reader.GetString(3),
+                Id = reader.GetInt32(4)
             });
         }
         return results;
