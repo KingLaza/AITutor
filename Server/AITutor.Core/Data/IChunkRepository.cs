@@ -6,6 +6,10 @@ public interface IChunkRepository
 
     Task<List<string>> GetSubjectsAsync();
 
+    Task<List<MaterialInfo>> ListMaterialsAsync(string subject, string sourceType);
+
+    Task<int> DeleteMaterialAsync(string subject, string sourceType, string sourceFile);
+
     Task<List<ChunkSearchResult>> SearchAsync(float[] queryEmbedding, int topK, string[]? sourceTypes = null, string? subject = null);
 
     // Sledeći chunk istog fajla (npr. rešenje zadatka koje je na sledećoj strani).
@@ -14,3 +18,5 @@ public interface IChunkRepository
     // Vektorska pretraga + tekstualna po ključnim rečima, spojene preko Reciprocal Rank Fusion.
     Task<List<ChunkSearchResult>> SearchHybridAsync(float[] queryEmbedding, string queryText, int topK, string[]? sourceTypes = null, string? subject = null);
 }
+
+public record MaterialInfo(string SourceFile, int Chunks);

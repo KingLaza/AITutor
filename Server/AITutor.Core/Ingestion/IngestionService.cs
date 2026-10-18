@@ -36,6 +36,33 @@ public class IngestionService
         return longWordRatio > 0.3; // baci samo ako je bar trećina sadržaja ovako "garblovana"
     }
 
+    // Ingest jednog fajla (npr. studentski upload). progress(obrađeno, ukupno) se poziva posle svakog chunka.
+    public async Task<int> IngestFileAsync(string filePath, string sourceFileName, string subject, string sourceType,
+                                           Action<int, int>? progress = null)
+    {
+        var pages = await DocumentParserFactory.GetParser(filePath).ExtractPagesAsync(filePath);
+        var chunks = ChunkingStrategyFactory.GetStrategy(sourceType).Chunk(pages)
+            .SelectMany(SplitIfTooLarge)
+            .Where(c => !string.IsNullOrWhiteSpace(c) && !LooksLikeGarbledFormula(c))
+            .ToList();
+
+        progress?.Invoke(0, chunks.Count);
+        var done = 0;
+        foreach (var chunk in chunks)
+        {
+            await _repository.InsertAsync(new ChunkRecord
+            {
+                Subject = subject,
+                SourceType = sourceType,
+                SourceFile = sourceFileName,
+                Content = chunk,
+                Embedding = await _embeddings.GetEmbeddingAsync(chunk)
+            });
+            progress?.Invoke(++done, chunks.Count);
+        }
+        return chunks.Count;
+    }
+
     public async Task<int> IngestFolderAsync(string materialsRoot, string subject)
     {
         int totalChunks = 0;

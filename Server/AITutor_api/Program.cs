@@ -21,7 +21,10 @@ builder.Services.AddHttpClient<IEmbeddingService, OllamaEmbeddingService>(c => c
 builder.Services.AddHttpClient<IChatService, OllamaChatService>(c => c.Timeout = TimeSpan.FromMinutes(10));
 var dataSourceBuilder = new NpgsqlDataSourceBuilder(builder.Configuration.GetConnectionString("Default"));
 dataSourceBuilder.UseVector();
-builder.Services.AddSingleton(dataSourceBuilder.Build());
+var dataSource = dataSourceBuilder.Build();
+builder.Services.AddSingleton(dataSource);
+builder.Services.AddSingleton<IProfileRepository, PgProfileRepository>();
+builder.Services.AddSingleton<AITutor_api.UploadJobs>();
 builder.Services.AddSingleton<IChunkRepository, PgvectorChunkRepository>();
 builder.Services.AddScoped<IngestionService>();
 builder.Services.AddScoped<RagQueryService>();
@@ -35,8 +38,11 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Adresa: ASPNETCORE_URLS ako je zadata (Docker), inače lokalni razvoj na 5000.
-if (string.IsNullOrEmpty(builder.Configuration["ASPNETCORE_URLS"]) && string.IsNullOrEmpty(builder.Configuration["urls"]))
+// Tabele za profile i istoriju se kreiraju same (radi i na već postojećoj bazi).
+await PgProfileRepository.EnsureSchemaAsync(dataSource);
+
+// Lokalni razvoj: API je na 5000 (na to adresu računa klijent). U Docker kontejneru adresu zadaje ASPNETCORE_URLS.
+if (Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") != "true")
     app.Urls.Add("http://localhost:5000");
 
 // Dozvoljeni izvori za CORS (Cors:Origins); podrazumevano Vite dev server.

@@ -4,7 +4,7 @@ public static class ChunkingStrategyFactory
 {
     public static IChunkingStrategy GetStrategy(string sourceType) => sourceType switch
     {
-        "predavanja" or "vezbe" => new PerPageChunkingStrategy(),
+        "predavanja" or "vezbe" or "moje" => new PerPageChunkingStrategy(),
         "pismeni" => new PerTaskChunkingStrategy(),
         "usmeni" => new SequentialNumberedChunkingStrategy(),
         "reseni_blanketi" => new WholeDocumentChunkingStrategy(),

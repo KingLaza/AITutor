@@ -58,6 +58,7 @@ public class ChunkingTests
     [InlineData("usmeni")]
     [InlineData("reseni_blanketi")]
     [InlineData("obrasci")]
+    [InlineData("moje")]
     public void Factory_knows_all_source_types(string sourceType) =>
         Assert.NotNull(ChunkingStrategyFactory.GetStrategy(sourceType));
 

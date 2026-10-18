@@ -20,7 +20,7 @@ public class RagQueryService
     private const string NoInfoReply = "Nemam dovoljno informacija u materijalu da odgovorim na ovo pitanje.";
 
     // Ispiti (pismeni) sadrže samo postavke bez odgovora, pa nisu izvor znanja za pitanja iz gradiva.
-    private static readonly string[] KnowledgeSourceTypes = { "predavanja", "vezbe", "usmeni", "reseni_blanketi" };
+    private static readonly string[] KnowledgeSourceTypes = { "predavanja", "vezbe", "usmeni", "reseni_blanketi", "moje" };
 
     private const string StyleRules =
         "Piši na srpskom jeziku, ekavicom, običnim tekstom. Bez emotikona i bez LaTeX-a ($...$): gramatike i formule piši običnim znacima (->, |, eps).";
@@ -194,7 +194,7 @@ public class RagQueryService
             examples = DistinctByContent(await _repository.SearchHybridAsync(
                 queryEmbedding, task, 6, new[] { "reseni_blanketi", "vezbe" }, subject)).Take(2).OrderBy(e => e.Distance).ToList();
         }
-        var theory = await _repository.SearchHybridAsync(queryEmbedding, task, 1, new[] { "predavanja", "usmeni" }, subject);
+        var theory = await _repository.SearchHybridAsync(queryEmbedding, task, 1, new[] { "predavanja", "usmeni", "moje" }, subject);
 
         var state = new TaskState(task, level);
         if (examples.Concat(theory).All(c => c.Distance > profile.MaxDistance))

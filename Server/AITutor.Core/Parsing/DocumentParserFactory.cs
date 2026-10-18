@@ -8,7 +8,7 @@ public static class DocumentParserFactory
         return ext switch
         {
             ".pdf" => new PdfDocumentParser(),
-            ".cup" or ".java" or ".flex" or ".txt" or ".c" or ".h" or ".sh" => new PlainTextDocumentParser(),
+            ".cup" or ".java" or ".flex" or ".txt" or ".md" or ".c" or ".h" or ".sh" => new PlainTextDocumentParser(),
             _ => throw new NotSupportedException($"Nepodržan format: {ext}")
         };
     }

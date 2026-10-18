@@ -274,6 +274,7 @@ public class RagQueryServiceTests
         Assert.All(_repo.Subjects, s => Assert.Equal("Operativni sistemi", s));
         Assert.DoesNotContain("pismeni", _repo.LastDenseTypes!);
         Assert.Contains("predavanja", _repo.LastDenseTypes!);
+        Assert.Contains("moje", _repo.LastDenseTypes!);
     }
 
     [Fact]

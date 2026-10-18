@@ -33,6 +33,30 @@ public class PgvectorChunkRepository : IChunkRepository
         return subjects;
     }
 
+    public async Task<List<MaterialInfo>> ListMaterialsAsync(string subject, string sourceType)
+    {
+        await using var cmd = _dataSource.CreateCommand(@"
+            SELECT source_file, count(*)::int FROM chunks
+            WHERE lower(subject) = lower($1) AND source_type = $2
+            GROUP BY source_file ORDER BY min(id)");
+        cmd.Parameters.AddWithValue(subject);
+        cmd.Parameters.AddWithValue(sourceType);
+        var list = new List<MaterialInfo>();
+        await using var reader = await cmd.ExecuteReaderAsync();
+        while (await reader.ReadAsync()) list.Add(new MaterialInfo(reader.IsDBNull(0) ? "" : reader.GetString(0), reader.GetInt32(1)));
+        return list;
+    }
+
+    public async Task<int> DeleteMaterialAsync(string subject, string sourceType, string sourceFile)
+    {
+        await using var cmd = _dataSource.CreateCommand(
+            "DELETE FROM chunks WHERE lower(subject) = lower($1) AND source_type = $2 AND source_file = $3");
+        cmd.Parameters.AddWithValue(subject);
+        cmd.Parameters.AddWithValue(sourceType);
+        cmd.Parameters.AddWithValue(sourceFile);
+        return await cmd.ExecuteNonQueryAsync();
+    }
+
     public async Task<ChunkSearchResult?> GetNextChunkAsync(int id)
     {
         await using var conn = await _dataSource.OpenConnectionAsync();

@@ -10,6 +10,9 @@ Trenutno su podržana dva predmeta (Programski prevodioci, Operativni sistemi); 
 - Prepoznaje nameru poruke (ćaskanje, pitanje iz gradiva, zadatak) i razume prethodni tok razgovora.
 - Za zadatke vodi lestvicu nagoveštaja: 1) plan, 2) razrada prva dva koraka, 3) rešenje. Ponavljajući tipovi zadataka
   (npr. proračuni) se rešavaju programski, a model samo izvlači parametre.
+- Čuva istoriju razgovora po lokalnom profilu (samo ime, bez lozinke) i predmetu; razgovor se nastavlja i posle osvežavanja stranice.
+- Student može da doda sopstveni materijal (PDF, TXT, MD, C, H, JAVA, SH) za izabrani predmet; fajl se obrađuje u pozadini
+  i odmah učestvuje u pretrazi (izvor `moje/...`). Može se ukloniti iz panela „Moj materijal“.
 
 ## Pokretanje (Docker Compose)
 

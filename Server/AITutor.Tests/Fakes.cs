@@ -47,7 +47,24 @@ public class FakeRepo : IChunkRepository
     public List<string?> Subjects { get; } = new();
     public string[]? LastDenseTypes { get; private set; }
 
-    public Task InsertAsync(ChunkRecord chunk) => Task.CompletedTask;
+    public List<ChunkRecord> Inserted { get; } = new();
+    public List<(string Subject, string SourceType, string SourceFile)> Deleted { get; } = new();
+
+    public Task InsertAsync(ChunkRecord chunk)
+    {
+        Inserted.Add(chunk);
+        return Task.CompletedTask;
+    }
+
+    public Task<List<MaterialInfo>> ListMaterialsAsync(string subject, string sourceType) =>
+        Task.FromResult(Inserted.Where(c => c.Subject == subject && c.SourceType == sourceType)
+            .GroupBy(c => c.SourceFile ?? "").Select(g => new MaterialInfo(g.Key, g.Count())).ToList());
+
+    public Task<int> DeleteMaterialAsync(string subject, string sourceType, string sourceFile)
+    {
+        Deleted.Add((subject, sourceType, sourceFile));
+        return Task.FromResult(Inserted.RemoveAll(c => c.Subject == subject && c.SourceType == sourceType && c.SourceFile == sourceFile));
+    }
 
     public Task<List<string>> GetSubjectsAsync() => Task.FromResult(new List<string>());
 
