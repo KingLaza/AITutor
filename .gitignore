@@ -17,3 +17,7 @@ dist-ssr/
 # --- OS / editor ---
 .DS_Store
 Thumbs.db
+
+# --- Izvezena baza znanja (materijal kursa; ne ide u javni repo) ---
+db/seed/*
+!db/seed/.gitkeep

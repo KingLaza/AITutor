@@ -52,6 +52,19 @@ curl -X POST http://localhost:8080/api/ingest -H "Content-Type: application/json
 Putanja je unutar kontejnera (`/data/materials/...`). Ingest nije idempotentan: ponovni ingest istog materijala pravi duplikate.
 Materijal kursa nije deo repoa; u `data/os_additions/` su samo dodaci koje je napisao autor (obrasci i kratke činjenice za Operativne sisteme).
 
+## Gotova baza znanja (opciono)
+
+Ako u `db/seed/` postoji `knowledge.sql.gz`, učitava se pri prvom pokretanju (prazan volumen baze), pa student odmah ima ugrađen materijal
+bez ingesta. Dump se pravi iz postojeće baze (ne uključuje ispite ni studentski upload):
+
+```
+bash scripts/export-knowledge.sh <ime-kontejnera-baze>
+```
+
+Dump sadrži tekst materijala kursa, zato nije u javnom repou (`db/seed/` je u `.gitignore`) i deli se samo uz dozvolu autora materijala.
+Vektori su za model `embeddinggemma` (768 dimenzija); sa drugim embedding modelom treba ponovo uraditi ingest. Ako je volumen već pravljen,
+seed se ne učitava ponovo (`docker compose down -v` briše podatke).
+
 ## Razvoj bez Dockera
 
 - Baza: PostgreSQL sa pgvector (`db/init.sql` kreira tabelu), connection string preko `dotnet user-secrets` (`ConnectionStrings:Default`).
