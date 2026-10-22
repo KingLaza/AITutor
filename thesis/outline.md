@@ -1,6 +1,7 @@
 # Struktura rada
 
-Fakultet traži najmanje 30 stranica, uvod do 2 i zaključak do 1 stranice; poglavlje o sopstvenom doprinosu je centralno i najduže (proveriti sa mentorom, vidi mentor-questions.md).
+Uslov fakulteta: najmanje 30 stranica; plan je najmanje 40. Uvod do 2 stranice, zaključak do 1, poglavlje o sopstvenom doprinosu centralno i najduže. Korisnička studija nije deo rada (odluka: izbacuje se poglavlje 7.7).
+Format: Times New Roman 12, A4, margine 2,5 cm, latinica; pravila su u `make_reference_docx.py`. Rok: 6 meseci od odobravanja teme (datum odobrenja proveriti u Službi; ako je 24.9.2026, rok je 24.3.2027).
 
 ## Istraživačka pitanja (kičma rada)
 
@@ -9,21 +10,29 @@ Fakultet traži najmanje 30 stranica, uvod do 2 i zaključak do 1 stranice; pogl
 - **RQ3** Radi li lestvica nagoveštaja kako je zamišljena (ne otkriva rešenje prerano, vodi dalje)?
 - **RQ4** Gde je lokalni model dovoljan, a gde ne (po vrsti zadatka, resursi, latencija)?
 
-## Poglavlja
+## Poglavlja i podela posla
 
-| # | Poglavlje | Obim (str.) | Oslanja se na | Stanje |
-|---|---|---|---|---|
-| 1 | Uvod: problem, cilj, RQ1-RQ4, doprinosi | do 2 | - | pisati poslednje |
-| 2 | Učenje uz tutora: ITS i dokazi o efikasnosti, skela i nagoveštaji, produktivna borba, kognitivno prepuštanje | 6-8 | literature.md odeljci 1 i 4 | čeka čitanje izvora |
-| 3 | LLM tutori i RAG u obrazovanju: komercijalni režimi, akademski sistemi, dokazi, praznine, pozicioniranje (poslednji odeljak) | 8-10 | literature.md odeljci 2 i 3 | čeka čitanje i ponovnu pretragu |
-| 4 | Tehnologije: lokalni naspram cloud LLM-a, embedding modeli, RAG i hibridna pretraga (RRF), poređenje skladišta vektora (pgvector, Qdrant, Pinecone i dr.) | 5-7 | `eval/embedding_eval.py`, dokumentacija skladišta | može se pisati odmah (osim poređenja skladišta) |
-| 5 | Zahtevi i dizajn: zahtevi izvedeni iz 2 i 3, arhitektura, privatnost, predmeti kao moduli, granica "izračunato" / "generisano" | 5-7 | README, `ISubjectProfile`, privacy-threat-model.md | može se pisati odmah |
-| 6 | Implementacija: ingest, hibridna pretraga, prepoznavanje namere, lestvica nagoveštaja, rešavači, profili i upload, UI, Docker | 8-10 | kod u `Server/`, `Client/` | može se pisati odmah |
-| 7 | Evaluacija (po istraživačkim pitanjima): 7.1 metodologija i pretnje validnosti; 7.2 pretraga (embedding modeli, pragovi); 7.3 ablacija plain / RAG / RAG + alati uključujući hold-out; 7.4 lestvica nagoveštaja; 7.5 resursi i latencija; 7.6 poređenje sa ChatGPT/Claude; 7.7 mala korisnička studija (opciono) | 12-15 | evaluation-protocol.md, results-so-far.md | deo gotov, hold-out i ponavljanja nedostaju |
-| 8 | Diskusija i budući rad: deljenje materijala među studentima, model studenta, cloud model | 3-4 | - | posle evaluacije |
-| 9 | Zaključak | do 1 | - | poslednje |
+| # | Poglavlje | Obim (str.) | Piše | Stanje |
+| --- | --- | --- | --- | --- |
+| 1 | Uvod: problem, cilj, RQ1-RQ4, doprinosi | do 2 | claude.ai | posle evaluacije |
+| 2 | Učenje uz tutora | 6-8 | claude.ai | nacrt u `draft/02-...` (čeka čitanje izvora, vidi PROVERITI.md) |
+| 3 | LLM tutori i RAG; pozicioniranje | 8-10 | claude.ai | nacrt u `draft/03-...` (čeka SortingHat u celini) |
+| 4 | Tehnologije (lokalni modeli, embeddinzi, RAG, skladišta vektora) | 5-7 | Claude Code | nacrt u `draft/04-...`; poređenje skladišta samo iz dokumentacije |
+| 5 | Zahtevi i dizajn | 5-7 | Claude Code | nacrt u `draft/05-...` |
+| 6 | Implementacija (isečci koda do ~25 linija, dijagrami u Mermaid-u) | 8-10 | Claude Code | nacrt u `draft/06-...` |
+| 7 | Evaluacija (po istraživačkim pitanjima) | 12-15 | brojeve daje Claude Code (`eval/`), tekst claude.ai | čeka merenja |
+| 8 | Diskusija i budući rad | 3-4 | claude.ai | posle evaluacije |
+| 9 | Zaključak | do 1 | claude.ai | poslednje |
 
-Uz to: literatura (IEEE) i prilozi (promptovi, šema baze, rubrika za ocenjivanje, model pretnji).
+Poglavlje 7: 7.1 metodologija i pretnje validnosti; 7.2 pretraga (embedding modeli, pragovi); 7.3 ablacija plain / RAG / RAG + alati, razvojni skup i hold-out; 7.4 lestvica nagoveštaja; 7.5 resursi i latencija; 7.6 poređenje sa ChatGPT i Claude.
+Uz to: apstrakt na srpskom i engleskom, literatura (IEEE, svi autori), prilozi (model pretnji, rubrika za ocenjivanje, promptovi, šema baze).
+
+Svaki broj u tekstu mora da pokazuje na fajl u `eval/results/`. Rezultati se ne izmišljaju ni ne zaokružuju "u korist" sistema; ograničenja idu na jedno mesto (7.1).
+
+## Procena obima (nacrti, 22.10.2026)
+
+Reči u nacrtima: poglavlje 2 oko 2000, 3 oko 2200, 4 oko 2000, 5 oko 2100, 6 oko 2700; zajedno oko 11000 reči, tj. otprilike 25-28 stranica uz tabele i slike pre literature. Poglavlja 1, 7, 8, 9 i apstrakt treba da dodaju još oko 15 stranica; obim od 40 stranica je ostvariv.
+Brojanje: `bash count.sh` (reči po poglavlju). Tačan broj stranica daje Word (ili LibreOffice, ako je instaliran, preko `build.sh`).
 
 ## Predloženi doprinosi (skromna formulacija, bez "prvi" i "jedinstven")
 
@@ -31,9 +40,11 @@ Uz to: literatura (IEEE) i prilozi (promptovi, šema baze, rubrika za ocenjivanj
 2. Hibridna arhitektura: pretraga za objašnjenja i deterministički rešavači za šablonske zadatke, uz vidljivo označavanje porekla odgovora.
 3. Empirijska evaluacija (ablacija plain / RAG / RAG + alati i poređenje sa komercijalnim četbotovima) na stvarnim ispitnim zadacima na srpskom, uz hold-out ispit i ponavljanja.
 
-Upload sopstvenog materijala **nije** doprinos (isto nude ChatGPT Projects, Claude Projects, NotebookLM); razlika je lokalnost podataka i to ide u dizajn i model pretnji, ne u tvrdnje o novosti.
+Upload sopstvenog materijala **nije** doprinos (isto nude ChatGPT Projects, Claude Projects, NotebookLM); razlika je lokalnost podataka i to ide u dizajn i model pretnji.
 
 ## Dogovorene odluke
 
 - Svaki student pokreće sopstvenu instancu (Docker Compose); nema zajedničke baze. Deljenje materijala među instancama je budući rad.
-- Gotova baza znanja za dva predmeta može da se isporuči kao dump (`db/seed/`), ali samo uz dozvolu autora materijala (vidi mentor-questions.md).
+- Gotova baza znanja za dva predmeta može da se isporuči kao dump (`db/seed/`), ali samo uz dozvolu autora materijala; nije u javnom repou.
+- Materijal koji student doda zajednički je za instancu (ne po profilu).
+- Korišćenje LLM alata pri izradi koda i pisanju navodi se u radu jednom neutralnom rečenicom (predlog: „Pri razvoju koda i pisanju korišćeni su LLM alati; autor je proverio rezultate i odgovara za sadržaj.“), a mentoru se to pominje uz draft. Pravilo fakulteta proveriti (mentor-questions.md, pitanje 10).

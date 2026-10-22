@@ -22,7 +22,7 @@ public class OperatingSystemsProfile : ISubjectProfile
 
     public string Name => "Operativni sistemi";
 
-    // Izmereno: pitanja iz domena do 0.638, van domena od 0.496; sivu zonu presuđuje model kroz prompt.
+    // Izmereno (eval/results/threshold_eval_operativni_sistemi.txt): pitanja iz domena do 0.578, van domena od 0.496; sivu zonu presuđuje model kroz prompt.
     public double MaxDistance => 0.64;
 
     public ITaskSolver? Solver { get; }

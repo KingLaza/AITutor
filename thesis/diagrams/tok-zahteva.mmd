@@ -1,0 +1,10 @@
+flowchart TD
+    Q["Poruka studenta"] --> H{"Aktivan zadatak i<br/>zahtev za nagoveštaj?"}
+    H -- da --> T["Zadatak:<br/>nivo nagoveštaja"]
+    H -- ne --> C{"Prepoznata namera"}
+    C -- ćaskanje --> CA["Odgovor modela<br/>bez materijala"]
+    C -- zadatak --> T
+    C -- pitanje --> R["Pretraga:<br/>vektori + ključne reči"]
+    R --> TH{"Najbliži deo<br/>ispod praga?"}
+    TH -- ne --> NO["Nemam dovoljno informacija<br/>u materijalu"]
+    TH -- da --> G["Model odgovara<br/>iz pronađenih izvora"]

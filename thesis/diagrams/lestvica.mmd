@@ -1,0 +1,11 @@
+stateDiagram-v2
+    direction LR
+    [*] --> Nivo1: zadatak
+    Nivo1 --> Nivo2: sledeći nagoveštaj
+    Nivo2 --> Nivo3: sledeći nagoveštaj
+    Nivo1 --> Nivo3: prikaži rešenje
+    Nivo2 --> Nivo3: prikaži rešenje
+    Nivo3 --> [*]
+    Nivo1: Nivo 1 - plan rešavanja
+    Nivo2: Nivo 2 - razrada prva dva koraka
+    Nivo3: Nivo 3 - rešenje

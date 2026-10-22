@@ -21,3 +21,13 @@ Thumbs.db
 # --- Izvezena baza znanja (materijal kursa; ne ide u javni repo) ---
 db/seed/*
 !db/seed/.gitkeep
+
+# --- thesis: generisano ---
+thesis/reference.docx
+thesis/rad.docx
+thesis/rad.pdf
+thesis/draft/99-literatura.md
+
+# --- hold-out ispiti (ne idu u javni repo) ---
+eval/exams_new/*
+!eval/exams_new/README.md

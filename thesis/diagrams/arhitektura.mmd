@@ -1,0 +1,7 @@
+flowchart LR
+    B["Pregledač<br/>React klijent"] -->|"/api"| N["nginx<br/>web"]
+    subgraph DC["Docker Compose"]
+        N --> A["API<br/>ASP.NET Core"]
+        A --> P[("PostgreSQL<br/>+ pgvector")]
+    end
+    A -->|"HTTP, localhost"| O["Ollama na računaru<br/>chat i embedding modeli"]

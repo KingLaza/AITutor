@@ -10,7 +10,7 @@ public interface ITaskSolver
 }
 
 // Smernice za određenu vrstu zadatka: notacija koja ide u prompt i izvori iz kojih se biraju primeri.
-// Primarni izvori (npr. proverени obrasci) uvek ulaze u kontekst, uz nekoliko primera iz sekundarnih izvora.
+// Primarni izvori (npr. provereni obrasci) uvek ulaze u kontekst, uz nekoliko primera iz sekundarnih izvora.
 public record TaskGuidance(string Notation, string[] PrimaryExampleTypes, int PrimaryCount, string[] SecondaryExampleTypes, int SecondaryCount);
 
 // Sve što je specifično za jedan predmet. Jezgro (pretraga, lestvica nagoveštaja, istorija) ne zna ništa o pojedinom predmetu;

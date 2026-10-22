@@ -1,0 +1,4 @@
+Operativni sistemi: iz domena n=24 prosek=0.431 max=0.578 | van domena n=18 prosek=0.634 min=0.496 | AUC=0.970
+najdalje iz domena: [(0.578, 'Sta radi fork()?'), (0.551, 'Sta je i-node?'), (0.537, 'Procesu su dodeljena 3 stranicna okvira. Odrediti '), (0.532, 'Sta je stranicenje?')]
+najblize van domena: [(0.496, 'Sta je objektno orijentisano programiranje?'), (0.513, 'Objasni Dijkstrin algoritam'), (0.545, 'Kako radi SQL JOIN?'), (0.587, 'Kako se pise petlja u JavaScript-u?')]
+najbolji prag (balansirana tacnost 0.92): 0.578; sredina izmedju max_in i min_off: 0.537

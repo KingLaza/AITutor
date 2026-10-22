@@ -1,0 +1,25 @@
+classDiagram
+    class ISubjectProfile {
+        +Name
+        +MaxDistance
+        +Solver
+        +GetGuidance(task)
+        +ClassifierExamples
+    }
+    class ITaskSolver {
+        +TrySolveAsync(task)
+    }
+    class SubjectRegistry
+    class OperatingSystemsProfile
+    class ProgramskiPrevodiociProfile
+    class OsTaskSolver
+    ISubjectProfile <|.. OperatingSystemsProfile
+    ISubjectProfile <|.. ProgramskiPrevodiociProfile
+    ITaskSolver <|.. OsTaskSolver
+    OperatingSystemsProfile --> OsTaskSolver
+    SubjectRegistry o-- ISubjectProfile
+    OsTaskSolver ..> CpuScheduling
+    OsTaskSolver ..> IoScheduling
+    OsTaskSolver ..> DiskScheduling
+    OsTaskSolver ..> PageReplacement
+    OsTaskSolver ..> Banker

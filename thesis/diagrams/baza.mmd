@@ -1,0 +1,26 @@
+erDiagram
+    PROFILES ||--o{ MESSAGES : "ima"
+    PROFILES {
+        int id PK
+        text name UK
+    }
+    MESSAGES {
+        int id PK
+        int profile_id FK
+        text subject
+        int conversation_id
+        text role
+        text content
+        text intent
+        jsonb sources
+        jsonb active_task
+        text origin
+    }
+    CHUNKS {
+        int id PK
+        text subject
+        text source_type
+        text source_file
+        text content
+        vector embedding
+    }

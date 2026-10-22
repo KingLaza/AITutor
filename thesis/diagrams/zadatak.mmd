@@ -1,0 +1,10 @@
+flowchart TD
+    Z["Zadatak, traženi nivo"] --> S{"Rešavač prepoznaje<br/>tip zadatka?"}
+    S -- da --> L{"Nivo"}
+    L -- "1 ili 2" --> HN["Unapred napisan nagoveštaj<br/>za taj tip zadatka"]
+    L -- 3 --> RS["Rešenje izračunato programski"]
+    S -- ne --> RP["Pretraga rešenih primera,<br/>obrazaca i teorije"]
+    RP --> PR{"Nivo"}
+    PR -- 1 --> P1["Model: plan od 3 do 5 koraka"]
+    PR -- 2 --> P2["Model: razrada prva dva koraka"]
+    PR -- 3 --> P3["Model: pokušaj rešenja<br/>+ doslovan rešen primer"]

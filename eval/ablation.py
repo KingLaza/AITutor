@@ -82,6 +82,43 @@ def call(message, history, active, mode):
     return d, round(time.time() - t, 1)
 
 
+OLLAMA = "http://127.0.0.1:11434"
+
+
+def ollama_resources():
+    """Memorija koju Ollama trenutno koristi: veličina učitanih modela (/api/ps) i zbir radnog skupa procesa ollama* i llama-server* (MB)."""
+    import subprocess
+    info = {}
+    try:
+        ps = json.load(urllib.request.urlopen(f"{OLLAMA}/api/ps", timeout=10))
+        info["models_mb"] = {m["name"]: round(m["size"] / 2**20) for m in ps.get("models", [])}
+        info["vram_mb"] = sum(round(m.get("size_vram", 0) / 2**20) for m in ps.get("models", []))
+        out = subprocess.run(["powershell", "-NoProfile", "-Command",
+                              "(Get-Process | Where-Object { $_.Name -like 'ollama*' -or $_.Name -like 'llama-server*' } | Measure-Object WorkingSet64 -Sum).Sum"],
+                             capture_output=True, text=True, timeout=20).stdout.strip()
+        info["ollama_rss_mb"] = round(int(out) / 2**20) if out.isdigit() else None
+    except Exception as e:  # noqa: BLE001
+        info["error"] = str(e)
+    return info
+
+
+def run_metadata(modes):
+    """Sve što je potrebno da se merenje ponovi: verzije, digesti modela, commit, datum, režimi."""
+    import subprocess, datetime
+    meta = {"date": datetime.datetime.now().isoformat(timespec="seconds"), "modes": modes, "temperature": "podrazumevana iz koda (0.2), seed nije zadat"}
+    try:
+        meta["ollama_version"] = json.load(urllib.request.urlopen(f"{OLLAMA}/api/version", timeout=10)).get("version")
+        tags = json.load(urllib.request.urlopen(f"{OLLAMA}/api/tags", timeout=10))["models"]
+        meta["models"] = {m["name"]: {"digest": m["digest"][:12], "parameter_size": m["details"].get("parameter_size"),
+                                      "quantization": m["details"].get("quantization_level")} for m in tags
+                          if m["name"].split(":")[0] in ("gemma4", "embeddinggemma")}
+        meta["commit"] = subprocess.run(["git", "rev-parse", "--short", "HEAD"], capture_output=True, text=True,
+                                        cwd=__file__.rsplit("ablation", 1)[0]).stdout.strip()
+    except Exception as e:  # noqa: BLE001
+        meta["error"] = str(e)
+    return meta
+
+
 def run(q, mode):
     text = q["text"]
     if mode != "plain" and q["id"] in TASK_IDS:
@@ -96,6 +133,7 @@ if __name__ == "__main__":
     modes = sys.argv[2].split(",") if len(sys.argv) > 2 and sys.argv[2] else MODES
     ids = set(sys.argv[3].split(",")) if len(sys.argv) > 3 else None
     results = []
+    json.dump(run_metadata(modes), open(out.replace(".json", ".meta.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     for mode in modes:
         for q in QUESTIONS:
             if ids and q["id"] not in ids:
@@ -107,7 +145,8 @@ if __name__ == "__main__":
                 reply, intent, sec, err = "", None, 0, str(e)
             checks = CHECKS[q["id"]](reply) if q["id"] in CHECKS and not err else []
             results.append({"mode": mode, "id": q["id"], "seconds": sec, "intent": intent, "expected": q["expected"],
-                            "checks": [{"name": n, "ok": ok} for n, ok in checks], "reply": reply, "error": err})
+                            "checks": [{"name": n, "ok": ok} for n, ok in checks], "reply": reply, "error": err,
+                            "resources": ollama_resources()})
             json.dump(results, open(out, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
             passed = sum(ok for _, ok in checks)
             print(f"{mode:10} {q['id']:26} {sec:6}s  {passed}/{len(checks)}", flush=True)
