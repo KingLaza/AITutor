@@ -9,6 +9,7 @@ export interface ChatMessage {
   sources?: string[]
   intent?: string
   activeTask?: TaskState | null
+  origin?: string
 }
 
 export interface ChatResult {
@@ -16,7 +17,19 @@ export interface ChatResult {
   sources: string[]
   intent: string
   activeTask: TaskState | null
+  origin: string
 }
+
+export interface Conversation {
+  subject: string
+  id: number
+  title: string
+  messages: number
+  updated: string
+}
+
+// Režim odgovora: Rag (pretraga + alati), RagNoTools (samo pretraga), Plain (bez materijala).
+export type AnswerMode = 'Rag' | 'RagNoTools' | 'Plain'
 
 export interface Profile {
   id: number
@@ -68,6 +81,8 @@ export function sendChatMessage(
   activeTask: TaskState | null,
   subject: string | null,
   profileId: number,
+  conversationId: number,
+  mode: AnswerMode,
 ): Promise<ChatResult> {
   return request<ChatResult>(
     '/api/chat',
@@ -77,6 +92,8 @@ export function sendChatMessage(
       activeTask,
       subject,
       profileId,
+      conversationId,
+      mode,
     }),
   ).then((r) => ({ ...r, sources: r.sources ?? [], activeTask: r.activeTask ?? null }))
 }
@@ -89,12 +106,27 @@ export function createProfile(name: string): Promise<Profile> {
   return request('/api/profiles', json('POST', { name }))
 }
 
-export function fetchMessages(profileId: number, subject: string): Promise<ChatMessage[]> {
-  return request(`/api/profiles/${profileId}/messages?subject=${encodeURIComponent(subject)}`)
+export function renameProfile(id: number, name: string): Promise<Profile> {
+  return request(`/api/profiles/${id}`, json('PUT', { name }))
 }
 
-export function clearMessages(profileId: number, subject: string): Promise<void> {
-  return request(`/api/profiles/${profileId}/messages?subject=${encodeURIComponent(subject)}`, { method: 'DELETE' })
+export function deleteProfile(id: number): Promise<void> {
+  return request(`/api/profiles/${id}`, { method: 'DELETE' })
+}
+
+export function fetchConversations(profileId: number, subject?: string): Promise<Conversation[]> {
+  const query = subject ? `?subject=${encodeURIComponent(subject)}` : ''
+  return request(`/api/profiles/${profileId}/conversations${query}`)
+}
+
+export function fetchMessages(profileId: number, subject: string, conversation: number): Promise<ChatMessage[]> {
+  return request(`/api/profiles/${profileId}/messages?subject=${encodeURIComponent(subject)}&conversation=${conversation}`)
+}
+
+export function deleteConversation(profileId: number, subject: string, conversation: number): Promise<void> {
+  return request(`/api/profiles/${profileId}/messages?subject=${encodeURIComponent(subject)}&conversation=${conversation}`, {
+    method: 'DELETE',
+  })
 }
 
 export function fetchMaterials(subject: string): Promise<Material[]> {

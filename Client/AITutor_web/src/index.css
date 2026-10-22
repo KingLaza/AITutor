@@ -32,6 +32,7 @@ body {
 
 h1,
 h2,
+h3,
 p {
   margin: 0;
 }
@@ -86,6 +87,14 @@ button.secondary:hover:not(:disabled) {
   border-color: var(--accent);
 }
 
+button.secondary.danger {
+  color: var(--error);
+}
+
+button.secondary.danger:hover:not(:disabled) {
+  border-color: var(--error);
+}
+
 button.link {
   border: none;
   background: none;
@@ -94,7 +103,7 @@ button.link {
   font-size: 13px;
 }
 
-button.link:hover {
+button.link:hover:not(:disabled) {
   text-decoration: underline;
 }
 
@@ -183,7 +192,7 @@ select {
 .layout {
   height: 100%;
   display: grid;
-  grid-template-columns: 280px 1fr;
+  grid-template-columns: 290px 1fr;
 }
 
 .sidebar {
@@ -218,13 +227,11 @@ select {
   flex-direction: column;
   min-width: 0;
   height: 100%;
+  overflow-y: auto;
 }
 
-.topbar {
-  display: none;
-}
-
-/* materijal */
+/* razgovori u sidebaru */
+.conversations,
 .materials {
   display: flex;
   flex-direction: column;
@@ -233,18 +240,58 @@ select {
   border-top: 1px solid var(--border);
 }
 
+.section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.conversations h2,
 .materials h2 {
   font-size: 14px;
   font-weight: 600;
 }
 
+.conversations ul,
 .materials ul {
   list-style: none;
   margin: 0;
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
+}
+
+.conversations li {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 3px 6px;
+  border-radius: 5px;
+}
+
+.conversations li.active {
+  background: var(--accent-soft);
+}
+
+.conversation-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: left;
+  font-size: 13px;
+}
+
+.conversations li.active .conversation-name {
+  color: var(--text);
+}
+
+/* materijal */
+.materials.dragging {
+  outline: 2px dashed var(--accent);
+  outline-offset: 4px;
 }
 
 .materials li {
@@ -256,6 +303,8 @@ select {
 }
 
 .file-name {
+  flex: 1;
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -273,6 +322,23 @@ select {
   height: 100%;
   background: var(--accent);
   transition: width 0.3s;
+}
+
+.advanced {
+  font-size: 13px;
+  color: var(--muted);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.advanced summary {
+  cursor: pointer;
+}
+
+.advanced select {
+  width: 100%;
+  margin-top: 4px;
 }
 
 /* razgovor */
@@ -325,6 +391,19 @@ select {
   border: 1px solid var(--border);
 }
 
+.bubble ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.bubble code {
+  font-family: ui-monospace, 'SF Mono', Consolas, monospace;
+  font-size: 0.9em;
+  background: var(--bg);
+  padding: 1px 4px;
+  border-radius: 4px;
+}
+
 .bubble pre {
   margin: 0;
   padding: 10px 12px;
@@ -337,10 +416,37 @@ select {
   white-space: pre;
 }
 
+.bubble pre code {
+  background: none;
+  padding: 0;
+  font-size: inherit;
+}
+
+.meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  max-width: 85%;
+}
+
+.origin {
+  font-size: 12px;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1px 7px;
+}
+
+.origin.calculated {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
 .sources {
   font-size: 12.5px;
   color: var(--muted);
-  max-width: 85%;
 }
 
 .sources summary {
@@ -350,6 +456,12 @@ select {
 .sources ul {
   margin: 4px 0 0;
   padding-left: 18px;
+}
+
+.source-type {
+  display: inline-block;
+  margin-right: 6px;
+  color: var(--text);
 }
 
 .hint-actions {
@@ -374,40 +486,82 @@ select {
   padding: 9px 12px;
 }
 
-/* uski ekrani */
-@media (max-width: 760px) {
-  .layout {
-    grid-template-columns: 1fr;
-  }
+/* stranica profila */
+.profile-page {
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
 
-  .sidebar {
-    display: none;
-    position: fixed;
-    inset: 41px 0 0 0;
-    z-index: 1;
-    border-right: none;
-  }
+.profile-page h1 {
+  font-size: 20px;
+  font-weight: 600;
+}
 
-  .menu-open .sidebar {
-    display: flex;
-  }
+.profile-page h2 {
+  font-size: 15px;
+  font-weight: 600;
+  margin-top: 8px;
+}
 
-  .topbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 41px;
-    padding: 0 16px;
-    border-bottom: 1px solid var(--border);
-    font-size: 13px;
-    color: var(--muted);
-  }
+.profile-page h3 {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
 
-  .chat {
-    padding: 16px 16px 8px;
-  }
+.conversation-group ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--panel);
+}
 
-  .composer {
-    padding: 12px 16px 16px;
-  }
+.conversation-group li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 12px;
+}
+
+.conversation-group li + li {
+  border-top: 1px solid var(--border);
+}
+
+.conversation-title {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.conversation-title .title {
+  text-align: left;
+  font-size: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.conversation-actions {
+  display: flex;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.danger-zone {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-start;
 }

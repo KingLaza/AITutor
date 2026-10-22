@@ -50,6 +50,8 @@ public class RagQueryService
         public List<ChunkSearchResult> RetrievedChunks { get; set; } = new();
         public ChatIntent Intent { get; set; }
         public TaskState? Task { get; set; }
+        // Poreklo odgovora, za prikaz u UI: generated (model), calculated (rešavač), hint (unapred napisan nagoveštaj rešavača), refusal, casual.
+        public string Origin { get; set; } = "generated";
     }
 
     public async Task<RagAnswer> AnswerAsync(string question, IReadOnlyList<ChatTurn>? history = null, TaskState? activeTask = null, string? subject = null, AnswerMode mode = AnswerMode.Rag)
@@ -69,7 +71,7 @@ public class RagQueryService
         if (intent == ChatIntent.Casual)
         {
             var casual = await _chat.GenerateAsync(BuildCasualPrompt(question, history, subject), new ChatOptions(Temperature: 0.6));
-            return new RagAnswer { Reply = casual, Intent = intent };
+            return new RagAnswer { Reply = casual, Intent = intent, Origin = "casual" };
         }
 
         if (intent == ChatIntent.Task)
@@ -83,7 +85,7 @@ public class RagQueryService
         var results = await _repository.SearchAsync(queryEmbedding, TopK, KnowledgeSourceTypes, subject);
 
         if (results.Count == 0 || results.Min(r => r.Distance) > profile.MaxDistance)
-            return new RagAnswer { Reply = NoInfoReply, RetrievedChunks = results, Intent = intent };
+            return new RagAnswer { Reply = NoInfoReply, RetrievedChunks = results, Intent = intent, Origin = "refusal" };
 
         var multiPart = IsMultiPartQuestion(question);
         if (multiPart)
@@ -168,6 +170,7 @@ public class RagQueryService
                 Reply = "Rešenje izračunato programski (tačno, bez procene modela):\n\n" + solved.Text.Replace("\r\n", "\n"),
                 Intent = ChatIntent.Task,
                 Task = new TaskState(task, level),
+                Origin = "calculated",
             };
 
         // Za zadatke koje alat zna da reši, nagoveštaji 1 i 2 su unapred napisani i tačni (model ih ne generiše, pa ne može da zavede).
@@ -177,6 +180,7 @@ public class RagQueryService
                 Reply = hints[level - 1] + "\n\nPokušaj prvo sam. Ako zapneš, traži sledeći nagoveštaj ili prikaži rešenje.",
                 Intent = ChatIntent.Task,
                 Task = new TaskState(task, level),
+                Origin = "hint",
             };
         var queryEmbedding = await _embeddings.GetEmbeddingAsync(task, EmbeddingKind.Query);
 
@@ -199,7 +203,7 @@ public class RagQueryService
 
         var state = new TaskState(task, level);
         if (examples.Concat(theory).All(c => c.Distance > profile.MaxDistance))
-            return new RagAnswer { Reply = NoInfoReply, RetrievedChunks = examples.Concat(theory).ToList(), Intent = ChatIntent.Task };
+            return new RagAnswer { Reply = NoInfoReply, RetrievedChunks = examples.Concat(theory).ToList(), Intent = ChatIntent.Task, Origin = "refusal" };
 
         // Postavka i rešenje su često na susednim stranama: uz svaki primer dodajemo i njegov nastavak.
         var groups = new List<List<ChunkSearchResult>>();

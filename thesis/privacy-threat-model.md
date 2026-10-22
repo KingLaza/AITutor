@@ -19,7 +19,7 @@ Tvrdnja "podaci ostaju na uređaju" je osobina dizajna, ne dokaz; ovde se navodi
 ## Rizici i ograničenja
 
 - **Profil bez lozinke:** svako ko ima pristup instanci vidi sve profile i razgovore (po dizajnu: instanca je lična ili za malu grupu na istom računaru).
-- **Dodat materijal nije privatan po profilu** u trenutnoj implementaciji: vidljiv je svim profilima na instanci (planirano: privatan po profilu).
+- **Dodat materijal je zajednički za instancu:** vidljiv je svim profilima na istoj instanci (odluka: instanca je lična, pa je materijal faktički privatan za svog korisnika).
 - **Autorska prava:** materijal kursa nije u javnom repou; gotova baza znanja (dump) deli se samo uz dozvolu autora materijala.
 - **Logovi razgovora:** u bazi su u čistom tekstu; enkripcija diska je odgovornost korisnika.
 - **Neprovereni PDF-ovi:** upload prolazi kroz parser (PdfPig); veličina ograničena na 50 MB; nema skeniranja sadržaja.

@@ -19,8 +19,8 @@ public class ChatController : ControllerBase
     }
 
     // History: raniji razgovor (klijent šalje zadnjih par poruka). ActiveTask: zadatak na kome student radi i nivo nagoveštaja.
-    public record ChatRequest(string Message, List<ChatTurn>? History = null, TaskState? ActiveTask = null, string? Subject = null, string? Mode = null, int? ProfileId = null);
-    public record ChatResponse(string Reply, List<string> Sources, string Intent, TaskState? ActiveTask);
+    public record ChatRequest(string Message, List<ChatTurn>? History = null, TaskState? ActiveTask = null, string? Subject = null, string? Mode = null, int? ProfileId = null, int ConversationId = 1);
+    public record ChatResponse(string Reply, List<string> Sources, string Intent, TaskState? ActiveTask, string Origin);
 
     [HttpPost]
     public async Task<ActionResult<ChatResponse>> Post(ChatRequest req)
@@ -35,12 +35,12 @@ public class ChatController : ControllerBase
         if (req.ProfileId is int profileId)
         {
             var subject = req.Subject ?? "";
-            await _profiles.AddMessageAsync(profileId, subject, new StoredMessage("user", req.Message, null, null, null));
-            await _profiles.AddMessageAsync(profileId, subject, new StoredMessage("assistant", result.Reply, result.Intent.ToString(),
+            await _profiles.AddMessageAsync(profileId, subject, req.ConversationId, new StoredMessage("user", req.Message, null, null, null));
+            await _profiles.AddMessageAsync(profileId, subject, req.ConversationId, new StoredMessage("assistant", result.Reply, result.Intent.ToString(),
                 JsonSerializer.Serialize(sources),
-                active is null ? null : JsonSerializer.Serialize(active, ProfilesController.JsonOptions)));
+                active is null ? null : JsonSerializer.Serialize(active, ProfilesController.JsonOptions), result.Origin));
         }
 
-        return Ok(new ChatResponse(result.Reply, sources, result.Intent.ToString(), active));
+        return Ok(new ChatResponse(result.Reply, sources, result.Intent.ToString(), active, result.Origin));
     }
 }

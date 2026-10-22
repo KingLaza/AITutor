@@ -65,7 +65,20 @@ function App() {
   }
   if (profiles === null) return <div className="picker muted">Učitavanje…</div>
   if (profile === null) return <ProfilePicker profiles={profiles} onSelect={select} />
-  return <ChatPage profile={profile} onSwitchProfile={switchProfile} />
+  return (
+    <ChatPage
+      profile={profile}
+      onSwitchProfile={switchProfile}
+      onProfileRenamed={(renamed) => {
+        setProfile(renamed)
+        setProfiles((list) => list && list.map((p) => (p.id === renamed.id ? renamed : p)))
+      }}
+      onProfileDeleted={() => {
+        setProfiles((list) => list && list.filter((p) => p.id !== profile.id))
+        switchProfile()
+      }}
+    />
+  )
 }
 
 export default App
